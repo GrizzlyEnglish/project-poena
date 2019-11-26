@@ -21,3 +21,14 @@ C:\Users\formy\Workspace\project-poena\project-poena-opengl\bin\Debug\netcoreapp
 C:\Users\formy\Workspace\project-poena\project-poena-opengl\obj\Debug\netcoreapp3.0\project-poena-opengl.csproj.CopyComplete
 C:\Users\formy\Workspace\project-poena\project-poena-opengl\obj\Debug\netcoreapp3.0\project-poena-opengl.dll
 C:\Users\formy\Workspace\project-poena\project-poena-opengl\obj\Debug\netcoreapp3.0\project-poena-opengl.pdb
+C:\Users\formy\Workspace\project-poena\project-poena-opengl\bin\Debug\netcoreapp3.0\Content\assets\ui\BlueBar.xnb
+C:\Users\formy\Workspace\project-poena\project-poena-opengl\bin\Debug\netcoreapp3.0\Content\assets\ui\EmptyBar.xnb
+C:\Users\formy\Workspace\project-poena\project-poena-opengl\bin\Debug\netcoreapp3.0\Content\assets\ui\skill_icon.xnb
+C:\Users\formy\Workspace\project-poena\project-poena-opengl\bin\Debug\netcoreapp3.0\Content\assets\ui\ui_panel_test.xnb
+C:\Users\formy\Workspace\project-poena\project-poena-opengl\bin\Debug\netcoreapp3.0\Content\assets\ui\ui_test_hotbar.xnb
+C:\Users\formy\Workspace\project-poena\project-poena-opengl\bin\Debug\netcoreapp3.0\Content\assets\tiles\HEX_Dirt_01.xnb
+C:\Users\formy\Workspace\project-poena\project-poena-opengl\bin\Debug\netcoreapp3.0\Content\assets\tiles\HEX_Grass_01.xnb
+C:\Users\formy\Workspace\project-poena\project-poena-opengl\bin\Debug\netcoreapp3.0\Content\assets\tiles\HEX_Highlight_Test.xnb
+C:\Users\formy\Workspace\project-poena\project-poena-opengl\bin\Debug\netcoreapp3.0\Content\assets\entities\icon_adventurer1.xnb
+C:\Users\formy\Workspace\project-poena\project-poena-opengl\bin\Debug\netcoreapp3.0\Content\assets\entities\icon_giantRat.xnb
+C:\Users\formy\Workspace\project-poena\project-poena-opengl\bin\Debug\netcoreapp3.0\Content\assets\fonts\BaseFont.xnb

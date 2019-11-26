@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/project-poena-opengl/bin/Debug/netcoreapp2.0/project-poena-opengl.dll",
+            "program": "${workspaceFolder}/project-poena-opengl/bin/Debug/netcoreapp3.0/project-poena-opengl.dll",
             "args": [],
             "cwd": "${workspaceFolder}/project-poena-opengl",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console

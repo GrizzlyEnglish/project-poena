@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Project_Poena.Managers;
+using Project_Poena.Extensions;
 using Project_Poena.Common.Variables;
 
 namespace Project_Poena
@@ -38,6 +39,7 @@ namespace Project_Poena
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteBatch.LoadContent(GraphicsDevice, this.Content);
             screenManager.LoadContent(this.Content);
         }
 

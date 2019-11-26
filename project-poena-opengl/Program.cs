@@ -8,8 +8,10 @@ namespace Project_Poena_opengl
         [STAThread]
         static void Main()
         {
-            using (var game = new Poena())
+            using (var game = new Poena()){
+                Console.WriteLine("Hello");
                 game.Run();
+            }
         }
     }
 }
