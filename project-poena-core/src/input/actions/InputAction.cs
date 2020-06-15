@@ -3,7 +3,6 @@ using Project_Poena.Common.Enums;
 
 namespace Project_Poena.Input
 {
-    
     public class InputAction
     {
 

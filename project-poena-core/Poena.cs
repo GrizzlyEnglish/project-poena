@@ -13,10 +13,12 @@ namespace Project_Poena
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         ScreenManager screenManager;
+        public InputHandler inputHandler;
 
         public Poena()
         {
             graphics = new GraphicsDeviceManager(this);
+            inputHandler = new InputHandler();
 
             graphics.IsFullScreen = false;
             graphics.PreferredBackBufferHeight = Variables.VIEWPORT_HEIGHT;
@@ -25,7 +27,7 @@ namespace Project_Poena
             this.Window.AllowUserResizing = true;
             this.Window.ClientSizeChanged += new EventHandler<EventArgs>(this.WindowResizeEvent);
 
-            screenManager = new ScreenManager();
+            screenManager = new ScreenManager(inputHandler);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }

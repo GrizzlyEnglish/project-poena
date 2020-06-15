@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Project_Poena.Input
+namespace Project_Poena.Input.Extensions
 {
     public static class InputExtension
     {

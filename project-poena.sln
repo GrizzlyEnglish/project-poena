@@ -1,11 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "project-poena-opengl", "project-poena-opengl\project-poena-opengl.csproj", "{52DF24B3-B9A5-4459-893F-4D5C623D615D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "project-poena-opengl", "project-poena-opengl\project-poena-opengl.csproj", "{52DF24B3-B9A5-4459-893F-4D5C623D615D}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		project-poena-core\project-poena-core.projitems*{52df24b3-b9a5-4459-893f-4d5c623d615d}*SharedItemsImports = 5
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
@@ -13,9 +16,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{52DF24B3-B9A5-4459-893F-4D5C623D615D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -30,5 +30,11 @@ Global
 		{52DF24B3-B9A5-4459-893F-4D5C623D615D}.Release|x64.Build.0 = Release|Any CPU
 		{52DF24B3-B9A5-4459-893F-4D5C623D615D}.Release|x86.ActiveCfg = Release|Any CPU
 		{52DF24B3-B9A5-4459-893F-4D5C623D615D}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C3D26CAB-D21D-4E66-8AF4-835FA81C6072}
 	EndGlobalSection
 EndGlobal

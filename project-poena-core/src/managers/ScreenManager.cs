@@ -21,10 +21,10 @@ namespace Project_Poena.Managers {
         private InputHandler inputHandler;
         private FrameCounter frameCounter;
 
-        public ScreenManager()
+        public ScreenManager(InputHandler inputHandler)
         {
             this.screens = new Stack<Screen>();
-            this.inputHandler = new InputHandler();
+            this.inputHandler = inputHandler;
             
             //Default EntryPoint of Splash
             this.AddScreen(new Screen("debug", new BattleScene()));

@@ -11,6 +11,7 @@ using Project_Poena.Extensions;
 using Project_Poena.Sprites;
 using Project_Poena.Cameras;
 using Project_Poena.Input;
+using Project_Poena.Input.Extensions;
 using Project_Poena.Entity.Entities;
 using Project_Poena.Entity.Components;
 

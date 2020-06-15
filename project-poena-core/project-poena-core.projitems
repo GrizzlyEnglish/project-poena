@@ -50,11 +50,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)src\events\Event.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)src\extensions\ListExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)src\events\EventQueueHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)src\input\InputExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\input\extensions\InputExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)src\input\InputHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)src\input\InputAction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)src\input\InputMapping.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)src\input\MappedInputAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\input\actions\InputAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\input\actions\InputMapping.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\input\actions\MappedInputAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\input\interface\IInputGather.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)src\managers\ScreenManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)src\scene\Scene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)src\scene\scenelayer\base_layer\BaseSceneLayer.cs" />

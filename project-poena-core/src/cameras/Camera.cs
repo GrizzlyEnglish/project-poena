@@ -3,6 +3,7 @@ using Project_Poena.Extensions;
 using Project_Poena.Common.Variables;
 using Project_Poena.Common.Rectangle;
 using Project_Poena.Input;
+using Project_Poena.Input.Extensions;
 using System;
 using System.Collections.Generic;
 
@@ -74,12 +75,13 @@ namespace Project_Poena.Cameras
                         else if (mia.mapped_action == "down") translation_cords.Y -= translation_diff;
                         else if (mia.mapped_action == "right_mouse_button")
                         {
-                            translation_cords = mia.raw_action.distance * -1; //Invert it
+                            // Invert it
+                            translation_cords = mia.raw_action.distance * -1;
                         }
                         else
                         {
                             //Mouse is scrolled lets zoom accordingly
-                            MappedInputAction mouse_position = actions.Find(m => m.mapped_action == "mouse_position");
+                            MappedInputAction mouse_position = actions.GetMousePosition();
                             Vector2? pos = null;
                             if (mouse_position?.raw_action?.position != null)
                             {
