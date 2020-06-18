@@ -9,15 +9,39 @@ namespace Project_Poena.Input.Extensions
 {
     public static class InputExtension
     {
-        public static List<MappedInputAction> GetAvailableActions(this List<MappedInputAction> actions, 
-            List<string> watchingActions)
+
+        /// <summary>
+        /// Filters out a full list of actions based on the watchers passed in
+        /// Then allows for only necessary watchers to apply
+        /// </summary>
+        /// <param name="actions">The current list of wactions</param>
+        /// <param name="watchers">The waters we are looking fo</param>
+        /// <returns>
+        /// A list of watchers that we want to activate
+        /// </returns>
+        public static void FireAvailableWatchers(this List<MappedInputAction> actions, List<InputWatcher> watchers)
         {
-            return actions.Where(a => watchingActions.Contains(a.mapped_action)).ToList();
+            foreach (InputWatcher watcher in watchers) 
+            {
+                // See if we have a mapped input that matches the parameters
+                MappedInputAction mia = actions
+                    .Where(a => 
+                        a.mapped_action == watcher.actionName && 
+                        (watcher.actionType == null || a.raw_action.action_type == watcher.actionType)
+                    )
+                    .FirstOrDefault();
+                if (mia != null) {
+                    // Fire the watcher
+                    watcher.watcherAction.Invoke(mia);
+                    // Notify the action was handled
+                    mia.SetHandled();
+                }
+            }
         }
 
         public static MappedInputAction GetMousePosition(this List<MappedInputAction> actions)
         {
-            return actions.FirstOrDefault(a => a.mapped_action == "mouse_position");
+            return actions.FirstOrDefault(a => a.mapped_action == "pointer_position");
         }
 
         public static void UnprojectCoordinates(this List<MappedInputAction> actions, Func<Point, Vector2> unprojectFunc)

@@ -115,7 +115,7 @@ namespace Project_Poena.Board
 
         public List<MappedInputAction> HandleInput(List<MappedInputAction> actions)
         {
-            MappedInputAction mia = actions.Find(a => a.mapped_action == "left_mouse_button");
+            MappedInputAction mia = actions.Find(a => a.mapped_action == "left_button");
 
             if (mia != null) 
             {

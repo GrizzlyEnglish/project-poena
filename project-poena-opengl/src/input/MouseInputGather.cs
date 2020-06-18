@@ -9,6 +9,9 @@ using Project_Poena.Input;
 namespace Project_Poena.OpenGL.Input 
 {
 
+    /// <summary>
+    /// Gathers Mouse Input and generates a list of input actions
+    /// </summary>
     public class MouseInputGather : IInputGather
     {
 
@@ -20,7 +23,7 @@ namespace Project_Poena.OpenGL.Input
         /// <summary>
         /// How many frames before we signal a button as held as well as how many to store
         /// </summary>
-        private const int _mouse_held_frames = 5;
+        private const int _mouse_held_frames = 10;
 
         public MouseInputGather()
         {
@@ -28,7 +31,7 @@ namespace Project_Poena.OpenGL.Input
         }
 
         /// <summary>
-        /// Determines if the action is held, pressed or released
+        /// Determines if the action is held, pressed or neither
         /// </summary>
         /// <param name="current">The current button state</param>
         /// <param name="past">The past button state</param>
@@ -38,19 +41,18 @@ namespace Project_Poena.OpenGL.Input
         /// </returns>
         private ActionType? getMouseActionType(ButtonState current, ButtonState past, Func<MouseState, bool> check)
         {
-            if (current == ButtonState.Pressed) 
-            {
-                if (past == ButtonState.Released) 
-                {
-                    // Button is pressed
-                    return ActionType.Pressed;
-                }
-
+            // Only check when we have pressed down the mouse
+            if (past == ButtonState.Pressed) {
                 // Check how many past frames adhere to the check
                 int count = pastMice.Where(check).Count();
-
-                if (count == _mouse_held_frames) { 
+                // If the current state is still down for greater than the held frames send held
+                if (current == ButtonState.Pressed && count > _mouse_held_frames) {
                     return ActionType.Held;
+                }
+                // Otherwise its a click if less than
+                else if (current == ButtonState.Released && count <=_mouse_held_frames) {
+                    // Button is pressed
+                    return ActionType.Pressed;
                 }
             }
 
@@ -66,15 +68,19 @@ namespace Project_Poena.OpenGL.Input
         /// <param name="check">How to check other frames for count of pressed</param>
         /// <param name="position">The position of the mouse at the action point</param>
         /// <param name="prev_position">The previous position of the mouse (for distance)</param>
+        /// <param name="heldName">Allows for changing the action name on a held state</param>
         /// <returns>
         /// An action if determined it was needed or null 
         /// </returns>
         private InputAction createInputAction(string actionName, ButtonState current, ButtonState past, 
-            Func<MouseState, bool> check, Point position, Point? prev_position)
+            Func<MouseState, bool> check, Point position, Point? prev_position, string heldName = null)
         {
             ActionType? at = getMouseActionType(current, past, check);
             if (at != null)
             {
+                if (at == ActionType.Held) {
+                    actionName = heldName ?? actionName;
+                }
                 return new InputAction(ActionDeviceType.Mouse, at.Value, actionName, position, prev_position);
             }
 
@@ -101,17 +107,17 @@ namespace Project_Poena.OpenGL.Input
             InputAction[] actions = new InputAction[3];
 
             // Left click
-            actions[0] = createInputAction("left_mouse_button", mouseState.LeftButton, 
+            actions[0] = createInputAction("left_button", mouseState.LeftButton, 
                     pastMice?.Last?.Value.LeftButton ?? ButtonState.Released, 
                     ms => ms.LeftButton == ButtonState.Pressed, pos, past_pos);
 
             // Right click
-            actions[1] = createInputAction("right_mouse_button", mouseState.RightButton, 
+            actions[1] = createInputAction("right_button", mouseState.RightButton, 
                     pastMice?.Last?.Value.RightButton ?? ButtonState.Released, 
                     ms => ms.RightButton == ButtonState.Pressed, pos, past_pos);
 
             // Middle Click
-            actions[2] = createInputAction("middle_mouse_button", mouseState.MiddleButton, 
+            actions[2] = createInputAction("middle_button", mouseState.MiddleButton, 
                     pastMice?.Last?.Value.MiddleButton ?? ButtonState.Released, 
                     ms => ms.MiddleButton == ButtonState.Pressed, pos, past_pos);
 
@@ -125,7 +131,7 @@ namespace Project_Poena.OpenGL.Input
             }
 
             // Add Pure Mouse position
-            results.Add(new InputAction(ActionDeviceType.Mouse, ActionType.Positional, "mouse_position", pos));
+            results.Add(new InputAction(ActionDeviceType.Mouse, ActionType.Positional, "pointer_position", pos));
 
             // Add the scrool wheel if the past value was different
             if (mouseState.ScrollWheelValue != (pastMice?.Last?.Value.ScrollWheelValue ?? 0) ||
@@ -136,12 +142,12 @@ namespace Project_Poena.OpenGL.Input
                     new Point(this.pastMice.Last.Value.HorizontalScrollWheelValue, pastMice.Last.Value.ScrollWheelValue);
 
                 InputAction scroll_ia = 
-                    new InputAction(ActionDeviceType.Mouse, ActionType.Positional, "mouse_scroll", current_scroll, past_scroll);
+                    new InputAction(ActionDeviceType.Mouse, ActionType.Positional, "scroll", current_scroll, past_scroll);
 
                 results.Add(scroll_ia);
             }
 
-            if (pastMice.Count >= _mouse_held_frames){
+            if (pastMice.Count() > _mouse_held_frames) {
                 pastMice.RemoveFirst();
             }
 

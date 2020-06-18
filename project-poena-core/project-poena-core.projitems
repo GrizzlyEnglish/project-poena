@@ -55,6 +55,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)src\input\actions\InputAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)src\input\actions\InputMapping.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)src\input\actions\MappedInputAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\input\actions\InputWatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)src\input\interface\IInputGather.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)src\managers\ScreenManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)src\scene\Scene.cs" />

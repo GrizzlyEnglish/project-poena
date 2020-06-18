@@ -6,6 +6,7 @@ using Project_Poena.Input;
 using Project_Poena.Input.Extensions;
 using System;
 using System.Collections.Generic;
+using Project_Poena.Common.Enums;
 
 namespace Project_Poena.Cameras
 {
@@ -32,10 +33,7 @@ namespace Project_Poena.Cameras
         private Vector2? start_position;
         private float movement_time = 0;
 
-        private static List<string> watching_actions = new List<string>()
-        {
-            "left", "right", "up", "down", "right_mouse_button", "mouse_scroll"
-        };
+        private List<InputWatcher> actionWatchers { get; set; }
         
         public Matrix translation_matrix { get; set; }
 
@@ -49,6 +47,15 @@ namespace Project_Poena.Cameras
             this.max_zoom = max_zoom;
             this.min_zoom = min_zoom;
             this.zoom = current_zoom;
+            actionWatchers = new List<InputWatcher>()
+            {
+                new InputWatcher("left", mia => this.Translate(new Vector2(-translation_diff, 0))),
+                new InputWatcher("right", mia => this.Translate(new Vector2(translation_diff, 0))),
+                new InputWatcher("up", mia => this.Translate(new Vector2(0, -translation_diff))),
+                new InputWatcher("down", mia => this.Translate(new Vector2(0, translation_diff))),
+                new InputWatcher("left_button", ActionType.Held, mia => this.Translate(-1 * mia.raw_action.distance)),
+                new InputWatcher("zoom", mia => this.Zoom(mia.raw_action.distance.Y, mia.raw_action.position?.ToVector2())),
+            };
             
             this.Resize();
         }
@@ -60,44 +67,7 @@ namespace Project_Poena.Cameras
 
             if (!this.is_static && !this.ignore_inputs)
             {
-                //TOOD: rce - Setup input handling for non-static cameras -- Translate and set position
-                List<MappedInputAction> available_actions = actions.GetAvailableActions(watching_actions);
-                if (available_actions.Count > 0)
-                {
-                    //We want to translate the camera
-                    Vector2 translation_cords = new Vector2();
-
-                    foreach (MappedInputAction mia in available_actions)
-                    {
-                        if (mia.mapped_action == "left") translation_cords.X -= translation_diff;
-                        else if (mia.mapped_action == "right") translation_cords.X += translation_diff;
-                        else if (mia.mapped_action == "up") translation_cords.Y += translation_diff;
-                        else if (mia.mapped_action == "down") translation_cords.Y -= translation_diff;
-                        else if (mia.mapped_action == "right_mouse_button")
-                        {
-                            // Invert it
-                            translation_cords = mia.raw_action.distance * -1;
-                        }
-                        else
-                        {
-                            //Mouse is scrolled lets zoom accordingly
-                            MappedInputAction mouse_position = actions.GetMousePosition();
-                            Vector2? pos = null;
-                            if (mouse_position?.raw_action?.position != null)
-                            {
-                                pos = mouse_position.raw_action.position.Value.ToVector2();
-                            }
-                            this.Zoom(mia.raw_action.distance.Y, pos);
-                        }
-
-                        mia.SetHandled();
-                    }
-
-                    if (translation_cords.X != 0 || translation_cords.Y != 0)
-                    {
-                        this.Translate(translation_cords);
-                    }
-                }
+                actions.FireAvailableWatchers(actionWatchers);
             }
 
             return actions;
