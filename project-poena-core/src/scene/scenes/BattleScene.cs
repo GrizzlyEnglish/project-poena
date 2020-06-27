@@ -22,6 +22,8 @@ namespace Project_Poena.Scene
 
         public BattleScene()
         {
+            // Set the namespace
+            this.sceneNamespace = "battle_scene";
             //Create the scene adding the necessary layers
             this.AddLayer(new BattleSceneLayer());
             this.AddLayer(new BattleSceneUI());

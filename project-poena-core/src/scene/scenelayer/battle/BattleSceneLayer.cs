@@ -12,6 +12,7 @@ using Project_Poena.Events;
 using Project_Poena.Scene;
 using Project_Poena.Cameras;
 using Project_Poena.Input;
+using System.Diagnostics;
 
 namespace Project_Poena.Scene.SceneLayer
 {
@@ -116,8 +117,6 @@ namespace Project_Poena.Scene.SceneLayer
 
             this.system_manager.Update(delta);
 
-            //Remove any unhandled events
-            EventQueueHandler.GetInstance().ClearNamespace("battle_scene");
 
             return StateEnum.InProgress;
         }

@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 namespace Project_Poena.Board
 {
@@ -119,14 +120,14 @@ namespace Project_Poena.Board
 
             if (mia != null) 
             {
-                //Check if a tile has been clicked
+                // Check if a tile has been clicked
                 Vector2 m_pos = mia.raw_action.unprojected_position.Value;
 
-                //First lets do some math do narrow the grid way down
+                // First lets do some math do narrow the grid way down
                 Point p = Coordinates.WorldToBoard(m_pos);
 
-                //Lets looks and see if there is a tile in the same slot but on the higher realm
-                //TODO: This
+                // Lets looks and see if there is a tile in the same slot but on the higher realm
+                // TODO: This
 
                 BoardTile bt = this[p.X, p.Y, 0];
                 if (bt != null)
@@ -136,6 +137,18 @@ namespace Project_Poena.Board
                 }
             }
 
+            // Now check what is being highlighted
+            MappedInputAction pointerPosition = actions.Find(a => a.mapped_action == "pointer_position");
+            if (pointerPosition != null) 
+            {
+                Vector2 m_pos = pointerPosition.raw_action.unprojected_position.Value;
+                Point p = Coordinates.WorldToBoard(m_pos);
+
+                if (this[p.X, p.Y, 0] != null) {
+                    EventQueueHandler.GetInstance().QueueEvent(new Event("battle_scene", "hover_tile", this[p.X, p.Y, 0]));
+                }
+            }
+            
             return actions;
         }
         

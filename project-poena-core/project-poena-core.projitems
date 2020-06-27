@@ -71,6 +71,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)src\sprites\Sprite.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)src\sprites\SpritePosition.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)src\utilities\FrameCounter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\utilities\Logger.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Content\" />

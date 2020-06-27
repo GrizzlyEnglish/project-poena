@@ -72,4 +72,14 @@ namespace Project_Poena.Common.Enums
         DebugNPC
     }
 
+    /// <summary>
+    /// Allows logs to be prioritized
+    /// </summary>
+    public enum LogLevel 
+    {
+        Debug,
+        Information,
+        Critical
+    }
+
 }

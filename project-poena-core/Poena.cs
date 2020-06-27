@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework.Input;
 using Project_Poena.Managers;
 using Project_Poena.Extensions;
 using Project_Poena.Common.Variables;
+using Project_Poena.Common.Enums;
+using Project_Poena.Utilities.Logger;
 
 namespace Project_Poena
 {
@@ -17,6 +19,7 @@ namespace Project_Poena
 
         public Poena()
         {
+            Logger.GetInstance().LogLevel = LogLevel.Debug;
             graphics = new GraphicsDeviceManager(this);
             inputHandler = new InputHandler();
 

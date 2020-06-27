@@ -21,6 +21,14 @@ namespace Project_Poena.Common.Coordinates
             return $"({x},{y},{z})";
         }
 
+        public override bool Equals(object? obj) {
+            if (obj == null) {
+                return false;
+            }
+            Coordinates coordinates = (Coordinates)obj;
+            return coordinates.x == this.x && coordinates.y == y && coordinates.z == this.z;
+        }
+
         public Vector2 AsVector2()
         {
             return new Vector2(x, y);
@@ -34,6 +42,18 @@ namespace Project_Poena.Common.Coordinates
         public static Coordinates BoardToWorld(Coordinates coordinates)
         {
             return BoardToWorld(coordinates.x, coordinates.y, coordinates.z);
+        }
+
+        /// <summary>
+        /// Returns the point in a Coordinates wrapper
+        /// </summary>
+        /// <param name="p">The point that is being converted</param>
+        /// <returns>
+        /// A world point coordinate
+        /// </returns>
+        public static Coordinates BoardToWorld(Point p) 
+        {
+            return BoardToWorld(p.X, p.Y);
         }
 
         public static Coordinates BoardToWorld(int x, int y, int z = 0)

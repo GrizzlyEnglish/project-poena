@@ -142,7 +142,7 @@ namespace Project_Poena.OpenGL.Input
                     new Point(this.pastMice.Last.Value.HorizontalScrollWheelValue, pastMice.Last.Value.ScrollWheelValue);
 
                 InputAction scroll_ia = 
-                    new InputAction(ActionDeviceType.Mouse, ActionType.Positional, "scroll", current_scroll, past_scroll);
+                    new InputAction(ActionDeviceType.Mouse, ActionType.Positional, "zoom", current_scroll, past_scroll);
 
                 results.Add(scroll_ia);
             }

@@ -1,5 +1,8 @@
-﻿using Project_Poena.Extensions;
+﻿using Project_Poena.Common.Enums;
+using Project_Poena.Extensions;
+using Project_Poena.Utilities.Logger;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Project_Poena.Events
 {
@@ -20,6 +23,7 @@ namespace Project_Poena.Events
             public void Clear()
             {
                 queued_events.Clear();
+                Logger.GetInstance().Log(LogLevel.Debug, "Event", "Cleared event stack");
             }
 
             // Clears unused events in namespace
@@ -33,6 +37,7 @@ namespace Project_Poena.Events
                         evt.HandleEvent();
                     }
                 });
+                Logger.GetInstance().Log(LogLevel.Debug, "Event", $"Cleared event namespace {event_namespace}");
             }
 
             public void QueueEvent(Event evt)
@@ -41,6 +46,7 @@ namespace Project_Poena.Events
                 queued_events.RemoveHandled();
                 //Now we can add it
                 queued_events.Add(evt);
+                Logger.GetInstance().Log(LogLevel.Debug, "Event", $"Added event {evt.name} to stack");
             }
 
             //Finds all the scene layer events and returns them by removing them

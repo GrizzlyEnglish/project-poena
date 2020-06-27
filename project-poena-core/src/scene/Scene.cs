@@ -35,6 +35,12 @@ namespace Project_Poena.Scene
         public EntityManager entity_manager { get; protected set; }
         public SystemManager system_manager { get; protected set; }
 
+        /// <summary>
+        /// The namespace of the scene for the event hankder
+        /// </summary>
+        /// <value>Public get witha protected set to allow the intertinace to set</value>
+        public string sceneNamespace { get; protected set; }
+
         public AbstractScene()
         {
             this.scene_layers = new LinkedList<ISceneLayer>();
@@ -117,6 +123,9 @@ namespace Project_Poena.Scene
 
         public void HandleInput(InputHandler inputHandler)
         {
+            // Remove any unhandled events -- Do first to allow render to get events
+            EventQueueHandler.GetInstance().ClearNamespace(this.sceneNamespace);
+
             //Convert the mappings we have into actions
             List<MappedInputAction> mappings = inputHandler.GetMappedInputs(this.scene_mappings);
             List<MappedInputAction> handled = new List<MappedInputAction>();
@@ -146,9 +155,6 @@ namespace Project_Poena.Scene
             {
                 sl.Update(delta);
             }
-
-            //Clear any unused events in the scene
-            EventQueueHandler.GetInstance().Clear();
 
             return this.GetState();
         }

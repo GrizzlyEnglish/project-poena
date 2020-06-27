@@ -116,6 +116,21 @@ namespace Project_Poena.Board
             this.isVisible = false;
         }
 
+        /// <summary>
+        /// Gets thes renderable position of the board tile
+        /// For ease of use
+        /// </summary>
+        /// <returns>
+        /// Returns world coordinates of the tile
+        /// </returns>
+        public Coordinates RenderCoordinates() 
+        {
+            Point p = Coordinates.WorldToBoard(this.position.world_position.AsVector2());
+            Coordinates coordinates = Coordinates.BoardToWorld(p.X, p.Y);
+
+            return coordinates;
+        }
+
         public bool IsEqual(BoardTile bt)
         {
             Coordinates c1 = this.position.grid_slot;
