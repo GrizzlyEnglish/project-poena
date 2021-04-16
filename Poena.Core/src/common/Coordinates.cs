@@ -21,7 +21,7 @@ namespace Project_Poena.Common.Coordinates
             return $"({x},{y},{z})";
         }
 
-        public override bool Equals(object? obj) {
+        public override bool Equals(object obj) {
             if (obj == null) {
                 return false;
             }
