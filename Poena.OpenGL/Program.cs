@@ -1,15 +1,14 @@
 ﻿using System;
-using Project_Poena;
-using Project_Poena.OpenGL.Input;
+using Poena.OpenGL.Input;
 
-namespace Project_Poena_opengl
+namespace Poena.OpenGL
 {
     public static class Program
     {
         [STAThread]
         static void Main()
         {
-            using (var game = new Poena())
+            using (var game = new Core.Poena())
             {
                 game.inputHandler.AddGather(new MouseInputGather());
                 game.inputHandler.AddGather(new KeyboardInputGather());

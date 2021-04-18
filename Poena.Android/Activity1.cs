@@ -17,14 +17,14 @@ namespace Poena.Android
     )]
     public class Activity1 : AndroidGameActivity
     {
-        private Project_Poena.Poena _game;
+        private Core.Poena _game;
         private View _view;
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
-            _game = new Project_Poena.Poena();
+            _game = new Core.Poena();
             _view = _game.Services.GetService(typeof(View)) as View;
 
             SetContentView(_view);

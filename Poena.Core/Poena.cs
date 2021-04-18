@@ -2,13 +2,13 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Project_Poena.Managers;
-using Project_Poena.Extensions;
-using Project_Poena.Common.Variables;
-using Project_Poena.Common.Enums;
-using Project_Poena.Utilities.Logger;
+using Poena.Core.Common;
+using Poena.Core.Extensions;
+using Poena.Core.Input;
+using Poena.Core.Managers;
+using Poena.Core.Utilities;
 
-namespace Project_Poena
+namespace Poena.Core
 {
     public class Poena : Game
     {
@@ -53,9 +53,7 @@ namespace Project_Poena
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            double deltaTime = gameTime.ElapsedGameTime.TotalSeconds;
-
-            screenManager.Update(deltaTime);
+            screenManager.Update(gameTime);
 
             base.Update(gameTime);
         }
