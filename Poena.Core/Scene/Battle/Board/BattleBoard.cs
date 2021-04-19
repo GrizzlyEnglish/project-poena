@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Poena.Core.Common;
-using Poena.Core.Input.Actions;
 
 namespace Poena.Core.Scene.Battle.Board
 {

@@ -8,7 +8,6 @@ using MonoGame.Extended.Input.InputListeners;
 using Poena.Core.Common;
 using Poena.Core.Events;
 using Poena.Core.Extensions;
-using Poena.Core.Input.Actions;
 
 namespace Poena.Core.Scene.Battle.Board
 {

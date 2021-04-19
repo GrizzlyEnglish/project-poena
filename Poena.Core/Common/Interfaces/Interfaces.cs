@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Input.InputListeners;
 using Poena.Core.Common.Interfaces;
-using Poena.Core.Input.Actions;
 using Poena.Core.Scene;
 
 namespace Poena.Core.Common {

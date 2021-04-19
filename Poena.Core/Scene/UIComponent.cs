@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Poena.Core.Common;
-using Poena.Core.Input.Actions;
 using Poena.Core.Sprites;
 
 namespace Poena.Core.Scene
@@ -58,8 +57,6 @@ namespace Poena.Core.Scene
         {
             this.foreground_sprite = new Sprite();
         }
-
-        public abstract List<MappedInputAction> HandleInput(List<MappedInputAction> actions);
 
         //Most likely not needed, but if so can override
         public StateEnum Update(double delta)

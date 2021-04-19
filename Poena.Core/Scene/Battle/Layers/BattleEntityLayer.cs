@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Input.InputListeners;
 using Poena.Core.Scene.Battle.Board;
 using Poena.Core.Common;
-using Poena.Core.Input.Actions;
 using Poena.Core.Scene.Battle.Entities;
 
 namespace Poena.Core.Scene.Battle.Layers

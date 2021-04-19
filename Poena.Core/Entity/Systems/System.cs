@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Poena.Core.Common;
 using Poena.Core.Entity.Managers;
-using Poena.Core.Input.Actions;
 
 namespace Poena.Core.Entity.Systems
 {
@@ -29,9 +28,6 @@ namespace Poena.Core.Entity.Systems
         }
 
         public abstract void Initiliaze();
-
-        //Overrideable
-        public virtual List<MappedInputAction> HandleLayerInput(List<MappedInputAction> actions) { return actions; }
         public virtual void LoadContent(ContentManager contentManager) { }
         public virtual void Update(double dt) { }
         public virtual void Render(SpriteBatch batch, RectangleF camera_bounds) { }

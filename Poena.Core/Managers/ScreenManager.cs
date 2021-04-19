@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Input.InputListeners;
 using Poena.Core.Common;
-using Poena.Core.Input;
 using Poena.Core.Scene.Battle;
 using Poena.Core.Utilities;
 
@@ -25,7 +24,7 @@ namespace Poena.Core.Managers {
         private readonly TouchListener touchListener;
         private readonly MouseListener mouseListener;
 
-        public ScreenManager(InputHandler inputHandler)
+        public ScreenManager()
         {
             this.screens = new Stack<Screen.Screen>();
             this.touchListener = new TouchListener();

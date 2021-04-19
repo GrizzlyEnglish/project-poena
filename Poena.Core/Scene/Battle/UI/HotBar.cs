@@ -5,8 +5,6 @@ using Poena.Core.Common;
 using Poena.Core.Entity;
 using Poena.Core.Entity.Components;
 using Poena.Core.Events;
-using Poena.Core.Input.Actions;
-using Poena.Core.Input.Extensions;
 using Poena.Core.Scene.Battle.Layers;
 using Poena.Core.Sprites;
 
@@ -143,45 +141,34 @@ namespace Poena.Core.Scene.Battle.UI
 
             return StateEnum.InProgress;
         }
-        
-        public override List<MappedInputAction> HandleInput(List<MappedInputAction> actions)
+
+        public override bool HandleMouseClicked(MouseEvent mouseEvent)
         {
             if (this.is_visible)
             {
-                MappedInputAction mouse = actions.GetMousePosition();
+                //Check if the position is within the hot bar
+                Point pos = mouseEvent.UnprojectedPosition.ToPoint();
 
-                if (mouse != null)
+                if (this.IsWithinBounds(pos))
                 {
-                    //Check if the position is within the hot bar
-                    Point? pos = mouse.raw_action.position;
-
-                    if (this.IsWithinBounds(pos))
+                    //Now determine the icon the mouse is over
+                    for (int i = 0; i < ICON_LENGTH; i++)
                     {
-                        //Now determine the icon the mouse is over
-                        for (int i = 0; i < ICON_LENGTH; i++)
+                        HotBarIcon hbi = this.Icons[i];
+                        if (hbi != null && hbi.IsWithinBounds(pos))
                         {
-                            HotBarIcon hbi = this.Icons[i];
-                            if (hbi != null && hbi.IsWithinBounds(pos))
-                            {
-                                string message = "entity_" + ((HotBarItems)i).ToString().ToLower();
-                                Component comp = hbi.component;
-                                //Notify the entity that they an action is being performed
-                                this.ui_scene_layer.CurrentScene.GetSceneLayer<BattleEntityLayer>().SystemManager.Message(message, comp);
-                                //This was selected break
-                                break;
-                            }
+                            string message = "entity_" + ((HotBarItems)i).ToString().ToLower();
+                            Component comp = hbi.component;
+                            //Notify the entity that they an action is being performed
+                            this.ui_scene_layer.CurrentScene.GetSceneLayer<BattleEntityLayer>().SystemManager.Message(message, comp);
+                            return true;
                         }
                     }
                 }
             }
-            return actions;
-        }
 
-        public override bool HandleMouseClicked(MouseEvent mouseEvent)
-        {
-            throw new System.NotImplementedException();
+            return false;
         }
-
 
         /*
          * 
@@ -206,11 +193,6 @@ namespace Poena.Core.Scene.Battle.UI
             public override void SetPosition(Vector2 icon_position)
             {
                 this.foreground_sprite.position.SetPosition(icon_position);
-            }
-
-            public override List<MappedInputAction> HandleInput(List<MappedInputAction> actions)
-            {
-                return actions;
             }
 
             public override bool HandleMouseClicked(MouseEvent mouseEvent)

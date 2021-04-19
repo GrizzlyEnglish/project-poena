@@ -2,12 +2,9 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Poena.Core.Common;
 using Poena.Core.Extensions;
-using Poena.Core.Input.Actions;
-using Poena.Core.Input.Extensions;
 
 namespace Poena.Core.Common
 {
-
     public class Camera
     {
         //The center of the camera position
@@ -30,8 +27,6 @@ namespace Poena.Core.Common
         private Vector2? start_position;
         private float movement_time = 0;
 
-        private List<InputWatcher> actionWatchers { get; set; }
-        
         public Matrix translation_matrix { get; set; }
 
         public Camera(float x = 0, float y = 0,
@@ -44,32 +39,9 @@ namespace Poena.Core.Common
             this.max_zoom = max_zoom;
             this.min_zoom = min_zoom;
             this.zoom = current_zoom;
-            actionWatchers = new List<InputWatcher>()
-            {
-                new InputWatcher("left", mia => this.Translate(new Vector2(-translation_diff, 0))),
-                new InputWatcher("right", mia => this.Translate(new Vector2(translation_diff, 0))),
-                new InputWatcher("up", mia => this.Translate(new Vector2(0, -translation_diff))),
-                new InputWatcher("down", mia => this.Translate(new Vector2(0, translation_diff))),
-                new InputWatcher("left_button", ActionType.Held, mia => this.Translate(-1 * mia.raw_action.distance)),
-                new InputWatcher("zoom", mia => this.Zoom(mia.raw_action.distance.Y, mia.raw_action.position?.ToVector2())),
-            };
-            
             this.Resize();
         }
         
-        public List<MappedInputAction> HandleInput(List<MappedInputAction> actions)
-        {
-            //Find any mouse positions
-            actions.UnprojectCoordinates(pos => this.UnProjectCoordinates(pos));
-
-            if (!this.is_static && !this.ignore_inputs)
-            {
-                actions.FireAvailableWatchers(actionWatchers);
-            }
-
-            return actions;
-        }
-
         public void ClampCamera(Rectangle bounds, bool centerOnBounds = false)
         {
             this.camera_bounds = bounds;

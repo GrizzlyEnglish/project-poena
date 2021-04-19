@@ -2,10 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Input.InputListeners;
 using Poena.Core.Common;
 using Poena.Core.Entity.Managers;
-using Poena.Core.Input.Actions;
 
 namespace Poena.Core.Scene
 {
@@ -74,12 +72,6 @@ namespace Poena.Core.Scene
         public abstract void HandleEvents();
         public abstract void Load(string path);
         public abstract void Save(string path);
-
-        public List<MappedInputAction> HandleInput(List<MappedInputAction> actions)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public abstract bool HandleMouseClicked(MouseEvent mouseEvent);
     }
 }

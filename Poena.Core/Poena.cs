@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Poena.Core.Common;
 using Poena.Core.Extensions;
-using Poena.Core.Input;
 using Poena.Core.Managers;
 using Poena.Core.Utilities;
 
@@ -15,13 +14,11 @@ namespace Poena.Core
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         ScreenManager screenManager;
-        public InputHandler inputHandler;
 
         public Poena()
         {
             Logger.GetInstance().LogLevel = LogLevel.Debug;
             graphics = new GraphicsDeviceManager(this);
-            inputHandler = new InputHandler();
 
             graphics.IsFullScreen = false;
             graphics.PreferredBackBufferHeight = Variables.VIEWPORT_HEIGHT;
@@ -30,7 +27,7 @@ namespace Poena.Core
             this.Window.AllowUserResizing = true;
             this.Window.ClientSizeChanged += new EventHandler<EventArgs>(this.WindowResizeEvent);
 
-            screenManager = new ScreenManager(inputHandler);
+            screenManager = new ScreenManager();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
