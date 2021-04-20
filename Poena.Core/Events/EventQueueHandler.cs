@@ -46,6 +46,7 @@ namespace Poena.Core.Events
                 //Now we can add it
                 queued_events.Add(evt);
                 Logger.GetInstance().Log(LogLevel.Debug, "Event", $"Added event {evt.name} to stack");
+                Logger.GetInstance().Log(LogLevel.Debug, "Event", evt.data.ToString());
             }
 
             //Finds all the scene layer events and returns them by removing them

@@ -32,7 +32,7 @@ namespace Poena.Core.Scene.Battle.Systems
                 PositionComponent pos = ent.GetComponent<PositionComponent>();
 
                 //TODO: rce - Determine how we are going to get things without direct connection
-                BattleBoard board = this.manager.SceneLayer.CurrentScene.GetSceneLayer<BattleEntityLayer>().GetLayerNode<BattleBoard>();
+                BattleBoard board = this.Manager.SceneLayer.CurrentScene.GetSceneLayer<BattleEntityLayer>().GetLayerNode<BattleBoard>();
                 BoardTile on_tile = board.grid[Coordinates.WorldToBoard(pos.tile_position)];
 
                 this.SelectEntity(ent, on_tile);
@@ -45,36 +45,29 @@ namespace Poena.Core.Scene.Battle.Systems
 
         public override void Update(double dt)
         {
-            Event evt = EventQueueHandler.GetInstance().GetEvent("battle_scene", "clicked_tile");
-
+            BoardTile selectedTile = this.Manager.SceneLayer.GetLayerNode<BattleBoard>().GetClickedTile();
             //If we have an event lets check if we seleced an entity
-            if (evt != null)
+            if (selectedTile != null)
             {
-                //Get the tile
-                BoardTile selected_tile = (BoardTile)evt.data;
-
                 //See if somone is already selected
-                ECEntity selected_ent = this.manager.EntityManager.GetEntity(typeof(SelectedComponent));
+                ECEntity selectedEnt = this.Manager.EntityManager.GetEntity(typeof(SelectedComponent));
                 
                 //If we have a selected entity, if not current turn deselect them otherwise ignore
-                if (selected_ent != null)
+                if (selectedEnt != null)
                 {
-                    TurnComponent turn = selected_ent.GetComponent<TurnComponent>();
-                    PositionComponent pos = selected_ent.GetComponent<PositionComponent>();
+                    TurnComponent turn = selectedEnt.GetComponent<TurnComponent>();
+                    PositionComponent pos = selectedEnt.GetComponent<PositionComponent>();
                     //If they are deslect them
-                    if (!turn.ready_for_turn && selected_tile.position.GetWorldAnchorPosition() == pos.tile_position)
+                    if (!turn.ready_for_turn && selectedTile.position.GetWorldAnchorPosition() == pos.tile_position)
                     {
-                        selected_ent.RemoveComponent(typeof(SelectedComponent));
-                    }
-                    else
-                    {
+                        selectedEnt.RemoveComponent(typeof(SelectedComponent));
                     }
 
                     return;
                 }
                 
                 List<ECEntity> entities =
-                    this.manager.EntityManager
+                    this.Manager.EntityManager
                         .GetEntities(true, new Type[] { typeof(PositionComponent), typeof(PlayerControllerComponent) });
 
                 foreach (ECEntity ent in entities)
@@ -82,16 +75,16 @@ namespace Poena.Core.Scene.Battle.Systems
                     PositionComponent pos = ent.GetComponent<PositionComponent>();
 
                     //Check if the entities anchor point is inside the tile
-                    if (selected_tile.position.GetWorldAnchorPosition() == pos.tile_position)
+                    if (selectedTile.position.GetWorldAnchorPosition() == pos.tile_position)
                     {
-                        this.SelectEntity(ent, selected_tile, evt);
+                        this.SelectEntity(ent, selectedTile);
                         break;
                     }
                 }
             }
         }
 
-        private void SelectEntity(ECEntity ent, BoardTile selected_tile, Event evt = null)
+        private void SelectEntity(ECEntity ent, BoardTile selected_tile)
         {
             //Get the componenets
             TurnComponent turn = ent.GetComponent<TurnComponent>();
@@ -102,14 +95,12 @@ namespace Poena.Core.Scene.Battle.Systems
             selected.disadvantaged = !turn.ready_for_turn;
             //This entity was selected
             ent.AddComponent(selected);
-            //Digest the event if we have one
-            if (evt !=null) evt.HandleEvent();
             //Finally get all the possible tile anchors
             List<Vector2> tiles =
                 selected_tile.board_grid.Flood(selected_tile, stats.GetMovementDistance(selected.disadvantaged))
                 .Select(bt => bt.position.GetWorldAnchorPosition()).ToList();
             //Filter blocked tiles
-            List<Vector2> ent_positions = this.manager.EntityManager
+            List<Vector2> ent_positions = this.Manager.EntityManager
                 .GetEntities(typeof(PositionComponent))
                 .Select(e => e.GetComponent<PositionComponent>().tile_position)
                 .ToList();
@@ -117,7 +108,7 @@ namespace Poena.Core.Scene.Battle.Systems
             //Set movements possible movement tiles
             selected.possible_positions = tiles;
             //Move camera to entity
-            this.manager.SceneLayer.CurrentScene.GetSceneLayer<BattleEntityLayer>().MoveCamera(selected_tile.position.GetWorldAnchorPosition());
+            this.Manager.SceneLayer.CurrentScene.GetSceneLayer<BattleEntityLayer>().MoveCamera(selected_tile.position.GetWorldAnchorPosition());
             //Tell the event channel someone was selected
             EventQueueHandler.GetInstance().QueueEvent(new Event("entity", "selected", ent));
         }

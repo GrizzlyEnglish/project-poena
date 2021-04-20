@@ -120,5 +120,11 @@ namespace Poena.Core.Scene.Battle.Layers
 
             return false;
         }
+
+        public override void HandleMouseMoved(MouseEvent mouseEvent)
+        {
+            mouseEvent.SetUnprojectedPosition(this.Camera);
+            this.LayerNodes.ForEach(obj => obj.HandleMouseMoved(mouseEvent));
+        }
     }
 }

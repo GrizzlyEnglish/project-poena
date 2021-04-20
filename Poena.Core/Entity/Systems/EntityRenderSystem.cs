@@ -23,7 +23,7 @@ namespace Poena.Core.Entity.Systems
         public override void Update(double dt)
         {
             List<ECEntity> entities =
-                    this.manager.EntityManager.GetEntities(new Type[] { typeof(SpriteComponent) });
+                    this.Manager.EntityManager.GetEntities(new Type[] { typeof(SpriteComponent) });
             foreach (ECEntity ent in entities)
             {
                 //TODO: rce - Add state logic
@@ -37,7 +37,7 @@ namespace Poena.Core.Entity.Systems
         public override void Render(SpriteBatch batch, RectangleF camera_bounds)
         {
             List<ECEntity> entities = 
-                this.manager.EntityManager.GetEntities(new Type[] { typeof(SpriteComponent), typeof(PositionComponent) });
+                this.Manager.EntityManager.GetEntities(new Type[] { typeof(SpriteComponent), typeof(PositionComponent) });
             foreach(ECEntity entity in entities)
             {
                 //TODO: rce - Add state to get the current animation of the state

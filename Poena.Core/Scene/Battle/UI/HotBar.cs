@@ -170,6 +170,11 @@ namespace Poena.Core.Scene.Battle.UI
             return false;
         }
 
+        public override void HandleMouseMoved(MouseEvent mouseEvent)
+        {
+            throw new System.NotImplementedException();
+        }
+
         /*
          * 
          * Hot bar icons are the specific icons for an action
@@ -196,6 +201,11 @@ namespace Poena.Core.Scene.Battle.UI
             }
 
             public override bool HandleMouseClicked(MouseEvent mouseEvent)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public override void HandleMouseMoved(MouseEvent mouseEvent)
             {
                 throw new System.NotImplementedException();
             }

@@ -30,7 +30,7 @@ namespace Poena.Core.Scene.Battle.Systems
 
             //Get entities that have a position
             List<ECEntity> entities =
-                this.manager.EntityManager
+                this.Manager.EntityManager
                 .GetEntities(new Type[] { typeof(PositionComponent), typeof(MovementComponent) });
 
             foreach (ECEntity ent in entities)
@@ -53,7 +53,7 @@ namespace Poena.Core.Scene.Battle.Systems
                         if (movement.path_to_destination.Count == 0)
                         {
                             //Entity is finished moving notify turn system to reset
-                            this.manager.Message("end_turn", ent);
+                            this.Manager.Message("end_turn", ent);
                             pos.tile_position = last_pos;
                             ent.RemoveComponent(movement);
                         }

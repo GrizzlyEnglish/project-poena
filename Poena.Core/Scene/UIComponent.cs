@@ -137,5 +137,6 @@ namespace Poena.Core.Scene
         }
 
         public abstract bool HandleMouseClicked(MouseEvent mouseEvent);
+        public abstract void HandleMouseMoved(MouseEvent mouseEvent);
     }
 }

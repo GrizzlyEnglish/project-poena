@@ -47,7 +47,7 @@ namespace Poena.Core.Entity.Systems
 
         public override void Update(double dt)
         {
-            ECEntity selected_ent = this.manager.EntityManager.GetSelectedEntity();
+            ECEntity selected_ent = this.Manager.EntityManager.GetSelectedEntity();
 
             //TODO: rce - Add pause mechanism
             if (selected_ent != null)
@@ -57,7 +57,7 @@ namespace Poena.Core.Entity.Systems
             }
 
             List<ECEntity> entities =
-                this.manager.EntityManager.GetEntities(new Type[] { typeof(TurnComponent) });
+                this.Manager.EntityManager.GetEntities(new Type[] { typeof(TurnComponent) });
 
             foreach (ECEntity ent in entities)
             {
@@ -72,7 +72,7 @@ namespace Poena.Core.Entity.Systems
                     //Make sure this doesn't overflow
                     turn.current_time = turn.time_for_turn;
                     //Force select the entity
-                    this.manager.Message("select_entity", ent);
+                    this.Manager.Message("select_entity", ent);
                     break;
                 }
 
@@ -83,7 +83,7 @@ namespace Poena.Core.Entity.Systems
         public override void Render(SpriteBatch batch, RectangleF camera_bounds)
         {
             List<ECEntity> entities =
-                this.manager.EntityManager.GetEntities(new Type[] { typeof(TurnComponent) });
+                this.Manager.EntityManager.GetEntities(new Type[] { typeof(TurnComponent) });
 
             //Loop anybody that has a turn comp and render there bar
             foreach (ECEntity ent in entities)

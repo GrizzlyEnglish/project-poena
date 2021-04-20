@@ -8,6 +8,7 @@ using MonoGame.Extended.Input.InputListeners;
 using Poena.Core.Common;
 using Poena.Core.Events;
 using Poena.Core.Extensions;
+using Poena.Core.Utilities;
 
 namespace Poena.Core.Scene.Battle.Board
 {
@@ -21,17 +22,20 @@ namespace Poena.Core.Scene.Battle.Board
     public class BoardGrid : INodeObject
     {
         //Debug options
-        private readonly bool debug_render = true;
+        private readonly bool DebugRender = true;
 
-        private BoardTile[,,] board_grid;
-        private Rectangle? grid_bounds;
+        private BoardTile[,,] Grid;
+        private Rectangle? GridBounds;
+        private BoardTile ClickedTile;
 
-        public int width { get { return board_grid.GetLength(1);  } }
-        public int length { get { return board_grid.GetLength(0); } }
+        public int Width { get { return Grid.GetLength(1);  } }
+        public int Length { get { return Grid.GetLength(0); } }
+
+        public BoardTile HoveringTile { get; private set; }
 
         public BoardGrid(BoardTile[,,] grid_tiles)
         {
-            this.board_grid = grid_tiles;
+            this.Grid = grid_tiles;
             this.ForEach(bt => bt.InjectBoard(this));
         }
 
@@ -52,7 +56,7 @@ namespace Poena.Core.Scene.Battle.Board
             {
                 if (this.WithinBounds(l, w, h))
                 {
-                    return this.board_grid[l, w, h];
+                    return this.Grid[l, w, h];
                 } else
                 {
                     return null;
@@ -60,7 +64,7 @@ namespace Poena.Core.Scene.Battle.Board
             }
             set
             {
-                this.board_grid[l, w, h] = value;
+                this.Grid[l, w, h] = value;
             }
         }
 
@@ -76,11 +80,11 @@ namespace Poena.Core.Scene.Battle.Board
         {
             for (int z = 0; z < 2; z++)
             {
-                for (int w = 0; w < this.width; w++)
+                for (int w = 0; w < this.Width; w++)
                 {
-                    for (int l = 0; l < this.length; l++)
+                    for (int l = 0; l < this.Length; l++)
                     {
-                        BoardTile bt = this.board_grid[l, w, z];
+                        BoardTile bt = this.Grid[l, w, z];
                         if (bt != null) action(bt);
                     }
                 }
@@ -120,27 +124,23 @@ namespace Poena.Core.Scene.Battle.Board
 
             // TODO: Lets looks and see if there is a tile in the same slot but on the higher realm
 
-            BoardTile bt = this[p.X, p.Y, 0];
-            if (bt != null)
-            {
-                EventQueueHandler.GetInstance().QueueEvent(new Event("battle_scene", "clicked_tile", bt));
-                return true;
-            }
+            ClickedTile = this[p.X, p.Y, 0];
 
-            // TODO: Move below to a hover only function
-            // Now check what is being highlighted, this does not count as a handled action
-            /*MappedInputAction pointerPosition = actions.Find(a => a.mapped_action == "pointer_position");
-            if (pointerPosition != null) 
-            {
-                Vector2 m_pos = pointerPosition.raw_action.unprojected_position.Value;
-                Point p = Coordinates.WorldToBoard(m_pos);
+            return ClickedTile != null;
+        }
 
-                if (this[p.X, p.Y, 0] != null) {
-                    EventQueueHandler.GetInstance().QueueEvent(new Event("battle_scene", "hover_tile", this[p.X, p.Y, 0]));
-                }
-            }*/
-            
-            return false;
+        public void HandleMouseMoved(MouseEvent mouseEvent)
+        {
+            Point p = Coordinates.WorldToBoard(mouseEvent.UnprojectedPosition);
+
+            HoveringTile = this[p.X, p.Y, 0];
+        }
+
+        public BoardTile GetClickedTile()
+        {
+            BoardTile bt = ClickedTile;
+            ClickedTile = null;
+            return bt;
         }
         
         public void Load(string path)
@@ -173,7 +173,7 @@ namespace Poena.Core.Scene.Battle.Board
             });
 
 #if DEBUG
-            if (this.debug_render)
+            if (this.DebugRender)
             {
                 spriteBatch.DrawRectangle(this.GetBounds(), 30);
             }
@@ -199,22 +199,22 @@ namespace Poena.Core.Scene.Battle.Board
 
         public bool WithinBounds(int l, int w, int z)
         {
-            return l >= 0 && l < this.length && w >= 0 && w < this.width && z >= 0 && z < 2;
+            return l >= 0 && l < this.Length && w >= 0 && w < this.Width && z >= 0 && z < 2;
         }
 
         public Rectangle GetBounds()
         {
-            if (this.grid_bounds == null)
+            if (this.GridBounds == null)
             {
                 //Scale back the top and the bottom
-                int width_scale = (int)(this.width * .25);
-                int length_scale = (int)(this.length * .25);
+                int width_scale = (int)(this.Width * .25);
+                int length_scale = (int)(this.Length * .25);
 
                 //Get the points
-                Coordinates left = Coordinates.BoardToWorld(0, this.length);
+                Coordinates left = Coordinates.BoardToWorld(0, this.Length);
                 Coordinates top = Coordinates.BoardToWorld(-width_scale, -length_scale);
-                Coordinates right = Coordinates.BoardToWorld(this.width, 0);
-                Coordinates bottom = Coordinates.BoardToWorld(this.width + width_scale, this.length + length_scale);
+                Coordinates right = Coordinates.BoardToWorld(this.Width, 0);
+                Coordinates bottom = Coordinates.BoardToWorld(this.Width + width_scale, this.Length + length_scale);
 
                 //Find the width and the height
                 int bounds_width = right.x - left.x;
@@ -225,10 +225,10 @@ namespace Poena.Core.Scene.Battle.Board
 
                 bounds_height += bounds_height; //Double the height to center
 
-                this.grid_bounds = new Rectangle(x, y, bounds_width, bounds_height);
+                this.GridBounds = new Rectangle(x, y, bounds_width, bounds_height);
             }
             
-            return this.grid_bounds.Value;
+            return this.GridBounds.Value;
         }
 
         public List<BoardTile> ShortestPath(BoardGridPosition start, BoardGridPosition end)

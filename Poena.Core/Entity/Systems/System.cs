@@ -8,18 +8,18 @@ namespace Poena.Core.Entity.Systems
 {
     public abstract class ECSystem
     {
-        protected SystemManager manager;
+        protected SystemManager Manager;
 
         protected string identifier;
 
         public ECSystem(SystemManager systemManager)
         {
-            this.manager = systemManager;
+            this.Manager = systemManager;
         }
 
         public void SendMessage(string message, object data)
         {
-            this.manager.Message(message, data);
+            this.Manager.Message(message, data);
         }
 
         public virtual bool RecieveMessage(string message, object data)

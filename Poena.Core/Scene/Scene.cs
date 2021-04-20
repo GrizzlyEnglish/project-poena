@@ -36,6 +36,7 @@ namespace Poena.Core.Scene
             this.TouchListener = touchListener;
 
             this.MouseListener.MouseClicked += MouseClicked;
+            this.MouseListener.MouseMoved += MouseMoved;
         }
 
         public T GetSceneLayer<T>() where T : ISceneLayer
@@ -140,6 +141,16 @@ namespace Poena.Core.Scene
                 {
                     handled = layer.HandleMouseClicked(mouseEvent);
                 }
+            }
+        }
+
+        public void MouseMoved(object sender, MouseEventArgs mouseEventArgs)
+        {
+            // Wrap the mouse event
+            MouseEvent mouseEvent = new MouseEvent(mouseEventArgs);
+            foreach (ISceneLayer layer in this.SceneLayers)
+            {
+                layer.HandleMouseMoved(mouseEvent);
             }
         }
 

@@ -33,19 +33,13 @@ namespace Poena.Core.Scene.Battle.Systems
             this.movement_marker_sprite = contentManager.Load<Texture2D>(Variables.AssetPaths.TILE_PATH + "HEX_Highlight_Test");
         }
 
-        public override void Update(double dt) {
-            Event hoverEvent = EventQueueHandler.GetInstance().GetEvent("battle_scene", "hover_tile");
-            if (hoverEvent != null) {
-                BoardTile bt = (BoardTile)hoverEvent.data;
-                //batch.Draw(this.movement_marker_sprite, bt.position.grid_slot.AsVector2(), Color.White);
-            }
-        }
+        public override void Update(double dt) {}
 
         public override void Render(SpriteBatch batch, RectangleF camera_bounds)
         {
             // Get all the entities that are affecting the tiles
             List<ECEntity> entities =
-                this.manager.EntityManager.GetEntities(new Type[] { 
+                this.Manager.EntityManager.GetEntities(new Type[] { 
                     typeof(PositionComponent), 
                     typeof(MovementComponent), 
                     typeof(SelectedComponent) 
@@ -100,10 +94,9 @@ namespace Poena.Core.Scene.Battle.Systems
                 batch.Draw(this.movement_marker_sprite, coordinates.AsVector2(), Color.White);
             }
 
-            Event hoverEvent = EventQueueHandler.GetInstance().GetEvent("battle_scene", "hover_tile");
-            if (hoverEvent != null) {
-                BoardTile bt = (BoardTile)hoverEvent.data;
-                Coordinates coordinates = bt.RenderCoordinates();
+            BoardTile hoveringTile = this.Manager.SceneLayer.GetLayerNode<BattleBoard>().GetHoveringTile();
+            if (hoveringTile != null) {
+                Coordinates coordinates = hoveringTile.RenderCoordinates();
                 // TODO: rce - Make this a highlight sprite - purely to show what tile is showing
                 batch.Draw(this.movement_marker_sprite, coordinates.AsVector2(), Color.White);
             }

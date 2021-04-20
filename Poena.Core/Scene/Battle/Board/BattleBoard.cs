@@ -40,6 +40,21 @@ namespace Poena.Core.Scene.Battle.Board
         {
             return this.grid.HandleMouseClicked(mouseEvent);
         }
+
+        public void HandleMouseMoved(MouseEvent mouseEvent)
+        {
+            this.grid.HandleMouseMoved(mouseEvent);
+        }
+
+        public BoardTile GetHoveringTile()
+        {
+            return this.grid.HoveringTile;
+        }
+
+        public BoardTile GetClickedTile()
+        {
+            return this.grid.GetClickedTile();
+        }
         
         public void Load(string path)
         {
@@ -70,6 +85,5 @@ namespace Poena.Core.Scene.Battle.Board
         {
             return grid.GetBounds();
         }
-
     }
 }

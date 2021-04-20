@@ -18,7 +18,7 @@ namespace Poena.Core.Entity.Systems
         public override void LoadContent(ContentManager contentManager)
         {
             List<ECEntity> entities =
-                this.manager.EntityManager.GetEntities(new Type[] {
+                this.Manager.EntityManager.GetEntities(new Type[] {
                     typeof(SpriteComponent),
                     typeof(SkillComponent),
                 });
