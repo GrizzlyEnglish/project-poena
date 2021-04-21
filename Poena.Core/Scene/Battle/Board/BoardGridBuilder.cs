@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Poena.Core.Common;
+using Poena.Core.Common.Interfaces;
 
 namespace Poena.Core.Scene.Battle.Board
 {

@@ -6,8 +6,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Input.InputListeners;
 using Poena.Core.Common;
+using Poena.Core.Common.Interfaces;
 using Poena.Core.Extensions;
-using Poena.Core.Utilities;
 
 namespace Poena.Core.Scene.Battle.Board
 {
@@ -18,7 +18,7 @@ namespace Poena.Core.Scene.Battle.Board
      * 
      */
 
-    public class BoardGrid : INodeObject
+    public class BoardGrid
     {
         //Debug options
         private readonly bool DebugRender = true;
@@ -97,25 +97,6 @@ namespace Poena.Core.Scene.Battle.Board
             });
         }
 
-        public void Entry()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Destroy()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Exit()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void GridClicked(object sender, MouseEventArgs mouseEventArgs)
-        {
-        }
-
         public bool HandleMouseClicked(MouseEvent mouseEvent)
         {
             // First lets do some math do narrow the grid way down
@@ -142,16 +123,6 @@ namespace Poena.Core.Scene.Battle.Board
             return bt;
         }
         
-        public void Load(string path)
-        {
-            
-        }
-
-        public void Save(string path)
-        {
-            
-        }
-
         public void LoadContent(ContentManager contentManager)
         {
             this.ForEach(bt => {
@@ -179,11 +150,6 @@ namespace Poena.Core.Scene.Battle.Board
 #endif
         }
         
-        public StateEnum Update(double delta)
-        {
-            throw new NotImplementedException();
-        }
-
         public List<BoardTile> CircleAroundTile(BoardTile bgt, int radius, bool includeCenter = false,
             bool includePrevious = false, bool addVariation = false, bool includeEdges = true)
         {
@@ -396,16 +362,6 @@ namespace Poena.Core.Scene.Battle.Board
                 }
             });
             return tiles;
-        }
-
-        public void HandleMouseDragged(MouseEvent mouseEvent)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void HandleMouseWheeled(MouseEvent mouseEvent)
-        {
-            throw new NotImplementedException();
         }
 
         private class PathNode

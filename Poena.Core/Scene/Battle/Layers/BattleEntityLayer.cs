@@ -111,7 +111,7 @@ namespace Poena.Core.Scene.Battle.Layers
         public override bool HandleMouseClicked(MouseEvent mouseEvent)
         {
             mouseEvent.SetUnprojectedPosition(this.Camera);
-            this.LayerNodes.ForEach(obj => {
+            this.LayerNodeObjects.ForEach(obj => {
                 bool handled = obj.HandleMouseClicked(mouseEvent);
                 if (handled)
                 {
@@ -125,7 +125,7 @@ namespace Poena.Core.Scene.Battle.Layers
         public override void HandleMouseMoved(MouseEvent mouseEvent)
         {
             mouseEvent.SetUnprojectedPosition(this.Camera);
-            this.LayerNodes.ForEach(obj => obj.HandleMouseMoved(mouseEvent));
+            this.LayerNodeObjects.ForEach(obj => obj.HandleMouseMoved(mouseEvent));
         }
 
         public override void HandleMouseDragged(MouseEvent mouseEvent)
@@ -136,7 +136,7 @@ namespace Poena.Core.Scene.Battle.Layers
 
         public override void HandleMouseWheeled(MouseEvent mouseEvent)
         {
-            int zoom = mouseEvent.MouseEventArgs.ScrollWheelDelta;
+            int zoom = mouseEvent.MouseEventArgs.ScrollWheelDelta * 3;
             this.Camera.Zoom(zoom);
         }
     }

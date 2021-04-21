@@ -204,7 +204,8 @@ namespace Poena.Core.Common
             if (set_zoom.HasValue)
             {
                 z = set_zoom.Value;
-            } else
+            }
+            else
             {
                 z = zoom + (dt > 0 ? this.zoom_scale : -this.zoom_scale);
             }
@@ -216,6 +217,10 @@ namespace Poena.Core.Common
                 {
                     //TODO: rce - Zoom to point if applicable
                     this.zoom = z;
+                }
+                else
+                {
+                    this.zoom = this.max_zoom;
                 }
             }
             else

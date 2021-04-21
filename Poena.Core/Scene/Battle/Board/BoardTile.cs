@@ -4,11 +4,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Poena.Core.Common;
+using Poena.Core.Common.Interfaces;
 using Poena.Core.Extensions;
 
 namespace Poena.Core.Scene.Battle.Board
 {
-    public class BoardTile : INodeObject, IRouteable
+    public class BoardTile : IRouteable
     {
         private Texture2D tile_texture;
         private bool isVisible;
@@ -43,31 +44,6 @@ namespace Poena.Core.Scene.Battle.Board
             this.tile_name = "HEX_Dirt_01";
         }
 
-        public void Entry()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Destroy()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Exit()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Save(string path)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Load(string path)
-        {
-            throw new NotImplementedException();
-        }
-
         public void LoadContent(ContentManager contentManager)
         {
             //TODO: Create a handler that takes params and generates the actual file name
@@ -90,11 +66,6 @@ namespace Poena.Core.Scene.Battle.Board
             }
         }
         
-        public StateEnum Update(double delta)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Show()
         {
             this.isVisible = true;
@@ -139,26 +110,6 @@ namespace Poena.Core.Scene.Battle.Board
         public int GetMovementCost(IRouteable mover = null)
         {
             return 1;
-        }
-
-        public bool HandleMouseClicked(MouseEvent mouseEvent)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void HandleMouseMoved(MouseEvent mouseEvent)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void HandleMouseDragged(MouseEvent mouseEvent)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void HandleMouseWheeled(MouseEvent mouseEvent)
-        {
-            throw new NotImplementedException();
         }
     }
 }

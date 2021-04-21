@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Poena.Core.Common;
+using Poena.Core.Common.Interfaces;
 using Poena.Core.Sprites;
 
 namespace Poena.Core.Scene
@@ -16,7 +17,7 @@ namespace Poena.Core.Scene
      * But in special cases the Foreground can act as the background (ie hotbar)
      */
 
-    public abstract class UIComponent : IUIComponent
+    public abstract class UIComponent : IInputUIComponent
     {
 
         // Background texture handled by layer

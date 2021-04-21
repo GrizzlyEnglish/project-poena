@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Poena.Core.Common;
+using Poena.Core.Common.Interfaces;
 using Poena.Core.Entity.Managers;
 
 namespace Poena.Core.Scene
@@ -14,11 +15,26 @@ namespace Poena.Core.Scene
         public SystemManager SystemManager { get; set; }
 
         protected Camera Camera { get; set; }
-        protected List<INodeObject> LayerNodes { get; set; }
+        protected List<INode> LayerNodes { get; set; }
+
+        protected List<INodeObject> LayerNodeObjects
+        {
+            get
+            {
+                List<INodeObject> nodes = new List<INodeObject>();
+
+                LayerNodes.ForEach(n =>
+                {
+                    if (n is INodeObject) nodes.Add(n as INodeObject);
+                });
+
+                return nodes;
+            }
+        }
 
         public SceneLayer()
         {
-            this.LayerNodes = new List<INodeObject>();
+            this.LayerNodes = new List<INode>();
             this.Camera = new Camera();
         }
         
@@ -31,9 +47,9 @@ namespace Poena.Core.Scene
             spriteBatch.End();
         }
         
-        public T GetLayerNode<T>() where T : INodeObject
+        public T GetLayerNode<T>() where T : INode
         {
-            foreach (INodeObject obj in this.LayerNodes)
+            foreach (INode obj in this.LayerNodes)
             {
                 if (obj.GetType() == typeof(T)) return (T)obj;
             }

@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Poena.Core.Common;
+using Poena.Core.Common.Interfaces;
 
 namespace Poena.Core.Scene.Battle.Board
 {
@@ -46,6 +46,16 @@ namespace Poena.Core.Scene.Battle.Board
             this.grid.HandleMouseMoved(mouseEvent);
         }
 
+        public void HandleMouseDragged(MouseEvent mouseEvent)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void HandleMouseWheeled(MouseEvent mouseEvent)
+        {
+            throw new NotImplementedException();
+        }
+
         public BoardTile GetHoveringTile()
         {
             return this.grid.HoveringTile;
@@ -84,16 +94,6 @@ namespace Poena.Core.Scene.Battle.Board
         public Rectangle GetBounds()
         {
             return grid.GetBounds();
-        }
-
-        public void HandleMouseDragged(MouseEvent mouseEvent)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void HandleMouseWheeled(MouseEvent mouseEvent)
-        {
-            throw new NotImplementedException();
         }
     }
 }

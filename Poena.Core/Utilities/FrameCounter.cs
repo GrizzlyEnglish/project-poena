@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Poena.Core.Common;
+using Poena.Core.Common.Interfaces;
 using Poena.Core.Extensions;
 
 namespace Poena.Core.Utilities

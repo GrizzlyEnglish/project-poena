@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Input.InputListeners;
 using Poena.Core.Common;
+using Poena.Core.Common.Interfaces;
 
 /*
  *  Scenes are the renderable objects of a screen
