@@ -6,6 +6,7 @@ using MonoGame.Extended.Input.InputListeners;
 using Poena.Core.Scene.Battle.Board;
 using Poena.Core.Common;
 using Poena.Core.Scene.Battle.Entities;
+using Poena.Core.Extensions;
 
 namespace Poena.Core.Scene.Battle.Layers
 {
@@ -125,6 +126,18 @@ namespace Poena.Core.Scene.Battle.Layers
         {
             mouseEvent.SetUnprojectedPosition(this.Camera);
             this.LayerNodes.ForEach(obj => obj.HandleMouseMoved(mouseEvent));
+        }
+
+        public override void HandleMouseDragged(MouseEvent mouseEvent)
+        {
+            Vector2 mouseMoved = mouseEvent.MouseEventArgs.DistanceMoved.Invert();
+            this.Camera.Translate(mouseMoved);
+        }
+
+        public override void HandleMouseWheeled(MouseEvent mouseEvent)
+        {
+            int zoom = mouseEvent.MouseEventArgs.ScrollWheelDelta;
+            this.Camera.Zoom(zoom);
         }
     }
 }

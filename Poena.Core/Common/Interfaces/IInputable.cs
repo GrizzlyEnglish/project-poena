@@ -8,5 +8,7 @@ namespace Poena.Core.Common.Interfaces
     {
         bool HandleMouseClicked(MouseEvent mouseEvent);
         void HandleMouseMoved(MouseEvent mouseEvent);
+        void HandleMouseDragged(MouseEvent mouseEvent);
+        void HandleMouseWheeled(MouseEvent mouseEvent);
     }
 }

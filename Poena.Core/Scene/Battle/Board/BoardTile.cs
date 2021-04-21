@@ -150,5 +150,15 @@ namespace Poena.Core.Scene.Battle.Board
         {
             throw new NotImplementedException();
         }
+
+        public void HandleMouseDragged(MouseEvent mouseEvent)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void HandleMouseWheeled(MouseEvent mouseEvent)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

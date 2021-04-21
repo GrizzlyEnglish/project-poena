@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Input.InputListeners;
 using Poena.Core.Common;
-using Poena.Core.Events;
 using Poena.Core.Extensions;
 using Poena.Core.Utilities;
 
@@ -399,6 +398,15 @@ namespace Poena.Core.Scene.Battle.Board
             return tiles;
         }
 
+        public void HandleMouseDragged(MouseEvent mouseEvent)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void HandleMouseWheeled(MouseEvent mouseEvent)
+        {
+            throw new NotImplementedException();
+        }
 
         private class PathNode
         {

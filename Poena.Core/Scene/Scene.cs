@@ -37,6 +37,8 @@ namespace Poena.Core.Scene
 
             this.MouseListener.MouseClicked += MouseClicked;
             this.MouseListener.MouseMoved += MouseMoved;
+            this.MouseListener.MouseDrag += MouseDragged;
+            this.MouseListener.MouseWheelMoved += MouseWheeled;
         }
 
         public T GetSceneLayer<T>() where T : ISceneLayer
@@ -130,6 +132,16 @@ namespace Poena.Core.Scene
             }
         }
 
+        public void MouseDragged(object sender, MouseEventArgs mouseEventArgs)
+        {
+            // Wrap the mouse event
+            MouseEvent mouseEvent = new MouseEvent(mouseEventArgs);
+            foreach (ISceneLayer layer in this.SceneLayers)
+            {
+                layer.HandleMouseDragged(mouseEvent);
+            }
+        }
+
         public void MouseClicked(object sender, MouseEventArgs mouseEventArgs)
         {
             // Wrap the mouse event
@@ -151,6 +163,16 @@ namespace Poena.Core.Scene
             foreach (ISceneLayer layer in this.SceneLayers)
             {
                 layer.HandleMouseMoved(mouseEvent);
+            }
+        }
+
+        public void MouseWheeled(object sender, MouseEventArgs mouseEventArgs)
+        {
+            // Wrap the mouse event
+            MouseEvent mouseEvent = new MouseEvent(mouseEventArgs);
+            foreach (ISceneLayer layer in this.SceneLayers)
+            {
+                layer.HandleMouseWheeled(mouseEvent);
             }
         }
 

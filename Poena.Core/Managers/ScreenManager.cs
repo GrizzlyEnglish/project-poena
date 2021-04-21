@@ -21,17 +21,17 @@ namespace Poena.Core.Managers {
         private Stack<Screen.Screen> screens;
         private FrameCounter frameCounter;
 
-        private readonly TouchListener touchListener;
-        private readonly MouseListener mouseListener;
+        private readonly TouchListener TouchListener;
+        private readonly MouseListener MouseListener;
 
         public ScreenManager()
         {
             this.screens = new Stack<Screen.Screen>();
-            this.touchListener = new TouchListener();
-            this.mouseListener = new MouseListener();
+            this.TouchListener = new TouchListener();
+            this.MouseListener = new MouseListener();
             
             //Default EntryPoint of Splash
-            this.AddScreen(new Screen.Screen("debug", new BattleScene(mouseListener, touchListener)));
+            this.AddScreen(new Screen.Screen("debug", new BattleScene(MouseListener, TouchListener)));
 
 #if DEBUG
             this.frameCounter = new FrameCounter();
@@ -92,8 +92,8 @@ namespace Poena.Core.Managers {
 #endif
 
             //Gather the input mappings
-            this.touchListener.Update(gameTime);
-            this.mouseListener.Update(gameTime);
+            this.TouchListener.Update(gameTime);
+            this.MouseListener.Update(gameTime);
 
             foreach (Screen.Screen screen in screens) 
             {

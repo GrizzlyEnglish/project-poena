@@ -25,5 +25,10 @@ namespace Poena.Core.Extensions
             return position * (1 - by) + destination * by;
         }
 
+        public static Vector2 Invert(this Vector2 vector)
+        {
+            return new Vector2(vector.X * -1, vector.Y * -1);
+        }
+
     }
 }

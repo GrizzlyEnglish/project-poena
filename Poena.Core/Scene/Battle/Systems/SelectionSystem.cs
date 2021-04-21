@@ -7,7 +7,6 @@ using Poena.Core.Entity;
 using Poena.Core.Entity.Components;
 using Poena.Core.Entity.Managers;
 using Poena.Core.Entity.Systems;
-using Poena.Core.Events;
 using Poena.Core.Scene.Battle.Board;
 using Poena.Core.Scene.Battle.Layers;
 
@@ -110,7 +109,7 @@ namespace Poena.Core.Scene.Battle.Systems
             //Move camera to entity
             this.Manager.SceneLayer.CurrentScene.GetSceneLayer<BattleEntityLayer>().MoveCamera(selected_tile.position.GetWorldAnchorPosition());
             //Tell the event channel someone was selected
-            EventQueueHandler.GetInstance().QueueEvent(new Event("entity", "selected", ent));
+            // TODO: REPLACE THE QUEUE EVENT
         }
         
     }

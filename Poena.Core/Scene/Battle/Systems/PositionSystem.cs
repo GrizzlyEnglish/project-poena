@@ -6,7 +6,6 @@ using Poena.Core.Entity;
 using Poena.Core.Entity.Components;
 using Poena.Core.Entity.Managers;
 using Poena.Core.Entity.Systems;
-using Poena.Core.Events;
 using Poena.Core.Extensions;
 using Poena.Core.Scene.Battle.Board;
 
@@ -26,7 +25,7 @@ namespace Poena.Core.Scene.Battle.Systems
         
         public override void Update(double dt)
         {
-            Event evt = EventQueueHandler.GetInstance().GetEvent("battle_scene", "clicked_tile");
+            BoardTile selectedTile = this.Manager.SceneLayer.GetLayerNode<BattleBoard>().GetClickedTile();
 
             //Get entities that have a position
             List<ECEntity> entities =
@@ -60,29 +59,24 @@ namespace Poena.Core.Scene.Battle.Systems
                     }
                 }
                 //Check if a tile has been clicked
-                else if (evt != null && selected != null)
+                else if (selectedTile != null && selected != null)
                 {
-                    //Get the destination tile
-                    BoardTile destination_tile = (BoardTile)evt.data;
-                    BoardGrid bg = destination_tile.board_grid;
+                    BoardGrid bg = selectedTile.board_grid;
                     BoardTile on_tile = bg[Coordinates.WorldToBoard(pos.tile_position)];
-                    Vector2 destination_tile_anchor = destination_tile.position.GetWorldAnchorPosition();
+                    Vector2 destination_tile_anchor = selectedTile.position.GetWorldAnchorPosition();
 
                     //TODO: rce - Add logic to make sure tile is moveable
                     bool isValid = selected.possible_positions.Contains(destination_tile_anchor);
 
                     // This is likely a deslection if the same tile
-                    if (!on_tile.IsEqual(destination_tile) && isValid)
+                    if (!on_tile.IsEqual(selectedTile) && isValid)
                     {
                         //Setup the movement component and append to the component
                         movement = new MovementComponent();
                         ent.AddComponent(movement);
                         
-                        //Flag the event it was digested
-                        evt.HandleEvent();
-
                         //We need to determine the path that entity will take
-                        List<BoardTile> path = bg.ShortestPath(on_tile, destination_tile);
+                        List<BoardTile> path = bg.ShortestPath(on_tile, selectedTile);
 
                         //Add the anchor positions to the queue of the path
                         foreach (BoardTile bt in path)

@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Poena.Core.Common;
 using Poena.Core.Entity;
 using Poena.Core.Entity.Components;
-using Poena.Core.Events;
 using Poena.Core.Scene.Battle.Layers;
 using Poena.Core.Sprites;
 
@@ -113,27 +112,22 @@ namespace Poena.Core.Scene.Battle.UI
         public new StateEnum Update(double delta)
         {
             //Check the event channel if someone new was selected
-            Event evt = EventQueueHandler.GetInstance().GetEvent("entity", "selected");
+            ECEntity ent = this.ui_scene_layer.CurrentScene.GetSceneLayer<BattleEntityLayer>().EntityManager.GetSelectedEntity();
             
-            if (evt != null && !this.is_visible)
+            if (ent != null && !this.is_visible)
             {
                 //Show the hot bar
-                this.GenerateIcons((ECEntity)evt.data);
+                this.GenerateIcons(ent);
                 this.is_visible = true;
                 this.foreground_sprite.position.MoveDistance(-this.PanDistance);
             }
             else if (this.is_visible && !this.foreground_sprite.position.in_motion)
             {
-                ECEntity ent = this.ui_scene_layer.CurrentScene.GetSceneLayer<BattleEntityLayer>().EntityManager.GetSelectedEntity();
-                if (ent == null)
-                {
-                    //Nobody is currently selected clear the icons and hide the hotbar
-                    this.foreground_sprite.position.MoveDistance(this.PanDistance, () => {
-                        this.is_visible = false;
-                        this.ClearIcons();
-                    });
-                }
-                
+                //Nobody is currently selected clear the icons and hide the hotbar
+                this.foreground_sprite.position.MoveDistance(this.PanDistance, () => {
+                    this.is_visible = false;
+                    this.ClearIcons();
+                });
             }
             
             this.foreground_sprite.Update(delta);

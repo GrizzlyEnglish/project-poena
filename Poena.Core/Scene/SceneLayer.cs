@@ -74,5 +74,7 @@ namespace Poena.Core.Scene
         public abstract void Save(string path);
         public abstract bool HandleMouseClicked(MouseEvent mouseEvent);
         public abstract void HandleMouseMoved(MouseEvent mouseEvent);
+        public abstract void HandleMouseDragged(MouseEvent mouseEvent);
+        public abstract void HandleMouseWheeled(MouseEvent mouseEvent);
     }
 }

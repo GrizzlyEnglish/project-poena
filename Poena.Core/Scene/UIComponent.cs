@@ -138,5 +138,15 @@ namespace Poena.Core.Scene
 
         public abstract bool HandleMouseClicked(MouseEvent mouseEvent);
         public abstract void HandleMouseMoved(MouseEvent mouseEvent);
+
+        public void HandleMouseDragged(MouseEvent mouseEvent)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void HandleMouseWheeled(MouseEvent mouseEvent)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

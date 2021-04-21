@@ -9,7 +9,6 @@ using Poena.Core.Entity;
 using Poena.Core.Entity.Components;
 using Poena.Core.Entity.Managers;
 using Poena.Core.Entity.Systems;
-using Poena.Core.Events;
 using Poena.Core.Scene.Battle.Board;
 
 namespace Poena.Core.Scene.Battle.Systems

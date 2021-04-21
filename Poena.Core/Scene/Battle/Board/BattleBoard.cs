@@ -85,5 +85,15 @@ namespace Poena.Core.Scene.Battle.Board
         {
             return grid.GetBounds();
         }
+
+        public void HandleMouseDragged(MouseEvent mouseEvent)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void HandleMouseWheeled(MouseEvent mouseEvent)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
