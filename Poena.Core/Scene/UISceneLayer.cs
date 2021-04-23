@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Input.InputListeners;
 using Poena.Core.Common;
+using Poena.Core.Scene.UI;
 
 namespace Poena.Core.Scene
 {
@@ -41,7 +42,7 @@ namespace Poena.Core.Scene
             //Load component backgrounds
             foreach (UIComponent comp in this.LayerComponents)
             {
-                string name = comp.background_texture_name;
+                string name = comp.BackgroundTextureName;
                 
                 if (name != null && !this.ComponentTextures.ContainsKey(name))
                 {
@@ -54,17 +55,15 @@ namespace Poena.Core.Scene
             }
         }
 
-        public override void Render(SpriteBatch spriteBatch, RectangleF camera_bounds)
+        public override void RenderLayer(SpriteBatch spriteBatch, RectangleF camera_bounds)
         {
-            spriteBatch.Begin(transformMatrix: Camera.translation_matrix);
-            
             foreach (UIComponent comp in LayerComponents)
             {
-                if (comp.background_texture_name != null)
+                if (comp.BackgroundTextureName != null)
                 {
                     //Render the backgrounds
                     Vector2 pos = comp.GetPosition();
-                    UITexture ui_texture = this.ComponentTextures[comp.background_texture_name];
+                    UITexture ui_texture = this.ComponentTextures[comp.BackgroundTextureName];
                     Texture2D texture = ui_texture.texture;
                     Vector2 center = ui_texture.center;
 
@@ -75,8 +74,6 @@ namespace Poena.Core.Scene
                 //Render the foreground
                 comp.Render(spriteBatch);
             }
-
-            spriteBatch.End();
         }
 
         public T GetComponent<T>() where T : UIComponent

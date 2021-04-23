@@ -22,6 +22,7 @@ namespace Poena.Core.Scene.Battle
             this.SceneNamespace = "battle_scene";
             //Create the scene adding the necessary layers
             this.AddLayer(new BattleEntityLayer());
+            this.AddLayer(new BattleUILayer());
         }
 
         public override StateEnum GetState()

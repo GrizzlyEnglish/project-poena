@@ -61,9 +61,9 @@ namespace Poena.Core.Scene.Battle.Systems
                 //Check if a tile has been clicked
                 else if (selectedTile != null && selected != null)
                 {
-                    BoardGrid bg = selectedTile.board_grid;
+                    BoardGrid bg = selectedTile.BoardGrid;
                     BoardTile on_tile = bg[Coordinates.WorldToBoard(pos.tile_position)];
-                    Vector2 destination_tile_anchor = selectedTile.position.GetWorldAnchorPosition();
+                    Vector2 destination_tile_anchor = selectedTile.Position.GetWorldAnchorPosition();
 
                     //TODO: rce - Add logic to make sure tile is moveable
                     bool isValid = selected.possible_positions.Contains(destination_tile_anchor);
@@ -71,6 +71,9 @@ namespace Poena.Core.Scene.Battle.Systems
                     // This is likely a deslection if the same tile
                     if (!on_tile.IsEqual(selectedTile) && isValid)
                     {
+                        // Mark tile as used
+                        selectedTile.BoardGrid.ClearClickedTile();
+
                         //Setup the movement component and append to the component
                         movement = new MovementComponent();
                         ent.AddComponent(movement);
@@ -81,7 +84,7 @@ namespace Poena.Core.Scene.Battle.Systems
                         //Add the anchor positions to the queue of the path
                         foreach (BoardTile bt in path)
                         {
-                            movement.path_to_destination.Enqueue(bt.position.GetWorldAnchorPosition());
+                            movement.path_to_destination.Enqueue(bt.Position.GetWorldAnchorPosition());
                         }
                     }
                 }

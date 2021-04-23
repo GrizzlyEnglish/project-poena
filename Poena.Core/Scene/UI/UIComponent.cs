@@ -6,7 +6,7 @@ using Poena.Core.Common;
 using Poena.Core.Common.Interfaces;
 using Poena.Core.Sprites;
 
-namespace Poena.Core.Scene
+namespace Poena.Core.Scene.UI
 {
 
     /*
@@ -21,60 +21,54 @@ namespace Poena.Core.Scene
     {
 
         // Background texture handled by layer
-        public string background_texture_name { get; protected set; }
-
-        protected Sprite foreground_sprite;
-        
-        protected bool is_visible { get; set; }
-
-        public int background_width { get; protected set; }
-        public int background_height { get; protected set; }
-
-        protected bool is_unique { get; set; }
-
-        public UISceneLayer ui_scene_layer { get; protected set; }
+        public string BackgroundTextureName { get; protected set; }
+        public int BackgroundWidth { get; protected set; }
+        public int BackgroundHeight { get; protected set; }
+        public UISceneLayer UISceneLayer { get; protected set; }
+        protected Sprite ForegroundTextureName { get; set; }
+        protected bool IsVisible { get; set; }
 
         protected Vector2 ui_position
         {
-            get { return this.foreground_sprite.position.position; }
-            set { this.foreground_sprite.position.SetPosition(value); }
+            get { return this.ForegroundTextureName.position.position; }
+            set { this.ForegroundTextureName.position.SetPosition(value); }
         }
 
         public UIComponent(UISceneLayer sceneLayer, Vector2 pos)
         {
-            this.foreground_sprite = new Sprite();
-            this.foreground_sprite.SetPosition(pos);
-            this.ui_scene_layer = sceneLayer;
+            this.ForegroundTextureName = new Sprite();
+            this.ForegroundTextureName.SetPosition(pos);
+            this.UISceneLayer = sceneLayer;
             this.ui_position = pos;
         }
 
         public UIComponent(UISceneLayer sceneLayer)
         {
-            this.foreground_sprite = new Sprite();
-            this.ui_scene_layer = sceneLayer;
+            this.ForegroundTextureName = new Sprite();
+            this.UISceneLayer = sceneLayer;
         }
 
         public UIComponent()
         {
-            this.foreground_sprite = new Sprite();
+            this.ForegroundTextureName = new Sprite();
         }
 
         //Most likely not needed, but if so can override
-        public StateEnum Update(double delta)
+        public virtual StateEnum Update(double delta)
         {
             return StateEnum.InProgress;
         }
 
         public void SetTextureDimensions(int width, int height)
         {
-            this.background_height = height;
-            this.background_width = width;
+            this.BackgroundHeight = height;
+            this.BackgroundWidth = width;
         }
 
         //Alias for readablity
         public void Render(SpriteBatch spriteBatch, RectangleF camera_bounds = null)
         {
-            if (this.is_visible)
+            if (this.IsVisible)
             {
                 this.RenderForeground(spriteBatch);
             }
@@ -82,12 +76,12 @@ namespace Poena.Core.Scene
 
         public void Show()
         {
-            this.is_visible = true;
+            this.IsVisible = true;
         }
 
         public void Hide()
         {
-            this.is_visible = false;
+            this.IsVisible = false;
         }
 
         public Vector2 GetPosition()
@@ -98,32 +92,32 @@ namespace Poena.Core.Scene
         public virtual void SetPosition(Vector2 position)
         {
             this.ui_position = position;
-            if (this.foreground_sprite?.position != null) this.foreground_sprite?.position.SetPosition(position);
+            if (this.ForegroundTextureName?.position != null) this.ForegroundTextureName?.position.SetPosition(position);
         }
 
         public virtual void RenderForeground(SpriteBatch spriteBatch)
         {
-            this.foreground_sprite.Render(spriteBatch);
+            this.ForegroundTextureName.Render(spriteBatch);
         }
 
         public virtual void LoadContent(ContentManager contentManager)
         {
             //Default load the foreground texture and set the dimensions
-            this.foreground_sprite.LoadContent(contentManager);
-            this.SetTextureDimensions(this.foreground_sprite.width, this.foreground_sprite.height);
+            this.ForegroundTextureName.LoadContent(contentManager);
+            this.SetTextureDimensions(this.ForegroundTextureName.width, this.ForegroundTextureName.height);
         }
         
         public bool IsWithinBounds(Point? p)
         {
-            if (this.is_visible && p.HasValue)
+            if (this.IsVisible && p.HasValue)
             {
                 Point p2 = p.Value;
 
-                float left = this.ui_position.X - (this.background_width / 2);
-                float right = left + this.background_width;
+                float left = this.ui_position.X - (this.BackgroundWidth / 2);
+                float right = left + this.BackgroundWidth;
                 
-                float top = this.ui_position.Y - (this.background_height / 2);
-                float bottom = top + this.background_height;
+                float top = this.ui_position.Y - (this.BackgroundHeight / 2);
+                float bottom = top + this.BackgroundHeight;
                 
                 return p2.X >= left && p2.X <= right && p2.Y >= top && p2.Y <= bottom;
             }
@@ -134,7 +128,7 @@ namespace Poena.Core.Scene
         //Gets the uis background layer
         public string GetBackgroundTexturePath()
         {
-            return Variables.AssetPaths.UI_PATH + "/" + background_texture_name;
+            return Variables.AssetPaths.UI_PATH + "/" + BackgroundTextureName;
         }
 
         public abstract bool HandleMouseClicked(MouseEvent mouseEvent);

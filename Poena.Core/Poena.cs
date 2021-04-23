@@ -20,7 +20,6 @@ namespace Poena.Core
             Logger.GetInstance().LogLevel = LogLevel.Debug;
             graphics = new GraphicsDeviceManager(this);
 
-            IsFixedTimeStep = false;
             graphics.IsFullScreen = false;
             graphics.PreferredBackBufferHeight = Variables.VIEWPORT_HEIGHT;
             graphics.PreferredBackBufferWidth = Variables.VIEWPORT_WIDTH;

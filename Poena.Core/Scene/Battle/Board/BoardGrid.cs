@@ -118,9 +118,12 @@ namespace Poena.Core.Scene.Battle.Board
 
         public BoardTile GetClickedTile()
         {
-            BoardTile bt = ClickedTile;
+            return ClickedTile;
+        }
+
+        public void ClearClickedTile()
+        {
             ClickedTile = null;
-            return bt;
         }
         
         public void LoadContent(ContentManager contentManager)
@@ -154,7 +157,7 @@ namespace Poena.Core.Scene.Battle.Board
             bool includePrevious = false, bool addVariation = false, bool includeEdges = true)
         {
             List<BoardTile> bgts = new List<BoardTile>();
-            bgt.position.CircleAroundTile(radius,
+            bgt.Position.CircleAroundTile(radius,
                 includeCenter, includePrevious, addVariation, includeEdges).ForEach(bgp => {
                     BoardTile b = this[bgp];
                     if (b != null) bgts.Add(b);
@@ -238,7 +241,7 @@ namespace Poena.Core.Scene.Battle.Board
 
                 //Get a circle around node
                 List<BoardGridPosition> neighbors =
-                    node.slot.position.CircleAroundTile(1, includeEdges: false);
+                    node.slot.Position.CircleAroundTile(1, includeEdges: false);
 
                 //Loop each neighbor to determine what to do
                 foreach (BoardGridPosition pos in neighbors)
@@ -288,7 +291,7 @@ namespace Poena.Core.Scene.Battle.Board
 
             for (int i = 0; i < scale; i++)
             {
-                BoardGridPosition pos = bgt.position.NextPosition((TileDirections)d, scale);
+                BoardGridPosition pos = bgt.Position.NextPosition((TileDirections)d, scale);
                 bgt = this[pos];
 
                 if (bgt == null) break;
@@ -325,7 +328,7 @@ namespace Poena.Core.Scene.Battle.Board
                     bgt = path.ElementAt(i);
                 }
 
-                BoardGridPosition pos = bgt.position;
+                BoardGridPosition pos = bgt.Position;
 
                 points.Add(this[pos]);
 
@@ -390,8 +393,8 @@ namespace Poena.Core.Scene.Battle.Board
 
             public void SetHeuristics(BoardTile end)
             {
-                Coordinates end_pos = end.position.grid_slot;
-                Coordinates this_pos = this.slot.position.grid_slot;
+                Coordinates end_pos = end.Position.grid_slot;
+                Coordinates this_pos = this.slot.Position.grid_slot;
 
                 this.heuristic = (Math.Abs(this_pos.x - end_pos.x) +
                     Math.Abs(this_pos.y - end_pos.y) + Math.Abs(this_pos.z - end_pos.z)) / 2;

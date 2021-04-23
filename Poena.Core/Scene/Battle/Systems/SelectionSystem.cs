@@ -57,10 +57,13 @@ namespace Poena.Core.Scene.Battle.Systems
                     TurnComponent turn = selectedEnt.GetComponent<TurnComponent>();
                     PositionComponent pos = selectedEnt.GetComponent<PositionComponent>();
                     //If they are deslect them
-                    if (!turn.ready_for_turn && selectedTile.position.GetWorldAnchorPosition() == pos.tile_position)
+                    if (!turn.ready_for_turn && selectedTile.Position.GetWorldAnchorPosition() == pos.tile_position)
                     {
                         selectedEnt.RemoveComponent(typeof(SelectedComponent));
                     }
+
+                    // Mark tile as used
+                    selectedTile.BoardGrid.ClearClickedTile();
 
                     return;
                 }
@@ -74,9 +77,11 @@ namespace Poena.Core.Scene.Battle.Systems
                     PositionComponent pos = ent.GetComponent<PositionComponent>();
 
                     //Check if the entities anchor point is inside the tile
-                    if (selectedTile.position.GetWorldAnchorPosition() == pos.tile_position)
+                    if (selectedTile.Position.GetWorldAnchorPosition() == pos.tile_position)
                     {
                         this.SelectEntity(ent, selectedTile);
+                        // Mark tile as used
+                        selectedTile.BoardGrid.ClearClickedTile();
                         break;
                     }
                 }
@@ -96,8 +101,8 @@ namespace Poena.Core.Scene.Battle.Systems
             ent.AddComponent(selected);
             //Finally get all the possible tile anchors
             List<Vector2> tiles =
-                selected_tile.board_grid.Flood(selected_tile, stats.GetMovementDistance(selected.disadvantaged))
-                .Select(bt => bt.position.GetWorldAnchorPosition()).ToList();
+                selected_tile.BoardGrid.Flood(selected_tile, stats.GetMovementDistance(selected.disadvantaged))
+                .Select(bt => bt.Position.GetWorldAnchorPosition()).ToList();
             //Filter blocked tiles
             List<Vector2> ent_positions = this.Manager.EntityManager
                 .GetEntities(typeof(PositionComponent))
@@ -107,9 +112,7 @@ namespace Poena.Core.Scene.Battle.Systems
             //Set movements possible movement tiles
             selected.possible_positions = tiles;
             //Move camera to entity
-            this.Manager.SceneLayer.CurrentScene.GetSceneLayer<BattleEntityLayer>().MoveCamera(selected_tile.position.GetWorldAnchorPosition());
-            //Tell the event channel someone was selected
-            // TODO: REPLACE THE QUEUE EVENT
+            this.Manager.SceneLayer.CurrentScene.GetSceneLayer<BattleEntityLayer>().MoveCamera(selected_tile.Position.GetWorldAnchorPosition());
         }
         
     }

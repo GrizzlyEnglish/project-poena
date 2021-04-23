@@ -11,56 +11,54 @@ namespace Poena.Core.Scene.Battle.Board
 {
     public class BoardTile : IRouteable
     {
-        private Texture2D tile_texture;
-        private bool isVisible;
 
-        public BoardGridPosition position { get; set; }
-        public BoardGrid board_grid { get; private set; }
+        public BoardGridPosition Position { get; set; }
+        public BoardGrid BoardGrid { get; private set; }
         
-        private string tile_name;
-            
-        //Debug
-        private bool debug_render = false;
+        private string TileName;
+        private Texture2D TileTexture;
+        private bool isVisible;
+        private bool DebugRender = false;
 
         public BoardTile(Coordinates boardCoordinates, bool isVisible = true)
         {
-            this.position = new BoardGridPosition(boardCoordinates.x, boardCoordinates.y, boardCoordinates.z);
+            this.Position = new BoardGridPosition(boardCoordinates.x, boardCoordinates.y, boardCoordinates.z);
             this.isVisible = isVisible;
         }
 
         public BoardTile(int x, int y, int z, bool isVisible = true)
         {
-            this.position = new BoardGridPosition(x, y, z);
+            this.Position = new BoardGridPosition(x, y, z);
             this.isVisible = isVisible;
         }
 
         public void InjectBoard(BoardGrid bg)
         {
-            this.board_grid = bg;
+            this.BoardGrid = bg;
         }
         
         public void Initialize()
         {
-            this.tile_name = "HEX_Dirt_01";
+            this.TileName = "HEX_Dirt_01";
         }
 
         public void LoadContent(ContentManager contentManager)
         {
             //TODO: Create a handler that takes params and generates the actual file name
-            this.tile_texture = contentManager.Load<Texture2D>(Variables.AssetPaths.TILE_PATH + this.tile_name);
+            this.TileTexture = contentManager.Load<Texture2D>(Variables.AssetPaths.TILE_PATH + this.TileName);
         }
 
         public void Render(SpriteBatch spriteBatch, RectangleF camera_bounds)
         {
-            if (this.isVisible && camera_bounds.Overlaps(this.position.world_position))
+            if (this.isVisible && camera_bounds.Overlaps(this.Position.world_position))
             {
-                spriteBatch.Draw(this.tile_texture, this.position.world_position.AsVector2(), Color.White);
+                spriteBatch.Draw(this.TileTexture, this.Position.world_position.AsVector2(), Color.White);
 #if DEBUG
-                if (this.debug_render)
+                if (this.DebugRender)
                 {
-                    Vector2 pos = this.position.GetWorldAnchorPosition();
+                    Vector2 pos = this.Position.GetWorldAnchorPosition();
                     
-                    spriteBatch.DrawDebugString(this.position.grid_slot.ToString(), pos);
+                    spriteBatch.DrawDebugString(this.Position.grid_slot.ToString(), pos);
                 }
 #endif
             }
@@ -85,7 +83,7 @@ namespace Poena.Core.Scene.Battle.Board
         /// </returns>
         public Coordinates RenderCoordinates() 
         {
-            Point p = Coordinates.WorldToBoard(this.position.world_position.AsVector2());
+            Point p = Coordinates.WorldToBoard(this.Position.world_position.AsVector2());
             Coordinates coordinates = Coordinates.BoardToWorld(p.X, p.Y);
 
             return coordinates;
@@ -93,16 +91,16 @@ namespace Poena.Core.Scene.Battle.Board
 
         public bool IsEqual(BoardTile bt)
         {
-            Coordinates c1 = this.position.grid_slot;
-            Coordinates c2 = bt.position.grid_slot;
+            Coordinates c1 = this.Position.grid_slot;
+            Coordinates c2 = bt.Position.grid_slot;
 
             return c1.x == c2.x && c1.y == c2.y && c1.z == c2.z;
         }
 
         public override string ToString()
         {
-            Coordinates b = this.position.grid_slot;
-            RectangleF w = this.position.world_position;
+            Coordinates b = this.Position.grid_slot;
+            RectangleF w = this.Position.world_position;
             return 
                 $"Grid Slot [{b.x}, {b.y}, {b.z}]  at ({w.x},{w.y})";
         }
