@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Poena.Core.Entity.Components;
 
-namespace Poena.Core.Entity.Components
+namespace Poena.Core.Scene.Battle.Components
 {
     public class MovementComponent : Component
     {

@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using Poena.Core.Common;
+using Poena.Core.Entity;
 using Poena.Core.Entity.Components;
 using Poena.Core.Entity.Managers;
+using Poena.Core.Entity.Systems;
+using Poena.Core.Scene.Battle.Components;
 
-namespace Poena.Core.Entity.Systems
+namespace Poena.Core.Scene.Battle.Systems
 {
     public class TurnSystem : ECSystem
     {
@@ -80,7 +84,7 @@ namespace Poena.Core.Entity.Systems
 
         }
 
-        public override void Render(SpriteBatch batch, RectangleF camera_bounds)
+        public override void Render(SpriteBatch batch, RectangleF cameraBounds)
         {
             List<ECEntity> entities =
                 this.Manager.EntityManager.GetEntities(new Type[] { typeof(TurnComponent) });

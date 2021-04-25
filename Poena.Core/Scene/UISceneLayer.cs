@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using MonoGame.Extended.Input.InputListeners;
 using Poena.Core.Common;
 using Poena.Core.Scene.UI;
@@ -55,7 +56,7 @@ namespace Poena.Core.Scene
             }
         }
 
-        public override void RenderLayer(SpriteBatch spriteBatch, RectangleF camera_bounds)
+        public override void RenderLayer(SpriteBatch spriteBatch, RectangleF cameraBounds)
         {
             foreach (UIComponent comp in LayerComponents)
             {
@@ -72,7 +73,7 @@ namespace Poena.Core.Scene
                 }
                 
                 //Render the foreground
-                comp.Render(spriteBatch);
+                comp.Render(spriteBatch, cameraBounds);
             }
         }
 

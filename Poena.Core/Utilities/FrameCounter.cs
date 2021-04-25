@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using Poena.Core.Common;
 using Poena.Core.Common.Interfaces;
 using Poena.Core.Extensions;
@@ -49,7 +50,7 @@ namespace Poena.Core.Utilities
             return StateEnum.InProgress;
         }
 
-        public void Render(SpriteBatch spriteBatch, RectangleF camera_bounds)
+        public void Render(SpriteBatch spriteBatch, RectangleF cameraBounds)
         {
             var fps = string.Format("FPS: {0}", this.average_fps);
             spriteBatch.Begin();

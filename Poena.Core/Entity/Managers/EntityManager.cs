@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Poena.Core.Entity.Components;
+using Poena.Core.Scene.Battle.Components;
 
 namespace Poena.Core.Entity.Managers
 {

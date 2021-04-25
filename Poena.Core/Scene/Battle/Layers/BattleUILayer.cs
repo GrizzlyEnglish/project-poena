@@ -19,9 +19,10 @@ namespace Poena.Core.Scene.Battle.Layers
 
         public override void Entry()
         {
-            //Update component positions
+            // Update component positions
             HotBar hotbar = this.GetComponent<HotBar>();
-            hotbar.SetPosition(new Vector2((Camera.width / 2), Camera.height - (hotbar.BackgroundHeight / 2) - 15));
+            // TODO: Rce - Need a bottom anchor here so we can say the bottom of the screen is where to render
+            hotbar.SetPosition(new Vector2((Camera.width / 2), Camera.height - 70));
         }
 
         public override void Exit()

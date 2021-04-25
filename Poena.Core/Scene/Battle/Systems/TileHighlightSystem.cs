@@ -4,12 +4,14 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using Poena.Core.Common;
 using Poena.Core.Entity;
 using Poena.Core.Entity.Components;
 using Poena.Core.Entity.Managers;
 using Poena.Core.Entity.Systems;
 using Poena.Core.Scene.Battle.Board;
+using Poena.Core.Scene.Battle.Components;
 
 namespace Poena.Core.Scene.Battle.Systems
 {
@@ -34,7 +36,7 @@ namespace Poena.Core.Scene.Battle.Systems
 
         public override void Update(double dt) {}
 
-        public override void Render(SpriteBatch batch, RectangleF camera_bounds)
+        public override void Render(SpriteBatch batch, RectangleF cameraBounds)
         {
             // Get all the entities that are affecting the tiles
             List<ECEntity> entities =

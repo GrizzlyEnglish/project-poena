@@ -7,6 +7,7 @@ using Poena.Core.Scene.Battle.Board;
 using Poena.Core.Common;
 using Poena.Core.Scene.Battle.Entities;
 using Poena.Core.Extensions;
+using MonoGame.Extended;
 
 namespace Poena.Core.Scene.Battle.Layers
 {
@@ -81,15 +82,13 @@ namespace Poena.Core.Scene.Battle.Layers
             this.SystemManager.LoadContent(contentManager);
         }
 
-        public override void RenderLayer(SpriteBatch spriteBatch, RectangleF camera_bounds)
+        public override void RenderLayer(SpriteBatch spriteBatch, RectangleF cameraBounds)
         {
-            RectangleF bounds = this.Camera.GetViewBounds();
-            
             //TODO: rce - Consider ordering this for rendering purposes?
             this.LayerNodes.ForEach(obj => {
-                obj.Render(spriteBatch, camera_bounds);
+                obj.Render(spriteBatch, cameraBounds);
             });
-            this.SystemManager.Render(spriteBatch, camera_bounds);
+            this.SystemManager.Render(spriteBatch, cameraBounds);
         }
 
         public override void Save(string path)

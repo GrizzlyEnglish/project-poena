@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using Poena.Core.Common;
 using Poena.Core.Entity.Managers;
 
@@ -30,7 +31,7 @@ namespace Poena.Core.Entity.Systems
         public abstract void Initiliaze();
         public virtual void LoadContent(ContentManager contentManager) { }
         public virtual void Update(double dt) { }
-        public virtual void Render(SpriteBatch batch, RectangleF camera_bounds) { }
+        public virtual void Render(SpriteBatch batch, RectangleF cameraBounds) { }
 
     }
 }

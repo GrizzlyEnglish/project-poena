@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using Poena.Core.Common;
 using Poena.Core.Common.Interfaces;
 using Poena.Core.Entity.Managers;
@@ -38,7 +39,7 @@ namespace Poena.Core.Scene
             this.Camera = new Camera();
         }
         
-        public virtual void Render(SpriteBatch spriteBatch, RectangleF camera_bounds)
+        public virtual void Render(SpriteBatch spriteBatch, RectangleF cameraBounds)
         {
             spriteBatch.Begin(transformMatrix: this.Camera?.translation_matrix);
 
@@ -78,7 +79,7 @@ namespace Poena.Core.Scene
             this.Camera.MoveToPosition(pos);
         }
         
-        public abstract void RenderLayer(SpriteBatch spriteBatch, RectangleF camera_bounds);
+        public abstract void RenderLayer(SpriteBatch spriteBatch, RectangleF cameraBounds);
         public abstract StateEnum UpdateLayer(double delta);
         public abstract void Initialize();
         public abstract void Entry();

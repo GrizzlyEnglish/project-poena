@@ -7,6 +7,5 @@ namespace Poena.Core.Common.Interfaces
     public interface IUIComponent : IRenderable
     {
         string GetBackgroundTexturePath();
-        void SetTextureDimensions(int width, int height);
     }
 }

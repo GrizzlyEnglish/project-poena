@@ -55,7 +55,7 @@ namespace Poena.Core.Scene.Battle.Board
             //Create the tiles
             pos.ForEach(bgp =>
             {
-                Coordinates board = bgp.grid_slot;
+                Coordinates board = bgp.GridSlot;
                 if (board.x > 0 && board.x < this.width && board.y > 0 && board.y < this.height)
                 {
                     bt[board.x, board.y, 0] = new BoardTile(board);

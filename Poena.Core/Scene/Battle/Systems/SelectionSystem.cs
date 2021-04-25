@@ -4,10 +4,10 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Poena.Core.Common;
 using Poena.Core.Entity;
-using Poena.Core.Entity.Components;
 using Poena.Core.Entity.Managers;
 using Poena.Core.Entity.Systems;
 using Poena.Core.Scene.Battle.Board;
+using Poena.Core.Scene.Battle.Components;
 using Poena.Core.Scene.Battle.Layers;
 
 namespace Poena.Core.Scene.Battle.Systems

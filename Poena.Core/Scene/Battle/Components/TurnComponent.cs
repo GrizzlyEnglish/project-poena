@@ -1,4 +1,6 @@
-﻿namespace Poena.Core.Entity.Components
+﻿using Poena.Core.Entity.Components;
+
+namespace Poena.Core.Scene.Battle.Components
 {
     public class TurnComponent : Component
     {

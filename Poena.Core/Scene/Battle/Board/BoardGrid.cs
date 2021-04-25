@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using MonoGame.Extended.Input.InputListeners;
 using Poena.Core.Common;
 using Poena.Core.Common.Interfaces;
@@ -71,7 +72,7 @@ namespace Poena.Core.Scene.Battle.Board
         {
             get
             {
-                return this[bgp.grid_slot.x, bgp.grid_slot.y, bgp.grid_slot.z];
+                return this[bgp.GridSlot.x, bgp.GridSlot.y, bgp.GridSlot.z];
             }
         }
 
@@ -136,12 +137,12 @@ namespace Poena.Core.Scene.Battle.Board
             });
         }
 
-        public void Render(SpriteBatch spriteBatch, RectangleF camera_bounds)
+        public void Render(SpriteBatch spriteBatch, RectangleF cameraBounds)
         {
             this.ForEach(bt => {
                 if (bt != null)
                 {
-                    bt.Render(spriteBatch, camera_bounds);
+                    bt.Render(spriteBatch, cameraBounds);
                 }
             });
 
@@ -393,8 +394,8 @@ namespace Poena.Core.Scene.Battle.Board
 
             public void SetHeuristics(BoardTile end)
             {
-                Coordinates end_pos = end.Position.grid_slot;
-                Coordinates this_pos = this.slot.Position.grid_slot;
+                Coordinates end_pos = end.Position.GridSlot;
+                Coordinates this_pos = this.slot.Position.GridSlot;
 
                 this.heuristic = (Math.Abs(this_pos.x - end_pos.x) +
                     Math.Abs(this_pos.y - end_pos.y) + Math.Abs(this_pos.z - end_pos.z)) / 2;

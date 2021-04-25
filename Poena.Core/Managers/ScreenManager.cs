@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using MonoGame.Extended.Input.InputListeners;
 using Poena.Core.Common;
 using Poena.Core.Scene.Battle;
@@ -79,7 +80,7 @@ namespace Poena.Core.Managers {
 
 #if DEBUG
             //Render on the very time
-            frameCounter.Render(spriteBatch, null);
+            frameCounter.Render(spriteBatch, default(RectangleF));
 #endif
         }
 

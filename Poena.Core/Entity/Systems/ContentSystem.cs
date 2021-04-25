@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Poena.Core.Common;
 using Poena.Core.Entity.Components;
 using Poena.Core.Entity.Managers;
+using Poena.Core.Scene.Battle.Components;
 
 namespace Poena.Core.Entity.Systems
 {
@@ -29,14 +30,15 @@ namespace Poena.Core.Entity.Systems
                 SpriteComponent anim = ent.GetComponent<SpriteComponent>();
                 if (anim != null)
                 {
-                    anim.animation.LoadContent(contentManager);
+                    anim.Animation.LoadContent(contentManager);
                 }
 
+                // TODO: Remove this and make it load what is necessary without calling directly to specific components
                 //Load the icons
                 SkillComponent skill = ent.GetComponent<SkillComponent>();
                 if (skill != null)
                 {
-                    skill.skill_icon = contentManager.Load<Texture2D>(Variables.AssetPaths.UI_PATH + skill.skill_path);
+                    skill.HotBarTexture = contentManager.Load<Texture2D>(Variables.AssetPaths.UI_PATH + skill.HotBarTexturePath);
                 }
             }
         }

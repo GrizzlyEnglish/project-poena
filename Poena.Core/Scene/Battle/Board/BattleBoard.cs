@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using Poena.Core.Common;
 using Poena.Core.Common.Interfaces;
 
@@ -81,9 +82,9 @@ namespace Poena.Core.Scene.Battle.Board
             grid.LoadContent(contentManager);
         }
 
-        public void Render(SpriteBatch spriteBatch, RectangleF camera_bounds)
+        public void Render(SpriteBatch spriteBatch, RectangleF cameraBounds)
         {
-            grid.Render(spriteBatch, camera_bounds);
+            grid.Render(spriteBatch, cameraBounds);
         }
         
         public StateEnum Update(double delta)

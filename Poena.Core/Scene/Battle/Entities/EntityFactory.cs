@@ -4,6 +4,8 @@ using Poena.Core.Scene.Battle.Board;
 using Poena.Core.Common;
 using Poena.Core.Entity.Components;
 using Poena.Core.Entity;
+using Poena.Core.Scene.Battle.Components;
+using Poena.Core.Common.Enums;
 
 namespace Poena.Core.Scene.Battle.Entities
 {
@@ -36,10 +38,7 @@ namespace Poena.Core.Scene.Battle.Entities
             TurnComponent turn = new TurnComponent();
             turn.time_for_turn = 15;
 
-            SkillComponent skill = new SkillComponent();
-            skill.skill_name = "skill";
-
-            e.AddComponent(anim, position, turn, stats, skill);
+            e.AddComponent(anim, position, turn, stats);
 
             //TODO: rce - Consider making this call a component factory
 
@@ -64,8 +63,10 @@ namespace Poena.Core.Scene.Battle.Entities
             TurnComponent turn = new TurnComponent();
             turn.time_for_turn = 15;
 
-            SkillComponent skill = new SkillComponent();
-            skill.skill_name = "skill";
+            SkillComponent skill = new SkillComponent() {
+                HotBarTexturePath = "active1",
+                Name = "Test Skill"
+            };
 
             e.AddComponent(anim, position, pcc, turn, stats, skill);
 

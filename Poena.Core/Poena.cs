@@ -43,6 +43,12 @@ namespace Poena.Core
             spriteBatch = new SpriteBatch(GraphicsDevice);
             spriteBatch.LoadContent(GraphicsDevice, this.Content);
             screenManager.LoadContent(this.Content);
+
+            // Setup debug render dexture
+            Texture2D texture = new Texture2D(GraphicsDevice, 1, 1);
+            texture.SetData(new Color[] { Color.White });
+
+            Config.DEBUG_TEXTURE = texture;
         }
 
         protected override void Update(GameTime gameTime)

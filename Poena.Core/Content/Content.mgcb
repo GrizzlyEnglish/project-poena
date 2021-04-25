@@ -90,7 +90,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:assets/ui/active1.png;assets/ui/skill_icon.png
+/build:assets/ui/active1.png
 
 #begin assets/ui/BlueBar.png
 /importer:TextureImporter

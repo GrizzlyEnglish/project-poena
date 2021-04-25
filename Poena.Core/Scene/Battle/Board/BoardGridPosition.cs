@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using Poena.Core.Common;
 
 namespace Poena.Core.Scene.Battle.Board
@@ -19,27 +20,27 @@ namespace Poena.Core.Scene.Battle.Board
     public class BoardGridPosition
     {
         //Positin on the grid
-        public Coordinates grid_slot { get; private set; }
+        public Coordinates GridSlot { get; private set; }
 
         //Position in the world
-        public RectangleF world_position { get; private set; }
+        public RectangleF WorldPosition { get; private set; }
         
         public BoardGridPosition(int x, int y, int z)
         {
-            this.grid_slot = new Coordinates(x, y, z);
+            this.GridSlot = new Coordinates(x, y, z);
             SetWorldRectangle();
         }
         
         public BoardGridPosition(Coordinates grid_slot)
         {
-            this.grid_slot = grid_slot;
+            this.GridSlot = grid_slot;
             SetWorldRectangle();
         }
 
         private void SetWorldRectangle()
         {
-            Coordinates world_coords = Coordinates.BoardToWorld(this.grid_slot);
-            this.world_position = new RectangleF(world_coords.x, world_coords.y, Variables.TILE_WIDTH, Variables.TILE_HEIGHT);
+            Coordinates world_coords = Coordinates.BoardToWorld(this.GridSlot);
+            this.WorldPosition = new RectangleF(world_coords.x, world_coords.y, Variables.TILE_WIDTH, Variables.TILE_HEIGHT);
         }
         
         private Point DirectionScale(TileDirections direction, int scale)
@@ -79,7 +80,7 @@ namespace Poena.Core.Scene.Battle.Board
         {
             Point vt = DirectionScale(direction, scale);
             
-            return new BoardGridPosition(this.grid_slot.x + vt.X, this.grid_slot.y + vt.Y, this.grid_slot.z);
+            return new BoardGridPosition(this.GridSlot.x + vt.X, this.GridSlot.y + vt.Y, this.GridSlot.z);
         }
 
 
@@ -163,10 +164,10 @@ namespace Poena.Core.Scene.Battle.Board
 
         public Vector2 GetWorldAnchorPosition()
         {
-            Vector2 pos = this.world_position.AsVector2();
+            Vector2 pos = this.WorldPosition.TopLeft;
 
             //Set the anchor point to center of tile face
-            pos.X += this.world_position.width / 2;
+            pos.X += this.WorldPosition.Width / 2;
             pos.Y += 50;
 
             return pos;

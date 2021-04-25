@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using MonoGame.Extended.Input.InputListeners;
 using Poena.Core.Common;
 using Poena.Core.Common.Interfaces;
@@ -107,11 +108,11 @@ namespace Poena.Core.Scene
             this.EnterScene();
         }
 
-        public void Render(SpriteBatch spriteBatch, RectangleF camera_bounds)
+        public void Render(SpriteBatch spriteBatch, RectangleF cameraBounds)
         {
             foreach (ISceneLayer sl in SceneLayers)
             {
-                sl.Render(spriteBatch, camera_bounds);
+                sl.Render(spriteBatch, cameraBounds);
             }
         }
 

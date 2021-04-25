@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using Poena.Core.Common;
 using Poena.Core.Common.Interfaces;
 using Poena.Core.Extensions;
@@ -18,7 +19,6 @@ namespace Poena.Core.Scene.Battle.Board
         private string TileName;
         private Texture2D TileTexture;
         private bool isVisible;
-        private bool DebugRender = false;
 
         public BoardTile(Coordinates boardCoordinates, bool isVisible = true)
         {
@@ -48,17 +48,17 @@ namespace Poena.Core.Scene.Battle.Board
             this.TileTexture = contentManager.Load<Texture2D>(Variables.AssetPaths.TILE_PATH + this.TileName);
         }
 
-        public void Render(SpriteBatch spriteBatch, RectangleF camera_bounds)
+        public void Render(SpriteBatch spriteBatch, RectangleF cameraBounds)
         {
-            if (this.isVisible && camera_bounds.Overlaps(this.Position.world_position))
+            if (this.isVisible && cameraBounds.Intersects(this.Position.WorldPosition))
             {
-                spriteBatch.Draw(this.TileTexture, this.Position.world_position.AsVector2(), Color.White);
+                spriteBatch.Draw(this.TileTexture, this.Position.WorldPosition.TopLeft, Color.White);
 #if DEBUG
-                if (this.DebugRender)
+                if (Config.DEBUG_RENDER)
                 {
                     Vector2 pos = this.Position.GetWorldAnchorPosition();
                     
-                    spriteBatch.DrawDebugString(this.Position.grid_slot.ToString(), pos);
+                    spriteBatch.DrawDebugString(this.Position.GridSlot.ToString(), pos);
                 }
 #endif
             }
@@ -83,7 +83,7 @@ namespace Poena.Core.Scene.Battle.Board
         /// </returns>
         public Coordinates RenderCoordinates() 
         {
-            Point p = Coordinates.WorldToBoard(this.Position.world_position.AsVector2());
+            Point p = Coordinates.WorldToBoard(this.Position.WorldPosition.TopLeft);
             Coordinates coordinates = Coordinates.BoardToWorld(p.X, p.Y);
 
             return coordinates;
@@ -91,18 +91,18 @@ namespace Poena.Core.Scene.Battle.Board
 
         public bool IsEqual(BoardTile bt)
         {
-            Coordinates c1 = this.Position.grid_slot;
-            Coordinates c2 = bt.Position.grid_slot;
+            Coordinates c1 = this.Position.GridSlot;
+            Coordinates c2 = bt.Position.GridSlot;
 
             return c1.x == c2.x && c1.y == c2.y && c1.z == c2.z;
         }
 
         public override string ToString()
         {
-            Coordinates b = this.Position.grid_slot;
-            RectangleF w = this.Position.world_position;
+            Coordinates b = this.Position.GridSlot;
+            RectangleF w = this.Position.WorldPosition;
             return 
-                $"Grid Slot [{b.x}, {b.y}, {b.z}]  at ({w.x},{w.y})";
+                $"Grid Slot [{b.x}, {b.y}, {b.z}]  at ({w.X},{w.Y})";
         }
 
         public int GetMovementCost(IRouteable mover = null)

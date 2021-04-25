@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using Poena.Core.Common;
 using Poena.Core.Entity.Systems;
 using Poena.Core.Scene;
@@ -69,11 +70,11 @@ namespace Poena.Core.Entity.Managers
             }
         }
 
-        public void Render(SpriteBatch batch, RectangleF camera_bounds)
+        public void Render(SpriteBatch batch, RectangleF cameraBounds)
         {
             foreach (ECSystem Systems in Systems)
             {
-                Systems.Render(batch, camera_bounds);
+                Systems.Render(batch, cameraBounds);
             }
         }
 

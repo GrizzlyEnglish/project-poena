@@ -5,8 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Content\assets\ui\ui_test_hotbar.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Content\assets\ui\ui_test_hotbar.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MonoGame.Extended" Version="3.8.0" />
-    <PackageReference Include="MonoGame.Extended.Entities" Version="3.8.0" />
     <PackageReference Include="MonoGame.Extended.Input" Version="3.8.0" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641">
       <PrivateAssets>All</PrivateAssets>
@@ -15,6 +24,45 @@
 
   <ItemGroup>
     <Folder Include="Entity\Factories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Content\assets\entities\icon_adventurer1.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\assets\entities\icon_giantRat.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\assets\fonts\BaseFont.spritefont">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\assets\tiles\HEX_Dirt_01.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\assets\tiles\HEX_Grass_01.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\assets\tiles\HEX_Highlight_Test.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\assets\ui\active1.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\assets\ui\EmptyBar.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\assets\ui\ui_panel_test.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\bin\DesktopGL\assets\ui\ui_test_hotbar.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\bin\DesktopGL\Content\assets\ui\ui_test_hotbar.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Content.mgcb">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

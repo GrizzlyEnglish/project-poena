@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using Poena.Core.Common;
 using Poena.Core.Scene;
 
@@ -45,7 +46,7 @@ namespace Poena.Core.Screen
         {
             if (this.rendering)
             {
-                this.scene.Render(spriteBatch, null);
+                this.scene.Render(spriteBatch, default(RectangleF));
             }
         }
 
