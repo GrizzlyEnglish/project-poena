@@ -11,6 +11,7 @@ namespace Poena.Core.Scene
 {
     public abstract class UISceneLayer : SceneLayer
     {
+        public bool Loaded { get; protected set; }
         protected class UITexture
         {
             public Texture2D texture;
@@ -54,6 +55,8 @@ namespace Poena.Core.Scene
 
                 comp.LoadContent(contentManager);
             }
+
+            Loaded = true;
         }
 
         public override void RenderLayer(SpriteBatch spriteBatch, RectangleF cameraBounds)
@@ -98,14 +101,6 @@ namespace Poena.Core.Scene
             }
 
             return StateEnum.InProgress;
-        }
-
-        public override void WindowResizeEvent()
-        {
-            base.WindowResizeEvent();
-
-            //Reset the components positions
-            this.Entry();
         }
     }
 }

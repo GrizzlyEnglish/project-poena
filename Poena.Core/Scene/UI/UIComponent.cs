@@ -27,6 +27,9 @@ namespace Poena.Core.Scene.UI
         protected Sprite ForegroundSprite { get; set; }
         protected bool IsVisible { get; set; }
 
+        public float Width { get { return ForegroundSprite.Width; } }
+        public float Height { get { return ForegroundSprite.Height; } }
+
         protected Vector2 UIPosition
         {
             get { return this.ForegroundSprite.Position.position; }

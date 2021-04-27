@@ -21,21 +21,41 @@ namespace Poena.Core.Sprites
         {
             get
             {
-                float width = this.Texture.Width * this.Scale;
-                float height = this.Texture.Height * this.Scale;
-                float x = this.Position.position.X - (width / 2);
-                float y = this.Position.position.Y - (height / 2);
-                return new RectangleF(x, y, width, height);
+                Vector2 center = this.Position.position;
+                Vector2 scale = this.Anchor;
+                float x = center.X - scale.X;
+                float y = center.Y - scale.Y;
+                return new RectangleF(x, y, Width, Height);
+            }
+        }
+
+        public float Width
+        {
+            get
+            {
+                return this.Texture.Width * this.Scale;
+            }
+        }
+
+        public float Height
+        {
+            get
+            {
+                return this.Texture.Height * this.Scale;
             }
         }
         
-        private Vector2 Anchor { get { return new Vector2(this.Texture.Width * AnchorOffset.X, this.Texture.Height * AnchorOffset.Y); } }
+        private Vector2 Anchor { 
+            get { 
+                return new Vector2((this.Texture.Width * this.Scale) * AnchorOffset.X, (this.Texture.Height * this.Scale) * AnchorOffset.Y); 
+            } 
+        }
         private Vector2? _AnchorOffset { get; set; }
         public Vector2 AnchorOffset
         {
             get
             {
-                return _AnchorOffset ?? new Vector2(.5f, .5f);
+                return _AnchorOffset ?? new Vector2(0, 0);
             }
             set
             {
@@ -65,7 +85,7 @@ namespace Poena.Core.Sprites
         {
             this.Position.SetPosition(pos);
         }
-        
+
         public void SetTexturePath(params string[] paths)
         {
             if (paths.Length == 1) this.TexturePath = paths[0];

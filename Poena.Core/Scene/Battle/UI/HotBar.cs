@@ -39,14 +39,14 @@ namespace Poena.Core.Scene.Battle.UI
         {
             //Go to far left of hot bar and center height
             RectangleF dimensions = this.ForegroundSprite.Dimensions;
-            Vector2 start_pos = new Vector2(dimensions.TopLeft.X, dimensions.TopLeft.Y);
+            Vector2 start_pos = new Vector2(dimensions.Left, dimensions.Top);
 
             int distance = 100;
 
             for (int i = 0; i < ICON_LENGTH; i++)
             {
-                start_pos.X += distance;
                 if (this.Icons[i] != null) this.Icons[i].SetPosition(start_pos);
+                start_pos.X += distance;
             }
         }
 
@@ -69,7 +69,7 @@ namespace Poena.Core.Scene.Battle.UI
         {
             // Skill icon
             SkillComponent skill = ent.GetComponent<SkillComponent>();
-            this.SetIcon(skill.AttackType, skill.HotBarTexture, skill);
+            this.SetIcon(skill.AttackType, skill.HotBarTexture);
 
             // Weapon skill icon
 
@@ -78,8 +78,6 @@ namespace Poena.Core.Scene.Battle.UI
             // Block
 
             // Stall
-
-            this.SetIconPositions();
         }
 
         public void ClearIcons()
@@ -87,12 +85,12 @@ namespace Poena.Core.Scene.Battle.UI
             Icons = new Sprite[ICON_LENGTH];
         }
 
-        private void SetIcon(AttackTypeEnum iconType, Texture2D icon, Component comp)
+        private void SetIcon(AttackTypeEnum iconType, Texture2D icon)
         {
             int position = (int)iconType;
             Icons[position] = new Sprite();
             Icons[position].SetTexture(icon);
-            Icons[position].SetScale(.18f);
+            Icons[position].SetScale(.19f);
         }
 
         public override void RenderForeground(SpriteBatch spriteBatch)
@@ -129,6 +127,7 @@ namespace Poena.Core.Scene.Battle.UI
             }
             
             this.ForegroundSprite.Update(delta);
+            this.SetIconPositions();
 
             return StateEnum.InProgress;
         }
