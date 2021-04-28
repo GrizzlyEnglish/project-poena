@@ -38,7 +38,7 @@ namespace Poena.Core.Entity.Systems
                 SkillComponent skill = ent.GetComponent<SkillComponent>();
                 if (skill != null)
                 {
-                    skill.HotBarTexture = contentManager.Load<Texture2D>(Variables.AssetPaths.UI_PATH + skill.HotBarTexturePath);
+                    skill.HotBarTexture = contentManager.Load<Texture2D>(Assets.UI_PATH + skill.HotBarTexturePath);
                 }
             }
         }

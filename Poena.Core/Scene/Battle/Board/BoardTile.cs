@@ -45,7 +45,7 @@ namespace Poena.Core.Scene.Battle.Board
         public void LoadContent(ContentManager contentManager)
         {
             //TODO: Create a handler that takes params and generates the actual file name
-            this.TileTexture = contentManager.Load<Texture2D>(Variables.AssetPaths.TILE_PATH + this.TileName);
+            this.TileTexture = contentManager.Load<Texture2D>(Assets.TILE_PATH + this.TileName);
         }
 
         public void Render(SpriteBatch spriteBatch, RectangleF cameraBounds)

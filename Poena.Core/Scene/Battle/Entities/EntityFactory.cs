@@ -14,8 +14,8 @@ namespace Poena.Core.Scene.Battle.Entities
         private static Dictionary<EntityTypeEnum, string[]> entity_sprite_mappings =
             new Dictionary<EntityTypeEnum, string[]>
         {
-                { EntityTypeEnum.Debug, new string[] { Variables.AssetPaths.ENTITY_PATH + "/" + "icon_adventurer1" } },
-                { EntityTypeEnum.DebugNPC, new string[] { Variables.AssetPaths.ENTITY_PATH + "/" + "icon_giantRat" } },
+                { EntityTypeEnum.Debug, new string[] { Assets.GetEntity(EntityType.Adventurer) } },
+                { EntityTypeEnum.DebugNPC, new string[] { Assets.GetEntity(EntityType.GiantRat) } },
         };
 
         //TODO: rce - Remove everything below and load components and their data from a file.

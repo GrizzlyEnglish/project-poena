@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using Poena.Core.Common;
+using Poena.Core.Common.Enums;
 using Poena.Core.Entity;
 using Poena.Core.Entity.Components;
 using Poena.Core.Entity.Managers;
@@ -44,8 +45,8 @@ namespace Poena.Core.Scene.Battle.Systems
 
         public override void LoadContent(ContentManager contentManager)
         {
-            this.turn_bar_background = contentManager.Load<Texture2D>(Variables.AssetPaths.UI_PATH + "EmptyBar");
-            this.turn_bar_foreground = contentManager.Load<Texture2D>(Variables.AssetPaths.UI_PATH + "BlueBar");
+            this.turn_bar_background = contentManager.Load<Texture2D>(Assets.GetUIElement(UIElements.EmptyActionBar));
+            this.turn_bar_foreground = contentManager.Load<Texture2D>(Assets.GetUIElement(UIElements.BlueActionBar));
             this.sprite_center = new Vector2(this.turn_bar_foreground.Width / 2, this.turn_bar_foreground.Height / 2);
         }
 

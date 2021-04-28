@@ -53,7 +53,7 @@ namespace Poena.Core.Common
         {
             get
             {
-                return new Vector2(Variables.VIEWPORT_WIDTH * .5f, Variables.VIEWPORT_HEIGHT * .5f);
+                return new Vector2(Config.VIEWPORT_WIDTH * .5f, Config.VIEWPORT_HEIGHT * .5f);
             }
         }
 
@@ -80,7 +80,7 @@ namespace Poena.Core.Common
             //TODO: rce - determine if we need to set the width
             get
             {
-                return Variables.VIEWPORT_WIDTH / this._Zoom;
+                return Config.VIEWPORT_WIDTH / this._Zoom;
             }
         }
 
@@ -89,7 +89,7 @@ namespace Poena.Core.Common
             //TODO: rce - determine if we need to set the height
             get
             {
-                return Variables.VIEWPORT_HEIGHT / this._Zoom;
+                return Config.VIEWPORT_HEIGHT / this._Zoom;
             }
         }
 

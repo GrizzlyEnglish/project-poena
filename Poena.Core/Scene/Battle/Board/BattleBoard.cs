@@ -92,9 +92,9 @@ namespace Poena.Core.Scene.Battle.Board
             return StateEnum.InProgress;
         }
 
-        public Rectangle GetBounds()
+        public RectangleF GetBounds()
         {
-            return grid.GetBounds();
+            return grid.GridBounds;
         }
     }
 }

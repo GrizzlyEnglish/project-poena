@@ -6,7 +6,7 @@ namespace Poena.Core.Scene.Battle.Components
 {
     public class SkillComponent : Component
     {
-        public AttackTypeEnum AttackType { get; private set; }
+        public AttackType AttackType { get; private set; }
 
         public Texture2D HotBarTexture { get; set; }
 
@@ -16,7 +16,7 @@ namespace Poena.Core.Scene.Battle.Components
 
         public override void Initialize()
         {
-            AttackType = AttackTypeEnum.Skill;
+            AttackType = AttackType.Skill;
         }
     }
 }

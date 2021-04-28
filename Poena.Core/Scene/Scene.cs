@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -138,7 +139,7 @@ namespace Poena.Core.Scene
         {
             // Wrap the mouse event
             MouseEvent mouseEvent = new MouseEvent(mouseEventArgs);
-            foreach (ISceneLayer layer in this.SceneLayers)
+            foreach (ISceneLayer layer in this.SceneLayers.Reverse())
             {
                 layer.HandleMouseDragged(mouseEvent);
             }
@@ -149,7 +150,7 @@ namespace Poena.Core.Scene
             // Wrap the mouse event
             MouseEvent mouseEvent = new MouseEvent(mouseEventArgs);
             bool handled = false;
-            foreach (ISceneLayer layer in this.SceneLayers)
+            foreach (ISceneLayer layer in this.SceneLayers.Reverse())
             {
                 if (!handled)
                 {

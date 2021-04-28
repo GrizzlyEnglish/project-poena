@@ -8,7 +8,7 @@ namespace Poena.Core.Scene.Battle.Components
 {
     public class AttackingComponent : Component
     {
-        public AttackTypeEnum AttackType { get; set; }
+        public AttackType AttackType { get; set; }
 
         public override void Initialize()
         {

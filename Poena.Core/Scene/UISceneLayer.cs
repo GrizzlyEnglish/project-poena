@@ -48,7 +48,7 @@ namespace Poena.Core.Scene
                 
                 if (name != null && !this.ComponentTextures.ContainsKey(name))
                 {
-                    Texture2D texture = contentManager.Load<Texture2D>(Variables.AssetPaths.UI_PATH + "/" + name);
+                    Texture2D texture = contentManager.Load<Texture2D>(Assets.UI_PATH + "/" + name);
                     Vector2 center = new Vector2(texture.Width / 2, texture.Height / 2);
                     this.ComponentTextures[name] = new UITexture(texture, center);
                 }

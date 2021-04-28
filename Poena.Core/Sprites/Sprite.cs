@@ -123,10 +123,7 @@ namespace Poena.Core.Sprites
                 if (Config.DEBUG_RENDER)
                 {
                     RectangleF dim = this.Dimensions;
-                    spriteBatch.Draw(Config.DEBUG_TEXTURE, new Rectangle((int)dim.Left, (int)dim.Top, (int)dim.Width, 3), Color.White);
-                    spriteBatch.Draw(Config.DEBUG_TEXTURE, new Rectangle((int)dim.Right, (int)dim.Top, 3, (int)dim.Height), Color.White);
-                    spriteBatch.Draw(Config.DEBUG_TEXTURE, new Rectangle((int)dim.Left, (int)dim.Bottom, (int)dim.Width, 3), Color.White);
-                    spriteBatch.Draw(Config.DEBUG_TEXTURE, new Rectangle((int)dim.Left, (int)dim.Top, 3, (int)dim.Height), Color.White);
+                    spriteBatch.DrawRectangle(dim, Color.White, 3);
                 }
             }
         }

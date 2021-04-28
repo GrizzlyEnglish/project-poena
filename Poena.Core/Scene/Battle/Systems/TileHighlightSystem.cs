@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using Poena.Core.Common;
+using Poena.Core.Common.Enums;
 using Poena.Core.Entity;
 using Poena.Core.Entity.Components;
 using Poena.Core.Entity.Managers;
@@ -17,10 +18,11 @@ namespace Poena.Core.Scene.Battle.Systems
 {
     public class TileHighlightSystem : ECSystem
     {
-        private Texture2D movement_marker_sprite;
+        private Dictionary<TileHighlight, Texture2D> Textures;
 
         public TileHighlightSystem(SystemManager systemManager) : base(systemManager)
         {
+            Textures = new Dictionary<TileHighlight, Texture2D>();
         }
 
         public override void Initiliaze()
@@ -30,11 +32,14 @@ namespace Poena.Core.Scene.Battle.Systems
         
         public override void LoadContent(ContentManager contentManager)
         {
-            //TODO: rce - Load all movement highlight variations
-            this.movement_marker_sprite = contentManager.Load<Texture2D>(Variables.AssetPaths.TILE_PATH + "HEX_Highlight_Test");
+            Textures.Add(TileHighlight.Movement, contentManager.Load<Texture2D>(Assets.GetTileHighlight(TileHighlight.Movement)));
+            Textures.Add(TileHighlight.Attack, contentManager.Load<Texture2D>(Assets.GetTileHighlight(TileHighlight.Attack)));
         }
 
-        public override void Update(double dt) {}
+        public override void Update(double dt) 
+        {
+            // Nothing to update
+        }
 
         public override void Render(SpriteBatch batch, RectangleF cameraBounds)
         {
@@ -47,7 +52,7 @@ namespace Poena.Core.Scene.Battle.Systems
                     });
 
             // Store a list of tiles that need highlights
-            Dictionary<Coordinates, List<string>> tile_coordinates = new Dictionary<Coordinates, List<string>>();
+            Dictionary<Coordinates, List<TileHighlight>> tile_coordinates = new Dictionary<Coordinates, List<TileHighlight>>();
 
             // Loop all the entities and highlight tile as necessary
             foreach (ECEntity ent in entities)
@@ -56,6 +61,7 @@ namespace Poena.Core.Scene.Battle.Systems
                 PositionComponent pos = ent.GetComponent<PositionComponent>();
                 MovementComponent movement = ent.GetComponent<MovementComponent>();
                 SelectedComponent selected = ent.GetComponent<SelectedComponent>();
+                AttackingComponent attacking = ent.GetComponent<AttackingComponent>();
 
                 List<Vector2> tile_points = new List<Vector2>();
                 
@@ -78,28 +84,26 @@ namespace Poena.Core.Scene.Battle.Systems
                     Coordinates coordinates = Coordinates.BoardToWorld(p);
                     if (!tile_coordinates.ContainsKey(coordinates))
                     {
-                        tile_coordinates.Add(coordinates, new List<string>());
-                        tile_coordinates[coordinates] = new List<string>();
+                        tile_coordinates.Add(coordinates, new List<TileHighlight>());
                     }
-                    tile_coordinates[coordinates].Add("movement");
+                    tile_coordinates[coordinates].Add(TileHighlight.Movement);
+                    if (attacking != null)
+                    {
+                        tile_coordinates[coordinates].Add(TileHighlight.Attack);
+                    }
                 }
             }
 
             foreach (Coordinates coordinates in tile_coordinates.Keys)
             {
-                List<string> highlights = tile_coordinates[coordinates];
-
-                // Determine the highesst precident and render that
-
-                // TODO: rce - add system to determine what to render
-                batch.Draw(this.movement_marker_sprite, coordinates.AsVector2(), Color.White);
+                TileHighlight highlight = tile_coordinates[coordinates].OrderByDescending(t => t).First();
+                batch.Draw(this.Textures[highlight], coordinates.AsVector2(), Color.White);
             }
 
             BoardTile hoveringTile = this.Manager.SceneLayer.GetLayerNode<BattleBoard>().GetHoveringTile();
             if (hoveringTile != null) {
                 Coordinates coordinates = hoveringTile.RenderCoordinates();
-                // TODO: rce - Make this a highlight sprite - purely to show what tile is showing
-                batch.Draw(this.movement_marker_sprite, coordinates.AsVector2(), Color.White);
+                batch.Draw(this.Textures[TileHighlight.Movement], coordinates.AsVector2(), Color.White);
             }
         }
     }

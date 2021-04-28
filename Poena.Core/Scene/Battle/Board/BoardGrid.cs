@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
-using MonoGame.Extended.Input.InputListeners;
 using Poena.Core.Common;
 using Poena.Core.Common.Interfaces;
 using Poena.Core.Extensions;
@@ -21,11 +20,9 @@ namespace Poena.Core.Scene.Battle.Board
 
     public class BoardGrid
     {
-        //Debug options
-        private readonly bool DebugRender = true;
+        public RectangleF GridBounds { get; private set; }
 
         private BoardTile[,,] Grid;
-        private Rectangle? GridBounds;
         private BoardTile ClickedTile;
 
         public int Width { get { return Grid.GetLength(1);  } }
@@ -37,6 +34,7 @@ namespace Poena.Core.Scene.Battle.Board
         {
             this.Grid = grid_tiles;
             this.ForEach(bt => bt.InjectBoard(this));
+            this.SetBounds();
         }
 
         public BoardTile this[Point coordinates]
@@ -146,12 +144,10 @@ namespace Poena.Core.Scene.Battle.Board
                 }
             });
 
-#if DEBUG
-            if (this.DebugRender)
+            if (Config.DEBUG_RENDER)
             {
-                spriteBatch.DrawRectangle(this.GetBounds(), 30);
+                spriteBatch.DrawRectangle(GridBounds, Color.Red, 30);
             }
-#endif
         }
         
         public List<BoardTile> CircleAroundTile(BoardTile bgt, int radius, bool includeCenter = false,
@@ -171,33 +167,28 @@ namespace Poena.Core.Scene.Battle.Board
             return l >= 0 && l < this.Length && w >= 0 && w < this.Width && z >= 0 && z < 2;
         }
 
-        public Rectangle GetBounds()
+        private void SetBounds()
         {
-            if (this.GridBounds == null)
-            {
-                //Scale back the top and the bottom
-                int width_scale = (int)(this.Width * .25);
-                int length_scale = (int)(this.Length * .25);
+            //Scale back the top and the bottom
+            int width_scale = (int)(this.Width * .25);
+            int length_scale = (int)(this.Length * .25);
 
-                //Get the points
-                Coordinates left = Coordinates.BoardToWorld(0, this.Length);
-                Coordinates top = Coordinates.BoardToWorld(-width_scale, -length_scale);
-                Coordinates right = Coordinates.BoardToWorld(this.Width, 0);
-                Coordinates bottom = Coordinates.BoardToWorld(this.Width + width_scale, this.Length + length_scale);
+            //Get the points
+            Coordinates left = Coordinates.BoardToWorld(0, this.Length);
+            Coordinates top = Coordinates.BoardToWorld(-width_scale, -length_scale);
+            Coordinates right = Coordinates.BoardToWorld(this.Width, 0);
+            Coordinates bottom = Coordinates.BoardToWorld(this.Width + width_scale, this.Length + length_scale);
 
-                //Find the width and the height
-                int bounds_width = right.x - left.x;
-                int bounds_height = bottom.y - top.y;
+            //Find the width and the height
+            int bounds_width = right.x - left.x;
+            int bounds_height = bottom.y - top.y;
 
-                int x = left.x;
-                int y = top.y - (bounds_height / 2); //Shift back y half the height to center
+            int x = left.x;
+            int y = top.y - (bounds_height / 2); //Shift back y half the height to center
 
-                bounds_height += bounds_height; //Double the height to center
+            bounds_height += bounds_height; //Double the height to center
 
-                this.GridBounds = new Rectangle(x, y, bounds_width, bounds_height);
-            }
-            
-            return this.GridBounds.Value;
+            this.GridBounds = new RectangleF(x, y, bounds_width, bounds_height);
         }
 
         public List<BoardTile> ShortestPath(BoardGridPosition start, BoardGridPosition end)

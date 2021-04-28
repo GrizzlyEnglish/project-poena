@@ -15,7 +15,7 @@ namespace Poena.Core.Extensions
             white_texture = new Texture2D(graphicsDevice, 1, 1);
             white_texture.SetData(new Color[] { Color.White });
 
-            sprite_font = contentManager.Load<SpriteFont>(Variables.AssetPaths.FONT_PATH + "BaseFont");
+            sprite_font = contentManager.Load<SpriteFont>(Assets.BASE_FONT);
         }
 
         public static void DrawRectangle(this SpriteBatch batch, Rectangle rectangle, Color color, int scale)

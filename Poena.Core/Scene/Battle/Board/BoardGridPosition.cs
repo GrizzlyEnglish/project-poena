@@ -40,7 +40,7 @@ namespace Poena.Core.Scene.Battle.Board
         private void SetWorldRectangle()
         {
             Coordinates world_coords = Coordinates.BoardToWorld(this.GridSlot);
-            this.WorldPosition = new RectangleF(world_coords.x, world_coords.y, Variables.TILE_WIDTH, Variables.TILE_HEIGHT);
+            this.WorldPosition = new RectangleF(world_coords.x, world_coords.y, Config.TILE_WIDTH, Config.TILE_HEIGHT);
         }
         
         private Point DirectionScale(TileDirections direction, int scale)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -26,7 +27,7 @@ namespace Poena.Core.Scene.Battle.UI
 
         public HotBar(UISceneLayer layer) : base(layer)
         {
-            this.ForegroundSprite.SetTexturePath(Variables.AssetPaths.UI_PATH + "/ui_test_hotbar");
+            this.ForegroundSprite.SetTexturePath(Assets.GetUIElement(UIElements.HotBar));
             this.ForegroundSprite.Position.speed = 3.25f;
 
             this.ClearIcons();
@@ -85,7 +86,7 @@ namespace Poena.Core.Scene.Battle.UI
             Icons = new Sprite[ICON_LENGTH];
         }
 
-        private void SetIcon(AttackTypeEnum iconType, Texture2D icon)
+        private void SetIcon(AttackType iconType, Texture2D icon)
         {
             int position = (int)iconType;
             Icons[position] = new Sprite();
@@ -144,6 +145,11 @@ namespace Poena.Core.Scene.Battle.UI
                 {
                     if (Icons[i] != null && Icons[i].IsWithinBounds(pos))
                     {
+                        ECEntity selectedEntity = this.UISceneLayer.CurrentScene.GetSceneLayer<BattleEntityLayer>().EntityManager.GetEntity(typeof(SelectedComponent));
+                        selectedEntity.AddComponent(new AttackingComponent
+                        {
+                            AttackType = (AttackType)i
+                        });
                         return true;
                     }
                 }

@@ -1,6 +1,6 @@
 namespace Poena.Core.Common.Enums
 {
-    public enum AttackTypeEnum
+    public enum AttackType
     {
         Skill = 0,
         Weapon = 1,

@@ -45,9 +45,9 @@ namespace Poena.Core.Scene.Battle.Layers
             this.LayerNodes.Add(board);
     
             //Get the board bounds
-            Rectangle bounds = board.GetBounds();
+            RectangleF bounds = board.GetBounds();
             //Set the camera to the bounds of the game board
-            this.Camera.ClampCamera(bounds, true);
+            this.Camera.ClampCamera(bounds.ToRectangle(), true);
 
             //For testing
             this.EntityManager.AddEntity(EntityFactory.GenerateEntity());

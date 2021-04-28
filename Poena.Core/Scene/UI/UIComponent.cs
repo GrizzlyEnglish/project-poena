@@ -104,7 +104,7 @@ namespace Poena.Core.Scene.UI
         //Gets the uis background layer
         public string GetBackgroundTexturePath()
         {
-            return Variables.AssetPaths.UI_PATH + "/" + BackgroundTextureName;
+            return Assets.UI_PATH + "/" + BackgroundTextureName;
         }
 
         public abstract bool HandleMouseClicked(MouseEvent mouseEvent);

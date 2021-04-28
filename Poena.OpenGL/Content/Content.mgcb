@@ -23,31 +23,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../Poena.Core/Content/assets/entities/icon_adventurer1.png;entities/icon_adventurer1.png
-
-#begin ../../Poena.Core/Content/assets/entities/icon_adventurer1.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
 /build:../../Poena.Core/Content/assets/entities/icon_adventurer1.png;assets/entities/icon_adventurer1.png
-
-#begin ../../Poena.Core/Content/assets/entities/icon_giantRat.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../Poena.Core/Content/assets/entities/icon_giantRat.png;entities/icon_giantRat.png
 
 #begin ../../Poena.Core/Content/assets/entities/icon_giantRat.png
 /importer:TextureImporter
@@ -66,26 +42,7 @@
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:../../Poena.Core/Content/assets/fonts/BaseFont.spritefont;fonts/BaseFont.spritefont
-
-#begin ../../Poena.Core/Content/assets/fonts/BaseFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
 /build:../../Poena.Core/Content/assets/fonts/BaseFont.spritefont;assets/fonts/BaseFont.spritefont
-
-#begin ../../Poena.Core/Content/assets/tiles/HEX_Dirt_01.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../Poena.Core/Content/assets/tiles/HEX_Dirt_01.png;tiles/HEX_Dirt_01.png
 
 #begin ../../Poena.Core/Content/assets/tiles/HEX_Dirt_01.png
 /importer:TextureImporter
@@ -109,21 +66,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../Poena.Core/Content/assets/tiles/HEX_Grass_01.png;tiles/HEX_Grass_01.png
-
-#begin ../../Poena.Core/Content/assets/tiles/HEX_Grass_01.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
 /build:../../Poena.Core/Content/assets/tiles/HEX_Grass_01.png;assets/tiles/HEX_Grass_01.png
 
-#begin ../../Poena.Core/Content/assets/tiles/HEX_Highlight_Test.png
+#begin ../../Poena.Core/Content/assets/tiles/HEX_Highlight_Attack.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -133,7 +78,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../Poena.Core/Content/assets/tiles/HEX_Highlight_Test.png;tiles/HEX_Highlight_Test.png
+/build:../../Poena.Core/Content/assets/tiles/HEX_Highlight_Attack.png;assets/tiles/HEX_Highlight_Attack.png
 
 #begin ../../Poena.Core/Content/assets/tiles/HEX_Highlight_Test.png
 /importer:TextureImporter
@@ -157,31 +102,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../Poena.Core/Content/assets/ui/active1.png;ui/active1.png
-
-#begin ../../Poena.Core/Content/assets/ui/active1.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
 /build:../../Poena.Core/Content/assets/ui/active1.png;assets/ui/active1.png
-
-#begin ../../Poena.Core/Content/assets/ui/BlueBar.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../Poena.Core/Content/assets/ui/BlueBar.png;ui/BlueBar.png
 
 #begin ../../Poena.Core/Content/assets/ui/BlueBar.png
 /importer:TextureImporter
@@ -205,18 +126,6 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../Poena.Core/Content/assets/ui/EmptyBar.png;ui/EmptyBar.png
-
-#begin ../../Poena.Core/Content/assets/ui/EmptyBar.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
 /build:../../Poena.Core/Content/assets/ui/EmptyBar.png;assets/ui/EmptyBar.png
 
 #begin ../../Poena.Core/Content/assets/ui/ui_panel_test.png
@@ -229,31 +138,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../Poena.Core/Content/assets/ui/ui_panel_test.png;ui/ui_panel_test.png
-
-#begin ../../Poena.Core/Content/assets/ui/ui_panel_test.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
 /build:../../Poena.Core/Content/assets/ui/ui_panel_test.png;assets/ui/ui_panel_test.png
-
-#begin ../../Poena.Core/Content/assets/ui/ui_test_hotbar.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../Poena.Core/Content/assets/ui/ui_test_hotbar.png;ui/ui_test_hotbar.png
 
 #begin ../../Poena.Core/Content/assets/ui/ui_test_hotbar.png
 /importer:TextureImporter

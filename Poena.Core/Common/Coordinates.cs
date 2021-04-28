@@ -58,8 +58,8 @@ namespace Poena.Core.Common
 
         public static Coordinates BoardToWorld(int x, int y, int z = 0)
         {
-            float half_width = Variables.TILE_WIDTH / 2;
-            float half_height = Variables.TILE_HEIGHT / 2;
+            float half_width = Config.TILE_WIDTH / 2f;
+            float half_height = Config.TILE_HEIGHT / 2;
 
             x -= z;
             y -= z;
@@ -72,8 +72,8 @@ namespace Poena.Core.Common
 
         public static Point WorldToBoard(Vector2 pos)
         {
-            float half_width = Variables.TILE_WIDTH / 2;
-            float half_height = Variables.TILE_HEIGHT / 2;
+            float half_width = Config.TILE_WIDTH / 2f;
+            float half_height = Config.TILE_HEIGHT / 2f;
             
             int wy = (int)Math.Floor(((pos.Y / (half_height - 75)) - (pos.X / (half_width + 25))) / 2);
             int wx = (int)Math.Floor((pos.X / (half_width + 25)) + wy);

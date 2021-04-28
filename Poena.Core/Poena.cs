@@ -21,8 +21,8 @@ namespace Poena.Core
             graphics = new GraphicsDeviceManager(this);
 
             graphics.IsFullScreen = false;
-            graphics.PreferredBackBufferHeight = Variables.VIEWPORT_HEIGHT;
-            graphics.PreferredBackBufferWidth = Variables.VIEWPORT_WIDTH;
+            graphics.PreferredBackBufferHeight = Config.VIEWPORT_HEIGHT;
+            graphics.PreferredBackBufferWidth = Config.VIEWPORT_WIDTH;
 
             this.Window.AllowUserResizing = true;
             this.Window.ClientSizeChanged += new EventHandler<EventArgs>(this.WindowResizeEvent);
@@ -73,11 +73,11 @@ namespace Poena.Core
         private void WindowResizeEvent(object sender, EventArgs e)
         {
             //Set the new vars
-            Variables.VIEWPORT_HEIGHT = this.Window.ClientBounds.Height;
-            Variables.VIEWPORT_WIDTH = this.Window.ClientBounds.Width;
+            Config.VIEWPORT_HEIGHT = this.Window.ClientBounds.Height;
+            Config.VIEWPORT_WIDTH = this.Window.ClientBounds.Width;
 
-            graphics.PreferredBackBufferHeight = Variables.VIEWPORT_HEIGHT;
-            graphics.PreferredBackBufferWidth = Variables.VIEWPORT_WIDTH;
+            graphics.PreferredBackBufferHeight = Config.VIEWPORT_HEIGHT;
+            graphics.PreferredBackBufferWidth = Config.VIEWPORT_WIDTH;
 
             screenManager.WindowResizeEvent();
         }
