@@ -7,7 +7,7 @@ namespace Poena.Core.Common
 {
     public static class Config
     {
-        public static readonly bool DEBUG_RENDER = true;
+        public static readonly bool DEBUG_RENDER = false;
         public static Texture2D DEBUG_TEXTURE { get; set; }
 
         public static int VIEWPORT_WIDTH { get; set; } = 960;

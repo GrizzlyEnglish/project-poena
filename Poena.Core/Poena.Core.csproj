@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Screen\Battle\UI\HotBar.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Content\assets\ui\ui_test_hotbar.png" />
   </ItemGroup>
 
@@ -16,14 +20,11 @@
 
   <ItemGroup>
     <PackageReference Include="MonoGame.Extended" Version="3.8.0" />
+    <PackageReference Include="MonoGame.Extended.Entities" Version="3.8.0" />
     <PackageReference Include="MonoGame.Extended.Input" Version="3.8.0" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Entity\Factories\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -63,6 +64,10 @@
     <None Update="Content\Content.mgcb">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Screen\Battle\UI\" />
   </ItemGroup>
 
 </Project>

@@ -2,51 +2,48 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Screens;
 using Poena.Core.Common;
 using Poena.Core.Extensions;
-using Poena.Core.Managers;
+using Poena.Core.Screen.Battle;
 using Poena.Core.Utilities;
 
 namespace Poena.Core
 {
     public class Poena : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        ScreenManager screenManager;
+        readonly GraphicsDeviceManager _graphics;
+        readonly ScreenManager _screenManager;
+
+        public SpriteBatch SpriteBatch { get; private set; }
 
         public Poena()
         {
             Logger.GetInstance().LogLevel = LogLevel.Debug;
-            graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
 
-            graphics.IsFullScreen = false;
-            graphics.PreferredBackBufferHeight = Config.VIEWPORT_HEIGHT;
-            graphics.PreferredBackBufferWidth = Config.VIEWPORT_WIDTH;
+            _graphics.IsFullScreen = false;
+            _graphics.PreferredBackBufferHeight = Config.VIEWPORT_HEIGHT;
+            _graphics.PreferredBackBufferWidth = Config.VIEWPORT_WIDTH;
 
             this.Window.AllowUserResizing = true;
             this.Window.ClientSizeChanged += new EventHandler<EventArgs>(this.WindowResizeEvent);
 
-            screenManager = new ScreenManager();
+            _screenManager = new ScreenManager();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
 
-        protected override void Initialize()
-        {
-            //TODO: Init screen manager with splash screen
-            base.Initialize();
-        }
-
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            spriteBatch.LoadContent(GraphicsDevice, this.Content);
-            screenManager.LoadContent(this.Content);
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
+            SpriteBatch.LoadContent(GraphicsDevice, this.Content);
 
             // Setup debug render dexture
             Texture2D texture = new Texture2D(GraphicsDevice, 1, 1);
             texture.SetData(new Color[] { Color.White });
+
+            _screenManager.LoadScreen(new Battle(this));
 
             Config.DEBUG_TEXTURE = texture;
         }
@@ -56,7 +53,7 @@ namespace Poena.Core
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            screenManager.Update(gameTime);
+            _screenManager.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -65,7 +62,7 @@ namespace Poena.Core
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            screenManager.Render(spriteBatch);
+            _screenManager.Draw(gameTime);
 
             base.Draw(gameTime);
         }
@@ -76,10 +73,8 @@ namespace Poena.Core
             Config.VIEWPORT_HEIGHT = this.Window.ClientBounds.Height;
             Config.VIEWPORT_WIDTH = this.Window.ClientBounds.Width;
 
-            graphics.PreferredBackBufferHeight = Config.VIEWPORT_HEIGHT;
-            graphics.PreferredBackBufferWidth = Config.VIEWPORT_WIDTH;
-
-            screenManager.WindowResizeEvent();
+            _graphics.PreferredBackBufferHeight = Config.VIEWPORT_HEIGHT;
+            _graphics.PreferredBackBufferWidth = Config.VIEWPORT_WIDTH;
         }
     }
 }

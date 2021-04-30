@@ -33,6 +33,16 @@ namespace Poena.Core.Common
         #endregion
 
         #region board
+        public static string GetTile(TileType tileType)
+        {
+            switch (tileType)
+            {
+                case TileType.Debug:
+                    return TILE_PATH + "HEX_Dirt_01";
+            }
+
+            return null;
+        }
         public static string GetTileHighlight(TileHighlight highlight)
         {
             switch (highlight)
