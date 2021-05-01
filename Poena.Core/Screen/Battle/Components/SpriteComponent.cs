@@ -8,7 +8,7 @@ namespace Poena.Core.Screen.Battle.Components
     {
         public float Scale { get; set; } = 1f;
         public Texture2D Texture { get; set; }
-        public bool IsVisible { get; set; }
+        public bool IsVisible { get; set; } = true;
 
         public float Width
         {

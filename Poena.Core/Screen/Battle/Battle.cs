@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
+using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.Screens;
 using Poena.Core.Common;
 using Poena.Core.Common.Enums;
+using Poena.Core.Extensions;
 using Poena.Core.Managers;
 using Poena.Core.Screen.Battle.Board;
 using Poena.Core.Screen.Battle.Entities;
@@ -23,11 +25,18 @@ namespace Poena.Core.Screen.Battle
         private OrthographicCamera _camera;
         private EntityFactory _entityFactory;
         private readonly AssetManager _assetManager;
+        private MouseListener _mouseListener;
 
         public Battle(Poena game) : base(game)
         {
             _assetManager = new AssetManager(game.Content);
             _entityFactory = new EntityFactory(_assetManager);
+
+            _mouseListener = new MouseListener();
+            _mouseListener.MouseDrag += HandleMouseDragged;
+            _mouseListener.MouseWheelMoved += HandleMouseWheeled;
+
+            Game.Components.Add(new InputListenerComponent(Game, _mouseListener));
         }
 
         public override void Initialize()
@@ -37,15 +46,14 @@ namespace Poena.Core.Screen.Battle
             _camera.Zoom = .9f;
             _boardGrid = new BoardGrid(_assetManager, _game.SpriteBatch, _camera, BoardSize.Medium);
             _world = new WorldBuilder()
-                .AddSystem(new SpriteSystem(_game.SpriteBatch))
+                .AddSystem(new TileHighlightSystem(_game.SpriteBatch, _assetManager))
                 .AddSystem(new PositionSystem(_boardGrid))
                 .AddSystem(new SelectionSystem(_boardGrid, _camera))
                 .AddSystem(new TurnSystem())
                 .AddSystem(new TurnRenderSystem(_game.SpriteBatch, _assetManager))
-                .AddSystem(new TileHighlightSystem(_game.SpriteBatch, _boardGrid))
                 .AddSystem(new AttackingSystem())
+                .AddSystem(new SpriteSystem(_game.SpriteBatch))
                 .Build();
-
 
             base.Initialize();
         }
@@ -57,6 +65,8 @@ namespace Poena.Core.Screen.Battle
             _assetManager.LoadTexture(Assets.GetTile(TileType.Debug));
             _assetManager.LoadTexture(Assets.GetEntity(EntityType.GiantRat));
             _assetManager.LoadTexture(Assets.GetEntity(EntityType.Adventurer));
+            _assetManager.LoadTexture(Assets.GetTileHighlight(TileHighlight.Movement));
+            _assetManager.LoadTexture(Assets.GetTileHighlight(TileHighlight.Attack));
             // TODO: Figure out how to organize this better
             _entityFactory.GenerateEntity(_world);
             _entityFactory.GenerateNPC(_world);
@@ -86,36 +96,23 @@ namespace Poena.Core.Screen.Battle
             _world.Update(gameTime);
         }
 
-        /*public override bool HandleMouseClicked(MouseEvent mouseEvent)
+        public void HandleMouseClicked(object sender, MouseEventArgs mouseEvent)
         {
-            mouseEvent.SetUnprojectedPosition(this.Camera);
-            this.LayerNodeObjects.ForEach(obj => {
-                bool handled = obj.HandleMouseClicked(mouseEvent);
-                if (handled)
-                {
-                    return;
-                }
-            });
-
-            return false;
         }
 
-        public override void HandleMouseMoved(MouseEvent mouseEvent)
+        public void HandleMouseMoved(object sender, MouseEventArgs mouseEvent)
         {
-            mouseEvent.SetUnprojectedPosition(this.Camera);
-            this.LayerNodeObjects.ForEach(obj => obj.HandleMouseMoved(mouseEvent));
         }
 
-        public override void HandleMouseDragged(MouseEvent mouseEvent)
+        public void HandleMouseDragged(object sender, MouseEventArgs mouseEvent)
         {
-            Vector2 mouseMoved = mouseEvent.MouseEventArgs.DistanceMoved.Invert();
-            this.Camera.Translate(mouseMoved);
+            this._camera.Move(mouseEvent.DistanceMoved.Invert());
         }
 
-        public override void HandleMouseWheeled(MouseEvent mouseEvent)
+        public void HandleMouseWheeled(object sender, MouseEventArgs mouseEvent)
         {
-            int zoom = mouseEvent.MouseEventArgs.ScrollWheelDelta * 3;
-            this.Camera.Zoom(zoom);
-        }*/
+            if (mouseEvent.ScrollWheelDelta < 0) this._camera.ZoomOut(.03f);
+            else this._camera.ZoomIn(.03f);
+        }
     }
 }

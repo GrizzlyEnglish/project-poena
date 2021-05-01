@@ -21,7 +21,7 @@ namespace Poena.Core.Screen.Battle.Systems
         private ComponentMapper<StatsComponent> _statsMapper;
 
         public SelectionSystem(BoardGrid boardGrid, OrthographicCamera cam) 
-            : base(Aspect.One(typeof(PositionComponent), typeof(SelectedComponent), typeof(PlayerControllerComponent)))
+            : base(Aspect.All(typeof(TurnComponent)))
         {
             this._boardGrid = boardGrid;
             this._camera = cam;
@@ -38,44 +38,57 @@ namespace Poena.Core.Screen.Battle.Systems
 
         public override void Update(GameTime gameTime)
         {
+            int? selectedEntityId = null;
+
+            foreach (int entityId in ActiveEntities)
+            {
+                if (_selectedMapper.Has(entityId))
+                {
+                    selectedEntityId = entityId;
+                    break;
+                }
+            }
+
             // TODO: Handle clicked tile
             BoardTile selectedTile = null;
             // If we have an event lets check if we seleced an entity
             if (selectedTile != null)
             {
                 // See if somone is already selected
-                foreach (int entityId in ActiveEntities)
+                if (selectedEntityId.HasValue)
                 {
-                    if (_selectedMapper.Has(entityId))
+                    TurnComponent turn = _turnMapper.Get(selectedEntityId.Value);
+                    PositionComponent pos = _positionMapper.Get(selectedEntityId.Value);
+
+                    // If they are deslect them
+                    if (!turn.ready_for_turn && selectedTile.Position.GetWorldAnchorPosition() == pos.TilePosition)
                     {
-                        TurnComponent turn = _turnMapper.Get(entityId);
-                        PositionComponent pos = _positionMapper.Get(entityId);
-
-                        // If they are deslect them
-                        if (!turn.ready_for_turn && selectedTile.Position.GetWorldAnchorPosition() == pos.tile_position)
-                        {
-                            _selectedMapper.Delete(entityId);
-                            _attackingMapper.Delete(entityId);
-                        }
-
-                        // Mark tile as used
-                        // TODO: Handle clicked tile
-
-                        return;
+                        _selectedMapper.Delete(selectedEntityId.Value);
+                        _attackingMapper.Delete(selectedEntityId.Value);
                     }
-                }
-                
-                foreach (int entityId in ActiveEntities)
+
+                    // Mark tile as used
+                    // TODO: Handle clicked tile
+
+                    return;
+                }    
+            }
+
+            foreach (int entityId in ActiveEntities)
+            {
+                TurnComponent turn = _turnMapper.Get(entityId);
+                PositionComponent pos = _positionMapper.Get(entityId);
+                SelectedComponent selected = _selectedMapper.Get(entityId);
+                // Check if the entities anchor point is inside the tile or they are prepared for their turn
+                if ( 
+                    (turn.ready_for_turn && selected == null) ||
+                    (selectedTile != null && selectedTile.Position.GetWorldAnchorPosition() == pos.TilePosition)
+                    )
                 {
-                    PositionComponent pos = _positionMapper.Get(entityId);
-                    //Check if the entities anchor point is inside the tile
-                    if (selectedTile.Position.GetWorldAnchorPosition() == pos.tile_position)
-                    {
-                        this.SelectEntity(entityId, selectedTile);
-                        // Mark tile as used
-                        // TODO: Handle clicked tile
-                        break;
-                    }
+                    this.SelectEntity(entityId, selectedTile ?? _boardGrid[pos.TilePosition]);
+                    // Mark tile as used
+                    // TODO: Handle clicked tile
+                    break;
                 }
             }
         }
@@ -100,7 +113,7 @@ namespace Poena.Core.Screen.Battle.Systems
             foreach (int entId in ActiveEntities)
             {
                 PositionComponent pos = _positionMapper.Get(entId);
-                ent_positions.Add(pos.tile_position);
+                ent_positions.Add(pos.TilePosition);
             }
             tiles.RemoveAll(t => ent_positions.Contains(t));
             // Set movements possible movement tiles

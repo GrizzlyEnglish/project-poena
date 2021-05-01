@@ -48,16 +48,16 @@ namespace Poena.Core.Screen.Battle.Systems
                 {
                     // LERP to position
                     Vector2 destination = movement.path_to_destination.Peek();
-                    pos.tile_position = pos.tile_position.Lerp(destination, (float)(gameTime.ElapsedGameTime.TotalMilliseconds * 3.5f));
+                    pos.TilePosition = pos.TilePosition.Lerp(destination, (float)(gameTime.ElapsedGameTime.TotalMilliseconds * 3.5f));
 
-                    if (pos.tile_position.Distance(destination) < 5)
+                    if (pos.TilePosition.Distance(destination) < 5)
                     {
                         Vector2 last_pos = movement.path_to_destination.Dequeue();
 
                         if (movement.path_to_destination.Count == 0)
                         {
                             // Entity is finished moving notify turn system to reset
-                            pos.tile_position = last_pos;
+                            pos.TilePosition = last_pos;
                             _movementMapper.Delete(entityId);
                         }
                     }
@@ -66,7 +66,7 @@ namespace Poena.Core.Screen.Battle.Systems
                 else if (selectedTile != null && selected != null && !_attackingMapper.Has(entityId))
                 {
                     BoardGrid bg = selectedTile.BoardGrid;
-                    BoardTile on_tile = bg[Coordinates.WorldToBoard(pos.tile_position)];
+                    BoardTile on_tile = bg[Coordinates.WorldToBoard(pos.TilePosition)];
                     Vector2 destination_tile_anchor = selectedTile.Position.GetWorldAnchorPosition();
 
                     //TODO: rce - Add logic to make sure tile is moveable

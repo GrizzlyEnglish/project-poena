@@ -15,6 +15,10 @@ namespace Poena.Core
         readonly GraphicsDeviceManager _graphics;
         readonly ScreenManager _screenManager;
 
+#if DEBUG
+        readonly FrameCounter _frameCounter;
+#endif
+
         public SpriteBatch SpriteBatch { get; private set; }
 
         public Poena()
@@ -32,6 +36,10 @@ namespace Poena.Core
             _screenManager = new ScreenManager();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
+#if DEBUG
+            _frameCounter = new FrameCounter(this);
+#endif
         }
 
         protected override void LoadContent()
@@ -55,6 +63,10 @@ namespace Poena.Core
 
             _screenManager.Update(gameTime);
 
+#if DEBUG
+            _frameCounter.Update(gameTime);
+#endif
+
             base.Update(gameTime);
         }
 
@@ -63,6 +75,10 @@ namespace Poena.Core
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _screenManager.Draw(gameTime);
+
+#if DEBUG
+            _frameCounter.Draw(gameTime);
+#endif
 
             base.Draw(gameTime);
         }

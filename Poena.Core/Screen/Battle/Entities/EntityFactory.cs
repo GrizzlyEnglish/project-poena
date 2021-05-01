@@ -32,7 +32,7 @@ namespace Poena.Core.Screen.Battle.Entities
             entity.Attach(anim);
 
             PositionComponent position = new PositionComponent();
-            position.tile_position = new BoardGridPosition(5, 5, 0).GetWorldAnchorPosition();
+            position.TilePosition = new BoardGridPosition(5, 5, 0).GetWorldAnchorPosition();
             entity.Attach(position);
             
             StatsComponent stats = new StatsComponent();
@@ -48,12 +48,12 @@ namespace Poena.Core.Screen.Battle.Entities
             var entity = world.CreateEntity();
 
             SpriteComponent anim = new SpriteComponent();
-            anim.Texture = _assetManager.GetTexture(Assets.GetEntity(EntityType.GiantRat));
+            anim.Texture = _assetManager.GetTexture(Assets.GetEntity(EntityType.Adventurer));
             anim.AnchorOffset = new Vector2(.5f, .7f);
             entity.Attach(anim);
 
             PositionComponent position = new PositionComponent();
-            position.tile_position = new BoardGridPosition(9, 9, 0).GetWorldAnchorPosition();
+            position.TilePosition = new BoardGridPosition(9, 9, 0).GetWorldAnchorPosition();
             entity.Attach(position);
 
             PlayerControllerComponent pcc = new PlayerControllerComponent();

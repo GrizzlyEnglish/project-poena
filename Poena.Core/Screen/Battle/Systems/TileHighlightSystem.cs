@@ -9,6 +9,7 @@ using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using Poena.Core.Common;
 using Poena.Core.Common.Enums;
+using Poena.Core.Managers;
 using Poena.Core.Screen.Battle.Board;
 using Poena.Core.Screen.Battle.Components;
 
@@ -16,18 +17,17 @@ namespace Poena.Core.Screen.Battle.Systems
 {
     public class TileHighlightSystem : EntityDrawSystem
     {
-        private readonly Dictionary<TileHighlight, Texture2D> _textures;
-        private readonly BoardGrid _boardGrid;
         private readonly SpriteBatch _spriteBatch;
+        private readonly AssetManager _assetManager;
         private ComponentMapper<PositionComponent> _positionMapper;
         private ComponentMapper<SelectedComponent> _selectedMapper;
         private ComponentMapper<AttackingComponent> _attackingMapper;
         private ComponentMapper<MovementComponent> _movementMapper;
 
-        public TileHighlightSystem(SpriteBatch batch, BoardGrid boardGrid) 
+        public TileHighlightSystem(SpriteBatch batch, AssetManager assetManager) 
             : base(Aspect.One(typeof(SelectedComponent), typeof(MovementComponent), typeof(PositionComponent)))
         {
-            _textures = new Dictionary<TileHighlight, Texture2D>();
+            _assetManager = assetManager;
             _spriteBatch = batch;
         }
 
@@ -87,14 +87,14 @@ namespace Poena.Core.Screen.Battle.Systems
             foreach (Coordinates coordinates in tile_coordinates.Keys)
             {
                 TileHighlight highlight = tile_coordinates[coordinates].OrderByDescending(t => t).First();
-                _spriteBatch.Draw(_textures[highlight], coordinates.AsVector2(), Color.White);
+                _spriteBatch.Draw(_assetManager.GetTexture(Assets.GetTileHighlight(highlight)), coordinates.AsVector2(), Color.White);
             }
 
             // TODO: Handle hovering tile
             BoardTile hoveringTile = null;
             if (hoveringTile != null) {
                 Coordinates coordinates = hoveringTile.RenderCoordinates();
-                _spriteBatch.Draw(_textures[TileHighlight.Movement], coordinates.AsVector2(), Color.White);
+                _spriteBatch.Draw(_assetManager.GetTexture(Assets.GetTileHighlight(TileHighlight.Movement)), coordinates.AsVector2(), Color.White);
             }
         }
     }

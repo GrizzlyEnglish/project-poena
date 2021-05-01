@@ -45,7 +45,7 @@ namespace Poena.Core.Screen.Battle.Systems
                 TurnComponent turn = _turnMapper.Get(entityId);
                 
                 // Shift it up a bit
-                Vector2 position = new Vector2((int)pos.tile_position.X, (int)pos.tile_position.Y - 100);
+                Vector2 position = new Vector2((int)pos.TilePosition.X, (int)pos.TilePosition.Y - 100);
 
                 // Draw the fully background
                 _spriteBatch.Draw(turn_bar_background, position, null, Color.White,

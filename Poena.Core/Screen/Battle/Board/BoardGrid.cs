@@ -34,6 +34,20 @@ namespace Poena.Core.Screen.Battle.Board
             this.SetBounds();
         }
 
+        public BoardTile this[Vector2 worldPosition]
+        {
+            get
+            {
+                Point worldPoint = worldPosition.ToPoint();
+                BoardTile tile = null;
+                this.ForEach(bt =>
+                {
+                    if (bt.Position.WorldPosition.Contains(worldPoint)) tile = bt;
+                });
+                return tile;
+            }
+        }
+
         public BoardTile this[Point coordinates]
         {
             get

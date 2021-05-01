@@ -5,7 +5,7 @@ namespace Poena.Core.Screen.Battle.Components
 {
     public class PositionComponent : IComponent
     {
-        public Vector2 tile_position { get; set; }
+        public Vector2 TilePosition { get; set; }
        
         public void Initialize()
         {

@@ -54,8 +54,6 @@ namespace Poena.Core.Screen.Battle.Systems
                 {
                     // Make sure this doesn't overflow
                     turn.current_time = turn.time_for_turn;
-                    // Force select the entity
-                    _selectedMapper.Put(entityId, new SelectedComponent());
                     break;
                 }
 

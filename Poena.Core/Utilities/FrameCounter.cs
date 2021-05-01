@@ -10,52 +10,52 @@ using Poena.Core.Extensions;
 
 namespace Poena.Core.Utilities
 {
-    public class FrameCounter : IRenderable
+    public class FrameCounter
     {
-        public FrameCounter()
-        {
-        }
-
-        public long total_frames { get; private set; }
-        public float total_seconds { get; private set; }
-        public float average_fps { get; private set; }
-        public float current_fps { get; private set; }
+        public long TotalFrames { get; private set; }
+        public float TotalSeconds { get; private set; }
+        public float AvgFPS { get; private set; }
+        public float CurrentFPS { get; private set; }
 
         public const int MAXIMUM_SAMPLES = 100;
 
-        private Queue<float> _sampleBuffer = new Queue<float>();
+        private readonly Queue<float> _sampleBuffer = new Queue<float>();
+        private readonly Poena _poena;
 
-        public void LoadContent(ContentManager contentManager){}
-
-        public StateEnum Update(double deltaTime)
+        public FrameCounter(Poena poena)
         {
-            var dt = (float)deltaTime;
-            current_fps = (float)(1.0 / dt);
+            _poena = poena;
+        }
 
-            _sampleBuffer.Enqueue(current_fps);
+        public StateEnum Update(GameTime gameTime)
+        {
+            var dt = gameTime.ElapsedGameTime.TotalSeconds;
+            CurrentFPS = (float)(1.0 / dt);
+
+            _sampleBuffer.Enqueue(CurrentFPS);
 
             if (_sampleBuffer.Count > MAXIMUM_SAMPLES)
             {
                 _sampleBuffer.Dequeue();
-                average_fps = _sampleBuffer.Average(i => i);
+                AvgFPS = _sampleBuffer.Average(i => i);
             }
             else
             {
-                average_fps = current_fps;
+                AvgFPS = CurrentFPS;
             }
 
-            total_frames++;
-            total_seconds += dt;
+            TotalFrames++;
+            TotalSeconds += (float)dt;
 
             return StateEnum.InProgress;
         }
 
-        public void Render(SpriteBatch spriteBatch, RectangleF cameraBounds)
+        public void Draw(GameTime gameTime)
         {
-            var fps = string.Format("FPS: {0}", this.average_fps);
-            spriteBatch.Begin();
-            spriteBatch.DrawDebugString(fps, new Vector2(1, 1), Color.Black);
-            spriteBatch.End();
+            string fps = string.Format("FPS: {0}", this.AvgFPS);
+            _poena.SpriteBatch.Begin();
+            _poena.SpriteBatch.DrawDebugString(fps, new Vector2(1, 1), Color.Black);
+            _poena.SpriteBatch.End();
         }
     }
 }

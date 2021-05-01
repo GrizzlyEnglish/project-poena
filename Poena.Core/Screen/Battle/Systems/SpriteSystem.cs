@@ -34,12 +34,12 @@ namespace Poena.Core.Screen.Battle.Systems
                 PositionComponent pos = _positionMapper.Get(entityId);
                 if (sprite.IsVisible)
                 {
-                    _spriteBatch.Draw(sprite.Texture, pos.tile_position, null, Color.White,
+                    _spriteBatch.Draw(sprite.Texture, pos.TilePosition, null, Color.White,
                             0, sprite.Anchor, sprite.Scale, SpriteEffects.None, 0);
 
                     if (Config.DEBUG_RENDER)
                     {
-                        RectangleF dim = GetDimensions(pos.tile_position, sprite.Anchor, sprite.Width, sprite.Height);
+                        RectangleF dim = GetDimensions(pos.TilePosition, sprite.Anchor, sprite.Width, sprite.Height);
                         _spriteBatch.DrawRectangle(dim, Color.White, 3);
                     }
                 }
