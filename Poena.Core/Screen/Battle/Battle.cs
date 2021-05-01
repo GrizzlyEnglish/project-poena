@@ -21,11 +21,13 @@ namespace Poena.Core.Screen.Battle
         private World _world;
         private BoardGrid _boardGrid;
         private OrthographicCamera _camera;
+        private EntityFactory _entityFactory;
         private readonly AssetManager _assetManager;
 
         public Battle(Poena game) : base(game)
         {
             _assetManager = new AssetManager(game.Content);
+            _entityFactory = new EntityFactory(_assetManager);
         }
 
         public override void Initialize()
@@ -35,6 +37,7 @@ namespace Poena.Core.Screen.Battle
             _camera.Zoom = .9f;
             _boardGrid = new BoardGrid(_assetManager, _game.SpriteBatch, _camera, BoardSize.Medium);
             _world = new WorldBuilder()
+                .AddSystem(new SpriteSystem(_game.SpriteBatch))
                 .AddSystem(new PositionSystem(_boardGrid))
                 .AddSystem(new SelectionSystem(_boardGrid, _camera))
                 .AddSystem(new TurnSystem())
@@ -43,8 +46,6 @@ namespace Poena.Core.Screen.Battle
                 .AddSystem(new AttackingSystem())
                 .Build();
 
-            EntityFactory.GenerateEntity(_world);
-            EntityFactory.GenerateNPC(_world);
 
             base.Initialize();
         }
@@ -54,6 +55,11 @@ namespace Poena.Core.Screen.Battle
             _assetManager.LoadTexture(Assets.GetUIElement(UIElements.EmptyActionBar));
             _assetManager.LoadTexture(Assets.GetUIElement(UIElements.BlueActionBar));
             _assetManager.LoadTexture(Assets.GetTile(TileType.Debug));
+            _assetManager.LoadTexture(Assets.GetEntity(EntityType.GiantRat));
+            _assetManager.LoadTexture(Assets.GetEntity(EntityType.Adventurer));
+            // TODO: Figure out how to organize this better
+            _entityFactory.GenerateEntity(_world);
+            _entityFactory.GenerateNPC(_world);
             base.LoadContent();
         }
 

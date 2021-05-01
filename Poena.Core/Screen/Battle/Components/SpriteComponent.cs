@@ -1,28 +1,51 @@
 ﻿using Microsoft.Xna.Framework;
-using Poena.Core.Sprites;
+using Microsoft.Xna.Framework.Graphics;
+using Poena.Core.Entity.Components;
 
-namespace Poena.Core.Entity.Components
+namespace Poena.Core.Screen.Battle.Components
 {
     public class SpriteComponent : IComponent
     {
-        public Sprite Animation { get; set; }
-        public bool IsVisible { get { return Animation.IsVisible; } set { Animation.IsVisible = value; } }
+        public float Scale { get; set; } = 1f;
+        public Texture2D Texture { get; set; }
+        public bool IsVisible { get; set; }
 
-        public void NewSprite(params string[] paths)
+        public float Width
         {
-            this.NewSprite(null, paths);
+            get
+            {
+                return this.Texture.Width * this.Scale;
+            }
         }
 
-        public void NewSprite(Vector2? base_offset, params string[] paths)
+        public float Height
         {
-            this.Animation = new Sprite(paths);
-            //Update the anchor to bottom center of base
-            if (base_offset.HasValue) this.Animation.AnchorOffset = base_offset.Value;
+            get
+            {
+                return this.Texture.Height * this.Scale;
+            }
         }
         
+        public Vector2 Anchor { 
+            get { 
+                return new Vector2((this.Texture.Width * this.Scale) * AnchorOffset.X, (this.Texture.Height * this.Scale) * AnchorOffset.Y); 
+            } 
+        }
+        private Vector2? _AnchorOffset { get; set; }
+        public Vector2 AnchorOffset
+        {
+            get
+            {
+                return _AnchorOffset ?? new Vector2(0, 0);
+            }
+            set
+            {
+                this._AnchorOffset = value;
+            }
+        }
+
         public void Initialize()
         {
-            
         }
 
     }

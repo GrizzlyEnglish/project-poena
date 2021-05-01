@@ -6,27 +6,29 @@ using Poena.Core.Common;
 using Poena.Core.Entity.Components;
 using Poena.Core.Screen.Battle.Components;
 using Poena.Core.Common.Enums;
+using Poena.Core.Managers;
 
 namespace Poena.Core.Screen.Battle.Entities
 {
-    public static class EntityFactory
+    public class EntityFactory
     {
-        private static Dictionary<EntityTypeEnum, string[]> entity_sprite_mappings =
-            new Dictionary<EntityTypeEnum, string[]>
+        private readonly AssetManager _assetManager;
+
+        public EntityFactory(AssetManager assetManager)
         {
-                { EntityTypeEnum.Debug, new string[] { Assets.GetEntity(EntityType.Adventurer) } },
-                { EntityTypeEnum.DebugNPC, new string[] { Assets.GetEntity(EntityType.GiantRat) } },
-        };
+            _assetManager = assetManager;
+        }
 
         //TODO: rce - Remove everything below and load components and their data from a file.
         //            This file will just read the data and return a fully crafted entity
 
-        public static void GenerateNPC(World world)
+        public void GenerateNPC(World world)
         {
             var entity = world.CreateEntity();
 
             SpriteComponent anim = new SpriteComponent();
-            anim.NewSprite(new Vector2(.5f, .8f), entity_sprite_mappings[EntityTypeEnum.DebugNPC]);
+            anim.Texture = _assetManager.GetTexture(Assets.GetEntity(EntityType.GiantRat));
+            anim.AnchorOffset = new Vector2(.5f, .8f);
             entity.Attach(anim);
 
             PositionComponent position = new PositionComponent();
@@ -41,12 +43,13 @@ namespace Poena.Core.Screen.Battle.Entities
             entity.Attach(turn);
         }
 
-        public static void GenerateEntity(World world)
+        public void GenerateEntity(World world)
         {
             var entity = world.CreateEntity();
 
             SpriteComponent anim = new SpriteComponent();
-            anim.NewSprite(new Vector2(.5f, .7f), entity_sprite_mappings[EntityTypeEnum.Debug]);
+            anim.Texture = _assetManager.GetTexture(Assets.GetEntity(EntityType.GiantRat));
+            anim.AnchorOffset = new Vector2(.5f, .7f);
             entity.Attach(anim);
 
             PositionComponent position = new PositionComponent();
