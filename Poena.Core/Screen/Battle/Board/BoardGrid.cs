@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using Poena.Core.Common;
+using Poena.Core.Common.Enums;
 using Poena.Core.Common.Interfaces;
 using Poena.Core.Extensions;
 using Poena.Core.Managers;
@@ -20,6 +20,8 @@ namespace Poena.Core.Screen.Battle.Board
         private readonly SpriteBatch _spriteBatch;
         private readonly OrthographicCamera _camera;
         private readonly AssetManager _assetManager;
+
+        private BoardTile _selectedTile;
 
         public int Width { get { return _grid.GetLength(1);  } }
         public int Length { get { return _grid.GetLength(0); } }
@@ -105,6 +107,21 @@ namespace Poena.Core.Screen.Battle.Board
             this.ForEach(bt => {
                 bt.Initialize();
             });
+        }
+
+        public void SelectTile(Point point)
+        {
+            this._selectedTile = this[point.X, point.Y, 0];
+        }
+
+        public BoardTile GetSelectedTile()
+        {
+            return this._selectedTile;
+        }
+
+        public void ClearSelectedTile()
+        {
+            this._selectedTile = null;
         }
 
         public void Draw(GameTime gameTime)
@@ -335,36 +352,6 @@ namespace Poena.Core.Screen.Battle.Board
                 }
             });
             return tiles;
-        }
-
-        public void Entry()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Exit()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Destroy()
-        {
-            throw new NotImplementedException();
-        }
-
-        public StateEnum Update(double delta)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Load(string path)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Save(string path)
-        {
-            throw new NotImplementedException();
         }
 
         private class PathNode

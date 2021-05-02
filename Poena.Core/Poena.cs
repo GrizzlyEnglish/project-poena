@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Screens;
 using Poena.Core.Common;
+using Poena.Core.Common.Enums;
 using Poena.Core.Extensions;
 using Poena.Core.Screen.Battle;
 using Poena.Core.Utilities;

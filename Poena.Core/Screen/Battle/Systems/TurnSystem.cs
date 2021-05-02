@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
+﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
-using Poena.Core.Common;
-using Poena.Core.Common.Enums;
-using Poena.Core.Entity;
-using Poena.Core.Entity.Components;
 using Poena.Core.Screen.Battle.Components;
 
 namespace Poena.Core.Screen.Battle.Systems

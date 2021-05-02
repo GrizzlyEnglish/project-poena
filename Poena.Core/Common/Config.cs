@@ -15,7 +15,5 @@ namespace Poena.Core.Common
         
         public static readonly int TILE_WIDTH = 216;
         public static readonly int TILE_HEIGHT = 216;
-
-        public static PriorityEnum OUTPUT_PRIORITY = PriorityEnum.High;
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using Poena.Core.Common;
+using Poena.Core.Common.Enums;
 
 namespace Poena.Core.Utilities
 {

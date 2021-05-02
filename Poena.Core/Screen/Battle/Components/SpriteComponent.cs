@@ -1,10 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Poena.Core.Entity.Components;
 
 namespace Poena.Core.Screen.Battle.Components
 {
-    public class SpriteComponent : IComponent
+    public class SpriteComponent
     {
         public float Scale { get; set; } = 1f;
         public Texture2D Texture { get; set; }
@@ -42,10 +41,6 @@ namespace Poena.Core.Screen.Battle.Components
             {
                 this._AnchorOffset = value;
             }
-        }
-
-        public void Initialize()
-        {
         }
 
     }

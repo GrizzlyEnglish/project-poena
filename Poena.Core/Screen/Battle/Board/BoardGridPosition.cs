@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using Poena.Core.Common;
+using Poena.Core.Common.Enums;
 
 namespace Poena.Core.Screen.Battle.Board
 {

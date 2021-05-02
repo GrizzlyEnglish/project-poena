@@ -1,14 +1,6 @@
-﻿using Poena.Core.Entity.Components;
-
-namespace Poena.Core.Screen.Battle.Components
+﻿namespace Poena.Core.Screen.Battle.Components
 {
-    public class PlayerControllerComponent : IComponent
+    public class PlayerControllerComponent
     {
-        //Flag for player controlled components
-
-        public void Initialize()
-        {
-            
-        }
     }
 }

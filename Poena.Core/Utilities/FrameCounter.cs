@@ -27,7 +27,7 @@ namespace Poena.Core.Utilities
             _poena = poena;
         }
 
-        public StateEnum Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             var dt = gameTime.ElapsedGameTime.TotalSeconds;
             CurrentFPS = (float)(1.0 / dt);
@@ -46,8 +46,6 @@ namespace Poena.Core.Utilities
 
             TotalFrames++;
             TotalSeconds += (float)dt;
-
-            return StateEnum.InProgress;
         }
 
         public void Draw(GameTime gameTime)

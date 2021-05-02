@@ -8,6 +8,7 @@ using Poena.Core.Common.Enums;
 using Poena.Core.Extensions;
 using Poena.Core.Managers;
 using Poena.Core.Screen.Battle.Board;
+using Poena.Core.Screen.Battle.Components;
 using Poena.Core.Screen.Battle.Entities;
 using Poena.Core.Screen.Battle.Systems;
 using System;
@@ -35,6 +36,7 @@ namespace Poena.Core.Screen.Battle
             _mouseListener = new MouseListener();
             _mouseListener.MouseDrag += HandleMouseDragged;
             _mouseListener.MouseWheelMoved += HandleMouseWheeled;
+            _mouseListener.MouseClicked += HandleMouseClicked;
 
             Game.Components.Add(new InputListenerComponent(Game, _mouseListener));
         }
@@ -42,7 +44,7 @@ namespace Poena.Core.Screen.Battle
         public override void Initialize()
         {
             _camera = new OrthographicCamera(_game.GraphicsDevice);
-            _camera.Position = Coordinates.BoardToWorld(new Coordinates(9, 9, 0)).AsVector2();
+            _camera.LookAt(Coordinates.BoardToWorld(new Coordinates(9, 9, 0)).AsVector2());
             _camera.Zoom = .9f;
             _boardGrid = new BoardGrid(_assetManager, _game.SpriteBatch, _camera, BoardSize.Medium);
             _world = new WorldBuilder()
@@ -98,6 +100,11 @@ namespace Poena.Core.Screen.Battle
 
         public void HandleMouseClicked(object sender, MouseEventArgs mouseEvent)
         {
+            // TODO: Handle UI clicks before checking the board
+
+            Vector2 worldPoint = _camera.ScreenToWorld(mouseEvent.Position.X, mouseEvent.Position.Y);
+            Point p = Coordinates.WorldToBoard(worldPoint);
+            this._boardGrid.SelectTile(p);
         }
 
         public void HandleMouseMoved(object sender, MouseEventArgs mouseEvent)

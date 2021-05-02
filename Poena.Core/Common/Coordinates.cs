@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Poena.Core.Common.Enums;
 
 namespace Poena.Core.Common
 {
@@ -59,7 +60,7 @@ namespace Poena.Core.Common
         public static Coordinates BoardToWorld(int x, int y, int z = 0)
         {
             float half_width = Config.TILE_WIDTH / 2f;
-            float half_height = Config.TILE_HEIGHT / 2;
+            float half_height = Config.TILE_HEIGHT / 2f;
 
             x -= z;
             y -= z;

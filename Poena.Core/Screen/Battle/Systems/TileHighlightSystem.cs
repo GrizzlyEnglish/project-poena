@@ -58,7 +58,7 @@ namespace Poena.Core.Screen.Battle.Systems
                 // Entity is currently moving
                 if (movement != null)
                 {
-                    tile_points = movement.path_to_destination.ToList();
+                    tile_points = movement.PathToDestination.ToList();
                 }
 
                 // Entity is selected and showing possible moves

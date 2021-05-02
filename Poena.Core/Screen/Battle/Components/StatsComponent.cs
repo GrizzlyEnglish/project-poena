@@ -1,9 +1,8 @@
 ﻿using System;
-using Poena.Core.Entity.Components;
 
 namespace Poena.Core.Screen.Battle.Components
 {
-    public class StatsComponent : IComponent
+    public class StatsComponent
     {
 
         /*

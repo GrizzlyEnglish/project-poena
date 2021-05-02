@@ -12,16 +12,17 @@ namespace Poena.Core.Screen.Battle.Systems
 {
     public class PositionSystem : EntityUpdateSystem
     {
-        private BoardGrid BoardGrid;
         private ComponentMapper<PositionComponent> _positionMapper;
         private ComponentMapper<MovementComponent> _movementMapper;
         private ComponentMapper<SelectedComponent> _selectedMapper;
         private ComponentMapper<AttackingComponent> _attackingMapper;
 
+        private readonly BoardGrid _boardGrid;
+
         public PositionSystem(BoardGrid boardGrid) : 
-            base(Aspect.All(typeof(PositionComponent)))
+            base(Aspect.One(typeof(PositionComponent)))
         {
-            this.BoardGrid = boardGrid;
+            _boardGrid = boardGrid;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -34,8 +35,7 @@ namespace Poena.Core.Screen.Battle.Systems
         
         public override void Update(GameTime gameTime)
         {
-            // TODO: Handle clicked tile
-            BoardTile selectedTile = null;
+            BoardTile selectedTile = _boardGrid.GetSelectedTile();
 
             foreach (int entityId in ActiveEntities)
             {
@@ -44,51 +44,51 @@ namespace Poena.Core.Screen.Battle.Systems
                 SelectedComponent selected = _selectedMapper.Get(entityId);
 
                 // Check if the entity is moving
-                if (movement != null && movement.path_to_destination.Count > 0)
+                if (movement != null && movement.PathToDestination.Count > 0)
                 {
                     // LERP to position
-                    Vector2 destination = movement.path_to_destination.Peek();
-                    pos.TilePosition = pos.TilePosition.Lerp(destination, (float)(gameTime.ElapsedGameTime.TotalMilliseconds * 3.5f));
+                    Vector2 destination = movement.PathToDestination.Peek();
+                    pos.TilePosition = pos.TilePosition.Lerp(destination, (float)(gameTime.ElapsedGameTime.TotalSeconds * 3.5f));
 
                     if (pos.TilePosition.Distance(destination) < 5)
                     {
-                        Vector2 last_pos = movement.path_to_destination.Dequeue();
+                        Vector2 last_pos = movement.PathToDestination.Dequeue();
 
-                        if (movement.path_to_destination.Count == 0)
+                        if (movement.PathToDestination.Count == 0)
                         {
                             // Entity is finished moving notify turn system to reset
                             pos.TilePosition = last_pos;
                             _movementMapper.Delete(entityId);
+                            _selectedMapper.Delete(entityId);
                         }
                     }
                 }
                 //Check if a tile has been clicked
                 else if (selectedTile != null && selected != null && !_attackingMapper.Has(entityId))
                 {
-                    BoardGrid bg = selectedTile.BoardGrid;
-                    BoardTile on_tile = bg[Coordinates.WorldToBoard(pos.TilePosition)];
-                    Vector2 destination_tile_anchor = selectedTile.Position.GetWorldAnchorPosition();
+                    BoardTile onTile = _boardGrid[Coordinates.WorldToBoard(pos.TilePosition)];
+                    Vector2 destTileAnchor = selectedTile.Position.GetWorldAnchorPosition();
 
                     //TODO: rce - Add logic to make sure tile is moveable
-                    bool isValid = selected.possible_positions.Contains(destination_tile_anchor);
+                    bool isValid = selected.possible_positions.Contains(destTileAnchor);
 
                     // This is likely a deslection if the same tile
-                    if (!on_tile.IsEqual(selectedTile) && isValid)
+                    if (!onTile.IsEqual(selectedTile) && isValid)
                     {
                         // Mark tile as used
-                        // TODO: Handle clicked tile
+                        _boardGrid.ClearSelectedTile();
 
                         // Setup the movement component and append to the component
                         movement = new MovementComponent();
                         _movementMapper.Put(entityId, movement);
                         
                         // We need to determine the path that entity will take
-                        List<BoardTile> path = bg.ShortestPath(on_tile, selectedTile);
+                        List<BoardTile> path = _boardGrid.ShortestPath(onTile, selectedTile);
 
                         // Add the anchor positions to the queue of the path
                         foreach (BoardTile bt in path)
                         {
-                            movement.path_to_destination.Enqueue(bt.Position.GetWorldAnchorPosition());
+                            movement.PathToDestination.Enqueue(bt.Position.GetWorldAnchorPosition());
                         }
                     }
                 }
