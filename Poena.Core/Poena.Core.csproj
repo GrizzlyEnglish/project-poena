@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Screen\Battle\UI\HotBar.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Content\assets\ui\ui_test_hotbar.png" />
   </ItemGroup>
 
@@ -64,10 +60,6 @@
     <None Update="Content\Content.mgcb">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Screen\Battle\UI\" />
   </ItemGroup>
 
 </Project>

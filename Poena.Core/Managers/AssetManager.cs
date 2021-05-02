@@ -25,7 +25,7 @@ namespace Poena.Core.Managers
 
         public Texture2D GetTexture(string name)
         {
-            return _textures[name];
+            return _textures.ContainsKey(name) ? _textures[name] : null;
         }
     }
 }

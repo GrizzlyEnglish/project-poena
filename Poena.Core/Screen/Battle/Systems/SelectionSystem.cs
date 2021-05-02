@@ -13,18 +13,18 @@ namespace Poena.Core.Screen.Battle.Systems
     public class SelectionSystem : EntityUpdateSystem
     {
         private readonly BoardGrid _boardGrid;
-        private readonly OrthographicCamera _camera;
+        private readonly Battle _battle;
         private ComponentMapper<SelectedComponent> _selectedMapper;
         private ComponentMapper<TurnComponent> _turnMapper;
         private ComponentMapper<PositionComponent> _positionMapper;
         private ComponentMapper<AttackingComponent> _attackingMapper;
         private ComponentMapper<StatsComponent> _statsMapper;
 
-        public SelectionSystem(BoardGrid boardGrid, OrthographicCamera cam) 
+        public SelectionSystem(BoardGrid boardGrid, Battle battle) 
             : base(Aspect.One(typeof(TurnComponent)))
         {
             this._boardGrid = boardGrid;
-            this._camera = cam;
+            this._battle = battle;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -92,6 +92,19 @@ namespace Poena.Core.Screen.Battle.Systems
             }
         }
 
+        public Entity GetSelectedEntity()
+        {
+            foreach (int entityId in ActiveEntities)
+            {
+                if (_selectedMapper.Has(entityId))
+                {
+                    return this.GetEntity(entityId);
+                }
+            }
+
+            return null;
+        }
+
         private void SelectEntity(int entityId, BoardTile selected_tile)
         {
             // Get the componenets
@@ -118,7 +131,7 @@ namespace Poena.Core.Screen.Battle.Systems
             // Set movements possible movement tiles
             selected.possible_positions = tiles;
             // Move camera to entity
-            this._camera.LookAt(selected_tile.Position.GetWorldAnchorPosition());
+            this._battle.PanCamera(selected_tile.Position.GetWorldAnchorPosition());
         }
         
     }

@@ -1,71 +1,64 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using MonoGame.Extended.Entities;
 using Poena.Core.Common;
 using Poena.Core.Common.Enums;
 using Poena.Core.Screen.Battle.Components;
-using Poena.Core.Screen.UI;
-using Poena.Core.Sprites;
 
 namespace Poena.Core.Screen.Battle.UI
 {
-    
-    public class HotBar : UIComponent
+    public class HotBar
     {
         private readonly int ICON_LENGTH = 5;
-        
-        private Sprite[] Icons;
 
-        private Vector2 VisiblePosition;
+        private bool _isVisible;
         
-        private readonly Vector2 PanDistance = new Vector2(0, 150);
+        private readonly Battle _battle;
+        private string[] _iconPaths;
 
-        public HotBar(UISceneLayer layer) : base(layer)
+        private Texture2D _background;
+
+        private Vector2 _backgroundPosition;
+
+        public HotBar(Battle battle)
         {
-            this.ForegroundSprite.SetTexturePath(Assets.GetUIElement(UIElements.HotBar));
-            this.ForegroundSprite.Position.speed = 3.25f;
-
-            this.ClearIcons();
-
-            //Start in hidden state
-            this.Hide();
+            this._battle = battle;
+            this._iconPaths = new string[ICON_LENGTH];
         }
-        
-        private void SetIconPositions()
+
+        public void LoadContent()
         {
-            //Go to far left of hot bar and center height
-            RectangleF dimensions = this.ForegroundSprite.Dimensions;
-            Vector2 start_pos = new Vector2(dimensions.Left + 7, dimensions.Top + 7);
+            this._background = this._battle.Content.Load<Texture2D>(Assets.GetUIElement(UIElements.HotBar));
 
-            int distance = 100;
+            RectangleF cameraBounds = _battle.Camera.BoundingRectangle;
+            this._backgroundPosition = new Vector2((cameraBounds.Width / 2), cameraBounds.Height - (_background.Height / 2) - 15);
+        }
 
-            for (int i = 0; i < ICON_LENGTH; i++)
+        public void Draw(GameTime gameTime)
+        {
+            if (this._isVisible)
             {
-                if (this.Icons[i] != null) this.Icons[i].SetPosition(start_pos);
-                start_pos.X += distance;
+                this._battle.Game.SpriteBatch.Draw(_background, _backgroundPosition, null, Color.White,
+                    0, new Vector2(.5f, .5f), 1f, SpriteEffects.None, 0);
+                int distance = 100;
+                for (int i = 0; i < ICON_LENGTH; i++)
+                {
+                    Texture2D icon = this._battle.AssetManager.GetTexture(Assets.UI_PATH + _iconPaths[i]);
+                    if (icon != null)
+                    {
+                        this._battle.Game.SpriteBatch.Draw(icon, new Vector2(_backgroundPosition.X + distance, _backgroundPosition.Y), null, Color.White,
+                            0, new Vector2(.5f, .5f), .17f, SpriteEffects.None, 0);
+                    }
+                }
             }
         }
 
-        public override void SetPosition(Vector2 position)
-        {
-            this.VisiblePosition = position;
-
-            Vector2 pos = position;
-
-            // Set the current position to below the threshold
-            if (!IsVisible)
-            {
-                pos = this.VisiblePosition + this.PanDistance;
-            }
-
-            base.SetPosition(pos);
-        }
-
-        public void GenerateIcons(ECEntity ent)
+        public void GenerateIcons(Entity ent)
         {
             // Skill icon
-            SkillComponent skill = ent.GetComponent<SkillComponent>();
-            this.SetIcon(skill.AttackType, skill.HotBarTexture);
+            SkillComponent skill = ent.Get<SkillComponent>();
+            this._iconPaths[0] = skill.HotBarTexturePath;
 
             // Weapon skill icon
 
@@ -76,86 +69,41 @@ namespace Poena.Core.Screen.Battle.UI
             // Stall
         }
 
-        public void ClearIcons()
-        {
-            Icons = new Sprite[ICON_LENGTH];
-        }
-
-        private void SetIcon(AttackType iconType, Texture2D icon)
-        {
-            int position = (int)iconType;
-            Icons[position] = new Sprite();
-            Icons[position].SetTexture(icon);
-            Icons[position].SetScale(.17f);
-        }
-
-        public override void RenderForeground(SpriteBatch spriteBatch)
-        {
-            //Regular render
-            base.RenderForeground(spriteBatch);
-
-            //Render icons
-            foreach(Sprite icon in this.Icons)
-            {
-                if (icon != null) icon.Render(spriteBatch, default(RectangleF));
-            }
-        }
-
-        public override StateEnum Update(double delta)
+        public void Update(GameTime gameTime)
         {
             //Check the event channel if someone new was selected
-            ECEntity ent = this.UISceneLayer.CurrentScene.GetSceneLayer<BattleEntityLayer>().EntityManager.GetSelectedEntity();
+            Entity selectedEntity = this._battle.SelectionSystem.GetSelectedEntity();
             
-            if (ent != null && !this.IsVisible)
+            if (selectedEntity != null && !this._isVisible)
             {
                 // Show the hot bar
-                this.GenerateIcons(ent);
-                this.IsVisible = true;
-                this.ForegroundSprite.Position.MoveDistance(-this.PanDistance);
+                this.GenerateIcons(selectedEntity);
+                this._isVisible = true;
             }
-            else if (ent == null && this.IsVisible && !this.ForegroundSprite.Position.in_motion)
+            else if (selectedEntity == null && this._isVisible)
             {
-                // Nobody is currently selected clear the icons and hide the hotbar
-                this.ForegroundSprite.Position.MoveDistance(this.PanDistance, () => {
-                    this.IsVisible = false;
-                    this.ClearIcons();
-                });
+                this._isVisible = false;
             }
-            
-            this.ForegroundSprite.Update(delta);
-            this.SetIconPositions();
-
-            return StateEnum.InProgress;
         }
 
-        public override bool HandleMouseClicked(MouseEvent mouseEvent)
+        public bool HandleMouseClicked(Vector2 screenCoords)
         {
-            if (this.IsVisible)
+            if (this._isVisible && IsWithinBounds(screenCoords))
             {
-                //Check if the position is within the hot bar
-                Point pos = mouseEvent.MouseEventArgs.Position;
-
-                //Now determine the icon the mouse is over
-                for (int i = 0; i < ICON_LENGTH; i++)
-                {
-                    if (Icons[i] != null && Icons[i].IsWithinBounds(pos))
-                    {
-                        ECEntity selectedEntity = this.UISceneLayer.CurrentScene.GetSceneLayer<BattleEntityLayer>().EntityManager.GetEntity(typeof(SelectedComponent));
-                        selectedEntity.AddComponent(new AttackingComponent
-                        {
-                            AttackType = (AttackType)i
-                        });
-                        return true;
-                    }
-                }
             }
 
             return false;
         }
 
-        public override void HandleMouseMoved(MouseEvent mouseEvent)
+        public bool IsWithinBounds(Vector2 pos)
         {
-            throw new System.NotImplementedException();
+            float left = this._backgroundPosition.X - (this._background.Width / 2);
+            float right = left + this._background.Width;
+            
+            float top = this._backgroundPosition.Y - (this._background.Height / 2);
+            float bottom = top + this._background.Height;
+            
+            return pos.X >= left && pos.X <= right && pos.Y >= top && pos.Y <= bottom;
         }
     }
 }
