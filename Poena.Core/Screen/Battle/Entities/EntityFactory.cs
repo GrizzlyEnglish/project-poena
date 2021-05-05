@@ -37,7 +37,7 @@ namespace Poena.Core.Screen.Battle.Entities
             entity.Attach(stats);
 
             TurnComponent turn = new TurnComponent();
-            turn.time_for_turn = 15;
+            turn.TimeForTurn = 15;
             entity.Attach(turn);
         }
 
@@ -61,7 +61,7 @@ namespace Poena.Core.Screen.Battle.Entities
             entity.Attach(stats);
 
             TurnComponent turn = new TurnComponent();
-            turn.time_for_turn = 15;
+            turn.TimeForTurn = 15;
             entity.Attach(turn);
 
             SkillComponent skill = new SkillComponent() {

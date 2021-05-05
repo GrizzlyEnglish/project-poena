@@ -19,13 +19,10 @@ namespace Poena.Core.Screen.Battle.Systems
     {
         private readonly SpriteBatch _spriteBatch;
         private readonly AssetManager _assetManager;
-        private ComponentMapper<PositionComponent> _positionMapper;
-        private ComponentMapper<SelectedComponent> _selectedMapper;
-        private ComponentMapper<AttackingComponent> _attackingMapper;
-        private ComponentMapper<MovementComponent> _movementMapper;
+        private ComponentMapper<TileHighlightComponent> _tileHighlightMapper;
 
         public TileHighlightSystem(SpriteBatch batch, AssetManager assetManager) 
-            : base(Aspect.One(typeof(SelectedComponent), typeof(MovementComponent), typeof(PositionComponent)))
+            : base(Aspect.One(typeof(TileHighlightComponent)))
         {
             _assetManager = assetManager;
             _spriteBatch = batch;
@@ -33,61 +30,24 @@ namespace Poena.Core.Screen.Battle.Systems
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _attackingMapper = mapperService.GetMapper<AttackingComponent>();
-            _movementMapper = mapperService.GetMapper<MovementComponent>();
-            _selectedMapper = mapperService.GetMapper<SelectedComponent>();
-            _positionMapper = mapperService.GetMapper<PositionComponent>();
+            _tileHighlightMapper = mapperService.GetMapper<TileHighlightComponent>();
         }
 
         public override void Draw(GameTime gameTime)
         {
-            // Store a list of tiles that need highlights
-            Dictionary<Coordinates, List<TileHighlight>> tile_coordinates = new Dictionary<Coordinates, List<TileHighlight>>();
-
-            // Loop all the entities and highlight tile as necessary
             foreach (int entityId in ActiveEntities)
             {
-                // See if we are moving so we can render it
-                PositionComponent pos = _positionMapper.Get(entityId);
-                MovementComponent movement = _movementMapper.Get(entityId);
-                SelectedComponent selected = _selectedMapper.Get(entityId);
-                AttackingComponent attacking = _attackingMapper.Get(entityId);
-
-                List<Vector2> tile_points = new List<Vector2>();
-                
-                // Entity is currently moving
-                if (movement != null)
-                {
-                    tile_points = movement.PathToDestination.ToList();
-                }
-
-                // Entity is selected and showing possible moves
-                else if (selected != null)
-                {
-                    tile_points = selected.possible_positions;
-                }
-
                 // Loop the positions and tag tiles as movement
-                foreach (Vector2 path_spot in tile_points)
+                TileHighlightComponent highlight = _tileHighlightMapper.Get(entityId);
+                if (highlight != null)
                 {
-                    Point p = Coordinates.WorldToBoard(path_spot);
-                    Coordinates coordinates = Coordinates.BoardToWorld(p);
-                    if (!tile_coordinates.ContainsKey(coordinates))
+                    foreach (Vector2 path_spot in highlight.TilePositions)
                     {
-                        tile_coordinates.Add(coordinates, new List<TileHighlight>());
-                    }
-                    tile_coordinates[coordinates].Add(TileHighlight.Movement);
-                    if (attacking != null)
-                    {
-                        tile_coordinates[coordinates].Add(TileHighlight.Attack);
+                        Point p = Coordinates.WorldToBoard(path_spot);
+                        Coordinates coordinates = Coordinates.BoardToWorld(p);
+                        _spriteBatch.Draw(_assetManager.GetTexture(Assets.GetTileHighlight(highlight.TileHighlight)), coordinates.AsVector2(), Color.White);
                     }
                 }
-            }
-
-            foreach (Coordinates coordinates in tile_coordinates.Keys)
-            {
-                TileHighlight highlight = tile_coordinates[coordinates].OrderByDescending(t => t).First();
-                _spriteBatch.Draw(_assetManager.GetTexture(Assets.GetTileHighlight(highlight)), coordinates.AsVector2(), Color.White);
             }
 
             // TODO: Handle hovering tile

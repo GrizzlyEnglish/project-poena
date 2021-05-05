@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
+using Poena.Core.Common.Enums;
 using Poena.Core.Screen.Battle.Board;
 using Poena.Core.Screen.Battle.Components;
 
@@ -19,6 +20,7 @@ namespace Poena.Core.Screen.Battle.Systems
         private ComponentMapper<PositionComponent> _positionMapper;
         private ComponentMapper<AttackingComponent> _attackingMapper;
         private ComponentMapper<StatsComponent> _statsMapper;
+        private ComponentMapper<TileHighlightComponent> _tileHighlightMapper;
 
         public SelectionSystem(BoardGrid boardGrid, Battle battle) 
             : base(Aspect.One(typeof(TurnComponent)))
@@ -34,6 +36,7 @@ namespace Poena.Core.Screen.Battle.Systems
             _turnMapper = mapperService.GetMapper<TurnComponent>();
             _attackingMapper = mapperService.GetMapper<AttackingComponent>();
             _statsMapper = mapperService.GetMapper<StatsComponent>();
+            _tileHighlightMapper = mapperService.GetMapper<TileHighlightComponent>();
         }
 
         public override void Update(GameTime gameTime)
@@ -51,26 +54,10 @@ namespace Poena.Core.Screen.Battle.Systems
             }
 
             // If we have an event lets check if we seleced an entity
-            if (selectedTile != null)
+            if (selectedTile != null && selectedEntityId.HasValue)
             {
-                // See if somone is already selected
-                if (selectedEntityId.HasValue)
-                {
-                    TurnComponent turn = _turnMapper.Get(selectedEntityId.Value);
-                    PositionComponent pos = _positionMapper.Get(selectedEntityId.Value);
-
-                    // If they are deslect them
-                    if (!turn.ready_for_turn && selectedTile.Position.GetWorldAnchorPosition() == pos.TilePosition)
-                    {
-                        _selectedMapper.Delete(selectedEntityId.Value);
-                        _attackingMapper.Delete(selectedEntityId.Value);
-                    }
-
-                    // Mark tile as used
-                    _boardGrid.ClearSelectedTile();
-
-                    return;
-                }    
+                DeselectEntity(selectedEntityId.Value, selectedTile);
+                return;
             }
 
             foreach (int entityId in ActiveEntities)
@@ -80,7 +67,7 @@ namespace Poena.Core.Screen.Battle.Systems
                 SelectedComponent selected = _selectedMapper.Get(entityId);
                 // Check if the entities anchor point is inside the tile or they are prepared for their turn
                 if ( 
-                    (turn != null && turn.ready_for_turn && selected == null) ||
+                    (turn != null && turn.ReadyForTurn && selected == null) ||
                     (selectedTile != null && pos != null && selectedTile.Position.GetWorldAnchorPosition() == pos.TilePosition)
                     )
                 {
@@ -104,6 +91,23 @@ namespace Poena.Core.Screen.Battle.Systems
 
             return null;
         }
+        
+        private void DeselectEntity(int entityId, BoardTile selectedTile)
+        {
+            TurnComponent turn = _turnMapper.Get(entityId);
+            PositionComponent pos = _positionMapper.Get(entityId);
+
+            // If they are deslect them
+            if (!turn.ReadyForTurn && selectedTile.Position.GetWorldAnchorPosition() == pos.TilePosition)
+            {
+                _selectedMapper.Delete(entityId);
+                _attackingMapper.Delete(entityId);
+                _tileHighlightMapper.Delete(entityId);
+            }
+
+            // Mark tile as used
+            _boardGrid.ClearSelectedTile();
+        }
 
         private void SelectEntity(int entityId, BoardTile selected_tile)
         {
@@ -113,12 +117,12 @@ namespace Poena.Core.Screen.Battle.Systems
             // Created the selected
             SelectedComponent selected = new SelectedComponent();
             // If not ready for turn disadvantage entity
-            selected.disadvantaged = !turn.ready_for_turn;
+            selected.Disadvantaged = !turn.ReadyForTurn;
             // This entity was selected
             _selectedMapper.Put(entityId, selected);
             // Finally get all the possible tile anchors
             List<Vector2> tiles =
-                selected_tile.BoardGrid.Flood(selected_tile, stats.GetMovementDistance(selected.disadvantaged))
+                selected_tile.BoardGrid.Flood(selected_tile, stats.GetMovementDistance(selected.Disadvantaged))
                 .Select(bt => bt.Position.GetWorldAnchorPosition()).ToList();
             // Filter blocked tiles
             List<Vector2> ent_positions = new List<Vector2>();
@@ -129,7 +133,10 @@ namespace Poena.Core.Screen.Battle.Systems
             }
             tiles.RemoveAll(t => ent_positions.Contains(t));
             // Set movements possible movement tiles
-            selected.possible_positions = tiles;
+            _tileHighlightMapper.Put(entityId, new TileHighlightComponent { 
+                TileHighlight = TileHighlight.Movement,
+                TilePositions = tiles
+            });
             // Move camera to entity
             this._battle.PanCamera(selected_tile.Position.GetWorldAnchorPosition());
         }

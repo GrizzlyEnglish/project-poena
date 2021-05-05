@@ -5,6 +5,7 @@ using MonoGame.Extended.Entities;
 using Poena.Core.Common;
 using Poena.Core.Common.Enums;
 using Poena.Core.Screen.Battle.Components;
+using System;
 
 namespace Poena.Core.Screen.Battle.UI
 {
@@ -30,9 +31,13 @@ namespace Poena.Core.Screen.Battle.UI
         public void LoadContent()
         {
             this._background = this._battle.Content.Load<Texture2D>(Assets.GetUIElement(UIElements.HotBar));
+            SetPosition();
+        }
 
+        public void SetPosition()
+        {
             RectangleF cameraBounds = _battle.Camera.BoundingRectangle;
-            this._backgroundPosition = new Vector2((cameraBounds.Width / 2), cameraBounds.Height - (_background.Height / 2) - 15);
+            this._backgroundPosition = new Vector2((cameraBounds.Width / 2) - (_background.Width / 2), (cameraBounds.Height * .87f) - _background.Height);
         }
 
         public void Draw(GameTime gameTime)
@@ -41,13 +46,12 @@ namespace Poena.Core.Screen.Battle.UI
             {
                 this._battle.Game.SpriteBatch.Draw(_background, _backgroundPosition, null, Color.White,
                     0, new Vector2(.5f, .5f), 1f, SpriteEffects.None, 0);
-                int distance = 100;
                 for (int i = 0; i < ICON_LENGTH; i++)
                 {
                     Texture2D icon = this._battle.AssetManager.GetTexture(Assets.UI_PATH + _iconPaths[i]);
                     if (icon != null)
                     {
-                        this._battle.Game.SpriteBatch.Draw(icon, new Vector2(_backgroundPosition.X + distance, _backgroundPosition.Y), null, Color.White,
+                        this._battle.Game.SpriteBatch.Draw(icon, new Vector2(_backgroundPosition.X + (i * 100) + 8, _backgroundPosition.Y + 5), null, Color.White,
                             0, new Vector2(.5f, .5f), .17f, SpriteEffects.None, 0);
                     }
                 }
@@ -90,6 +94,21 @@ namespace Poena.Core.Screen.Battle.UI
         {
             if (this._isVisible && IsWithinBounds(screenCoords))
             {
+                float slotDistance = _background.Width / 4f;
+                int slot = (int)Math.Floor(screenCoords.X / slotDistance);
+                Entity selectedEntity = this._battle.SelectionSystem.GetSelectedEntity();
+                if (selectedEntity.Has<AttackingComponent>())
+                {
+                    // Deselect the attack
+                    selectedEntity.Detach<AttackingComponent>();
+                } 
+                else
+                {
+                    selectedEntity.Attach<AttackingComponent>(new AttackingComponent
+                    {
+                        AttackType = (AttackType)slot
+                    });
+                }
             }
 
             return false;
@@ -97,7 +116,7 @@ namespace Poena.Core.Screen.Battle.UI
 
         public bool IsWithinBounds(Vector2 pos)
         {
-            float left = this._backgroundPosition.X - (this._background.Width / 2);
+            float left = this._backgroundPosition.X;
             float right = left + this._background.Width;
             
             float top = this._backgroundPosition.Y - (this._background.Height / 2);

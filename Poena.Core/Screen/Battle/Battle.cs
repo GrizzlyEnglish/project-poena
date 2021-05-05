@@ -3,6 +3,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.Screens;
+using MonoGame.Extended.ViewportAdapters;
 using Poena.Core.Common;
 using Poena.Core.Common.Enums;
 using Poena.Core.Extensions;
@@ -32,6 +33,7 @@ namespace Poena.Core.Screen.Battle
         private float _timePanningCamera;
 
         public OrthographicCamera Camera { get; private set; }
+        public OrthographicCamera UICamera { get; private set; }
         public new Poena Game { get { return (Poena)base.Game; } }
         public SelectionSystem SelectionSystem { get; private set; }
         public AssetManager AssetManager { get; private set; }
@@ -46,12 +48,20 @@ namespace Poena.Core.Screen.Battle
             _mouseListener.MouseWheelMoved += HandleMouseWheeled;
             _mouseListener.MouseClicked += HandleMouseClicked;
 
+            this.Game.Window.ClientSizeChanged += WindowResized;
+
             base.Game.Components.Add(new InputListenerComponent(base.Game, _mouseListener));
+        }
+
+        public void WindowResized(object sender, EventArgs e)
+        {
+            _hotBar.SetPosition();  
         }
 
         public override void Initialize()
         {
             Camera = new OrthographicCamera(Game.GraphicsDevice);
+            UICamera = new OrthographicCamera(new WindowViewportAdapter(Game.Window, Game.GraphicsDevice));
             Camera.LookAt(Coordinates.BoardToWorld(new Coordinates(9, 9, 0)).AsVector2());
             Camera.Zoom = .9f;
             _boardGrid = new BoardGrid(AssetManager, Game.SpriteBatch, Camera, BoardSize.Medium);
@@ -108,7 +118,8 @@ namespace Poena.Core.Screen.Battle
 
             Game.SpriteBatch.End();
 
-            Game.SpriteBatch.Begin();
+            transformMatrix = UICamera.GetViewMatrix();
+            Game.SpriteBatch.Begin(transformMatrix: transformMatrix);
             _hotBar.Draw(gameTime);
             Game.SpriteBatch.End();
         }
@@ -145,10 +156,15 @@ namespace Poena.Core.Screen.Battle
         public void HandleMouseClicked(object sender, MouseEventArgs mouseEvent)
         {
             // TODO: Handle UI clicks before checking the board
+            Vector2 uiCoords = UICamera.ScreenToWorld(mouseEvent.Position.ToVector2());
+            bool handled = _hotBar.HandleMouseClicked(uiCoords);
 
-            Vector2 worldPoint = Camera.ScreenToWorld(mouseEvent.Position.X, mouseEvent.Position.Y);
-            Point p = Coordinates.WorldToBoard(worldPoint);
-            this._boardGrid.SelectTile(p);
+            if (!handled)
+            {
+                Vector2 worldPoint = Camera.ScreenToWorld(mouseEvent.Position.X, mouseEvent.Position.Y);
+                Point p = Coordinates.WorldToBoard(worldPoint);
+                this._boardGrid.SelectTile(p);
+            }
         }
 
         public void HandleMouseMoved(object sender, MouseEventArgs mouseEvent)

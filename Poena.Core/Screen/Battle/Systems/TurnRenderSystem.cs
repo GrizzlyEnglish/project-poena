@@ -52,7 +52,7 @@ namespace Poena.Core.Screen.Battle.Systems
                     0, sprite_center, 0.5f, SpriteEffects.None, 0);
 
                 // We need to calc the rectange to draw
-                int width = (int)(turn_bar_foreground.Width * (turn.current_time / turn.time_for_turn));
+                int width = (int)(turn_bar_foreground.Width * (turn.CurrentTime / turn.TimeForTurn));
                 Rectangle clipping_rect = new Rectangle(0, 0, width, turn_bar_foreground.Height);
                 
                 // Draw the clipped foreground

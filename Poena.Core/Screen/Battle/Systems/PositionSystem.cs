@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
@@ -16,6 +17,8 @@ namespace Poena.Core.Screen.Battle.Systems
         private ComponentMapper<MovementComponent> _movementMapper;
         private ComponentMapper<SelectedComponent> _selectedMapper;
         private ComponentMapper<AttackingComponent> _attackingMapper;
+        private ComponentMapper<TileHighlightComponent> _tileHighlightMapper;
+        private ComponentMapper<TurnComponent> _turnMapper;
 
         private readonly BoardGrid _boardGrid;
 
@@ -31,6 +34,8 @@ namespace Poena.Core.Screen.Battle.Systems
             _positionMapper = mapperService.GetMapper<PositionComponent>();
             _selectedMapper = mapperService.GetMapper<SelectedComponent>();
             _movementMapper = mapperService.GetMapper<MovementComponent>();
+            _turnMapper = mapperService.GetMapper<TurnComponent>();
+            _tileHighlightMapper = mapperService.GetMapper<TileHighlightComponent>();
         }
         
         public override void Update(GameTime gameTime)
@@ -60,6 +65,8 @@ namespace Poena.Core.Screen.Battle.Systems
                             pos.TilePosition = last_pos;
                             _movementMapper.Delete(entityId);
                             _selectedMapper.Delete(entityId);
+                            _turnMapper.Get(entityId).EndTurn();
+                            _tileHighlightMapper.Delete(entityId);
                         }
                     }
                 }
@@ -70,7 +77,8 @@ namespace Poena.Core.Screen.Battle.Systems
                     Vector2 destTileAnchor = selectedTile.Position.GetWorldAnchorPosition();
 
                     //TODO: rce - Add logic to make sure tile is moveable
-                    bool isValid = selected.possible_positions.Contains(destTileAnchor);
+                    TileHighlightComponent highlight = _tileHighlightMapper.Get(entityId);
+                    bool isValid = highlight.TilePositions.Contains(destTileAnchor);
 
                     // This is likely a deslection if the same tile
                     if (!onTile.IsEqual(selectedTile) && isValid)
@@ -90,6 +98,9 @@ namespace Poena.Core.Screen.Battle.Systems
                         {
                             movement.PathToDestination.Enqueue(bt.Position.GetWorldAnchorPosition());
                         }
+
+                        // Highlight the path taken
+                        _tileHighlightMapper.Get(entityId).TilePositions = movement.PathToDestination.ToList();
                     }
                 }
             }

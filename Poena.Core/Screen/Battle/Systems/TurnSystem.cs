@@ -38,13 +38,13 @@ namespace Poena.Core.Screen.Battle.Systems
                 TurnComponent turn = _turnMapper.Get(entityId);
 
                 //TODO: rce - Do we need to add logic to not update?
-                turn.current_time += gameTime.ElapsedGameTime.TotalSeconds;
+                turn.CurrentTime += gameTime.ElapsedGameTime.TotalSeconds;
 
                 // There turn is available
-                if (turn.current_time >= turn.time_for_turn)
+                if (turn.CurrentTime >= turn.TimeForTurn)
                 {
                     // Make sure this doesn't overflow
-                    turn.current_time = turn.time_for_turn;
+                    turn.CurrentTime = turn.TimeForTurn;
                     break;
                 }
 
