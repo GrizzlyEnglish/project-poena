@@ -49,7 +49,7 @@ namespace Poena.Core.Screen.Battle.Systems
                 SelectedComponent selected = _selectedMapper.Get(entityId);
 
                 // Check if the entity is moving
-                if (movement != null && movement.PathToDestination.Count > 0)
+                if (movement != null && movement.IsMoving && movement.PathToDestination.Count > 0)
                 {
                     // LERP to position
                     Vector2 destination = movement.PathToDestination.Peek();
@@ -71,36 +71,43 @@ namespace Poena.Core.Screen.Battle.Systems
                     }
                 }
                 //Check if a tile has been clicked
-                else if (selectedTile != null && selected != null && !_attackingMapper.Has(entityId))
+                else if (selectedTile != null)
                 {
-                    BoardTile onTile = _boardGrid[Coordinates.WorldToBoard(pos.TilePosition)];
-                    Vector2 destTileAnchor = selectedTile.Position.GetWorldAnchorPosition();
-
-                    //TODO: rce - Add logic to make sure tile is moveable
-                    TileHighlightComponent highlight = _tileHighlightMapper.Get(entityId);
-                    bool isValid = highlight.TilePositions.Contains(destTileAnchor);
-
-                    // This is likely a deslection if the same tile
-                    if (!onTile.IsEqual(selectedTile) && isValid)
+                    if (movement == null && selected != null && !_attackingMapper.Has(entityId))
                     {
-                        // Mark tile as used
-                        _boardGrid.ClearSelectedTile();
+                        BoardTile onTile = _boardGrid[Coordinates.WorldToBoard(pos.TilePosition)];
+                        Vector2 destTileAnchor = selectedTile.Position.GetWorldAnchorPosition();
 
-                        // Setup the movement component and append to the component
-                        movement = new MovementComponent();
-                        _movementMapper.Put(entityId, movement);
-                        
-                        // We need to determine the path that entity will take
-                        List<BoardTile> path = _boardGrid.ShortestPath(onTile, selectedTile);
+                        //TODO: rce - Add logic to make sure tile is moveable
+                        TileHighlightComponent highlight = _tileHighlightMapper.Get(entityId);
+                        bool isValid = highlight.TilePositions.Contains(destTileAnchor);
 
-                        // Add the anchor positions to the queue of the path
-                        foreach (BoardTile bt in path)
+                        // This is likely a deslection if the same tile
+                        if (!onTile.IsEqual(selectedTile) && isValid)
                         {
-                            movement.PathToDestination.Enqueue(bt.Position.GetWorldAnchorPosition());
-                        }
+                            // Mark tile as used
+                            _boardGrid.ClearSelectedTile();
 
-                        // Highlight the path taken
-                        _tileHighlightMapper.Get(entityId).TilePositions = movement.PathToDestination.ToList();
+                            // Setup the movement component and append to the component
+                            movement = new MovementComponent();
+                            _movementMapper.Put(entityId, movement);
+                            
+                            // We need to determine the path that entity will take
+                            List<BoardTile> path = _boardGrid.ShortestPath(onTile, selectedTile);
+
+                            // Add the anchor positions to the queue of the path
+                            foreach (BoardTile bt in path)
+                            {
+                                movement.PathToDestination.Enqueue(bt.Position.GetWorldAnchorPosition());
+                            }
+
+                            // Highlight the path taken
+                            _tileHighlightMapper.Get(entityId).TilePositions = movement.PathToDestination.ToList();
+                        }
+                    }
+                    else if (movement != null && !movement.IsMoving)
+                    {
+                        movement.IsMoving = true;
                     }
                 }
             }
