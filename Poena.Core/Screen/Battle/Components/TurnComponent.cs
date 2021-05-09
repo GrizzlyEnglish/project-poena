@@ -4,6 +4,7 @@
     {
         public double CurrentTime { get; set; }
         public double TimeForTurn { get; set; }
+        public bool TurnComplete { get; set; }
 
         public bool ReadyForTurn { 
             get 

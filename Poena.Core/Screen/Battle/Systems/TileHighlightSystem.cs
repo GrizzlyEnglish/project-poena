@@ -8,7 +8,6 @@ using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using Poena.Core.Common;
-using Poena.Core.Common.Enums;
 using Poena.Core.Managers;
 using Poena.Core.Screen.Battle.Board;
 using Poena.Core.Screen.Battle.Components;
@@ -41,20 +40,14 @@ namespace Poena.Core.Screen.Battle.Systems
                 TileHighlightComponent highlight = _tileHighlightMapper.Get(entityId);
                 if (highlight != null)
                 {
-                    foreach (Vector2 path_spot in highlight.TilePositions)
+                    List<Vector2> highlights = highlight.HighlightCheck ? highlight.HighlightPositions : highlight.PossiblePositions;
+                    foreach (Vector2 path_spot in highlights)
                     {
                         Point p = Coordinates.WorldToBoard(path_spot);
                         Coordinates coordinates = Coordinates.BoardToWorld(p);
                         _spriteBatch.Draw(_assetManager.GetTexture(Assets.GetTileHighlight(highlight.TileHighlight)), coordinates.AsVector2(), Color.White);
                     }
                 }
-            }
-
-            // TODO: Handle hovering tile
-            BoardTile hoveringTile = null;
-            if (hoveringTile != null) {
-                Coordinates coordinates = hoveringTile.RenderCoordinates();
-                _spriteBatch.Draw(_assetManager.GetTexture(Assets.GetTileHighlight(TileHighlight.Movement)), coordinates.AsVector2(), Color.White);
             }
         }
     }

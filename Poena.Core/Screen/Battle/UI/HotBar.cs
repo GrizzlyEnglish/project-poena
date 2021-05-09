@@ -76,7 +76,7 @@ namespace Poena.Core.Screen.Battle.UI
         public void Update(GameTime gameTime)
         {
             //Check the event channel if someone new was selected
-            Entity selectedEntity = this._battle.SelectionSystem.GetSelectedEntity();
+            Entity selectedEntity = this._battle.BoardSystem.GetSelectedEntity();
             
             if (selectedEntity != null && !this._isVisible)
             {
@@ -96,7 +96,7 @@ namespace Poena.Core.Screen.Battle.UI
             {
                 float slotDistance = _background.Width / 4f;
                 int slot = (int)Math.Floor(screenCoords.X / slotDistance);
-                Entity selectedEntity = this._battle.SelectionSystem.GetSelectedEntity();
+                Entity selectedEntity = this._battle.BoardSystem.GetSelectedEntity();
                 if (selectedEntity.Has<AttackingComponent>())
                 {
                     // Deselect the attack
@@ -104,11 +104,15 @@ namespace Poena.Core.Screen.Battle.UI
                 } 
                 else
                 {
+                    selectedEntity.Detach<MovementComponent>();
+                    selectedEntity.Detach<TileHighlightComponent>();
                     selectedEntity.Attach<AttackingComponent>(new AttackingComponent
                     {
-                        AttackType = (AttackType)slot
+                        AttackType = (AttackType)slot,
                     });
                 }
+
+                return true;
             }
 
             return false;

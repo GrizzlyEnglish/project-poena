@@ -35,7 +35,7 @@ namespace Poena.Core.Screen.Battle
         public OrthographicCamera Camera { get; private set; }
         public OrthographicCamera UICamera { get; private set; }
         public new Poena Game { get { return (Poena)base.Game; } }
-        public SelectionSystem SelectionSystem { get; private set; }
+        public BoardInteractionSystem BoardSystem { get; private set; }
         public AssetManager AssetManager { get; private set; }
 
         public Battle(Poena game) : base(game)
@@ -65,11 +65,11 @@ namespace Poena.Core.Screen.Battle
             Camera.LookAt(Coordinates.BoardToWorld(new Coordinates(9, 9, 0)).AsVector2());
             Camera.Zoom = .9f;
             _boardGrid = new BoardGrid(AssetManager, Game.SpriteBatch, Camera, BoardSize.Medium);
-            SelectionSystem = new SelectionSystem(_boardGrid, this);
+            BoardSystem = new BoardInteractionSystem(this, _boardGrid);
             _world = new WorldBuilder()
+                .AddSystem(BoardSystem)
+                .AddSystem(new MovementSystem())
                 .AddSystem(new TileHighlightSystem(Game.SpriteBatch, AssetManager))
-                .AddSystem(new PositionSystem(_boardGrid))
-                .AddSystem(SelectionSystem)
                 .AddSystem(new TurnSystem())
                 .AddSystem(new TurnRenderSystem(Game.SpriteBatch, AssetManager))
                 .AddSystem(new AttackingSystem())

@@ -7,6 +7,6 @@ namespace Poena.Core.Screen.Battle.Components
     {
         // Set when tile is selected for movement
         public Queue<Vector2> PathToDestination { get; set; } = new Queue<Vector2>();
-        public bool IsMoving { get; set; }
+        public Vector2 Destination { get; set; }
     }
 }

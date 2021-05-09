@@ -116,12 +116,9 @@ namespace Poena.Core.Screen.Battle.Board
 
         public BoardTile GetSelectedTile()
         {
-            return this._selectedTile;
-        }
-
-        public void ClearSelectedTile()
-        {
+            BoardTile bt = this._selectedTile;
             this._selectedTile = null;
+            return bt;
         }
 
         public void Draw(GameTime gameTime)
