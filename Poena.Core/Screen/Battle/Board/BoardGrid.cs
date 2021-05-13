@@ -331,6 +331,17 @@ namespace Poena.Core.Screen.Battle.Board
             return new_path.Distinct().ToList();
         }
 
+        public List<BoardTile> GetTilePattern(BoardTile source, TilePattern pattern, int distance)
+        {
+            switch (pattern)
+            {
+                case TilePattern.Flood:
+                    return Flood(source, distance);
+                default:
+                    return new List<BoardTile>();
+            }
+        }
+
         public List<BoardTile> Flood(BoardTile source, int distance)
         {
             List<BoardTile> tiles = new List<BoardTile>();

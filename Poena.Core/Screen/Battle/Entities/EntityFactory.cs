@@ -36,6 +36,10 @@ namespace Poena.Core.Screen.Battle.Entities
             StatsComponent stats = new StatsComponent();
             entity.Attach(stats);
 
+            HealthComponent health = new HealthComponent();
+            health.Health = 15;
+            entity.Attach(health);
+
             TurnComponent turn = new TurnComponent();
             turn.TimeForTurn = 15;
             entity.Attach(turn);
@@ -64,9 +68,15 @@ namespace Poena.Core.Screen.Battle.Entities
             turn.TimeForTurn = 15;
             entity.Attach(turn);
 
+            HealthComponent health = new HealthComponent();
+            health.Health = 15;
+            entity.Attach(health);
+
             SkillComponent skill = new SkillComponent() {
                 HotBarTexturePath = "active1",
-                Name = "Test Skill"
+                Name = "Test Skill",
+                AttackPattern = TilePattern.Flood,
+                Distance = 2
             };
             entity.Attach(skill);
         }

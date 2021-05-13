@@ -9,6 +9,7 @@ namespace Poena.Core.Screen.Battle.Systems
     {
         private ComponentMapper<TurnComponent> _turnMapper;
         private ComponentMapper<SelectedComponent> _selectedMapper;
+        private ComponentMapper<StatsComponent> _statsMapper;
 
         public TurnSystem() 
             : base(Aspect.One(typeof(TurnComponent),typeof(SelectedComponent)))
@@ -20,6 +21,7 @@ namespace Poena.Core.Screen.Battle.Systems
         {
             _turnMapper = mapperService.GetMapper<TurnComponent>();
             _selectedMapper = mapperService.GetMapper<SelectedComponent>();
+            _statsMapper = mapperService.GetMapper<StatsComponent>();
         }
 
         public override void Update(GameTime gameTime)
@@ -36,6 +38,7 @@ namespace Poena.Core.Screen.Battle.Systems
             foreach (int entityId in ActiveEntities)
             {
                 TurnComponent turn = _turnMapper.Get(entityId);
+                StatsComponent stats = _statsMapper.Get(entityId);
 
                 if (turn.TurnComplete)
                 {
@@ -46,7 +49,7 @@ namespace Poena.Core.Screen.Battle.Systems
                 {
 
                     //TODO: rce - Do we need to add logic to not update?
-                    turn.CurrentTime += gameTime.ElapsedGameTime.TotalSeconds;
+                    turn.CurrentTime += stats.GetTurnTick(gameTime.ElapsedGameTime.TotalSeconds);
 
                     // There turn is available
                     if (turn.CurrentTime >= turn.TimeForTurn)

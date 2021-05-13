@@ -5,6 +5,7 @@ using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using Poena.Core.Common;
 using Poena.Core.Screen.Battle.Components;
+using System.Linq;
 
 namespace Poena.Core.Screen.Battle.Systems
 {
@@ -28,18 +29,23 @@ namespace Poena.Core.Screen.Battle.Systems
 
         public override void Draw(GameTime gameTime)
         {
-            foreach (int entityId in ActiveEntities)
+            var entityComponents = ActiveEntities.Select(e => new
             {
-                SpriteComponent sprite = _spriteMapper.Get(entityId);
-                PositionComponent pos = _positionMapper.Get(entityId);
-                if (sprite.IsVisible)
+                sprite = _spriteMapper.Get(e),
+                pos = _positionMapper.Get(e)
+            })
+            .OrderBy(e => e.pos.TilePosition.Y);
+
+            foreach (var entityComponent in entityComponents)
+            {
+                if (entityComponent.sprite.IsVisible)
                 {
-                    _spriteBatch.Draw(sprite.Texture, pos.TilePosition, null, Color.White,
-                            0, sprite.Anchor, sprite.Scale, SpriteEffects.None, 0);
+                    _spriteBatch.Draw(entityComponent.sprite.Texture, entityComponent.pos.TilePosition, null, Color.White,
+                            0, entityComponent.sprite.Anchor, entityComponent.sprite.Scale, SpriteEffects.None, 0);
 
                     if (Config.DEBUG_RENDER)
                     {
-                        RectangleF dim = GetDimensions(pos.TilePosition, sprite.Anchor, sprite.Width, sprite.Height);
+                        RectangleF dim = GetDimensions(entityComponent.pos.TilePosition, entityComponent.sprite.Anchor, entityComponent.sprite.Width, entityComponent.sprite.Height);
                         _spriteBatch.DrawRectangle(dim, Color.White, 3);
                     }
                 }

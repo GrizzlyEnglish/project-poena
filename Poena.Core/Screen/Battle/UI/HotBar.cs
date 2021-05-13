@@ -5,6 +5,7 @@ using MonoGame.Extended.Entities;
 using Poena.Core.Common;
 using Poena.Core.Common.Enums;
 using Poena.Core.Screen.Battle.Components;
+using Poena.Core.Utilities;
 using System;
 
 namespace Poena.Core.Screen.Battle.UI
@@ -46,12 +47,17 @@ namespace Poena.Core.Screen.Battle.UI
             {
                 this._battle.Game.SpriteBatch.Draw(_background, _backgroundPosition, null, Color.White,
                     0, new Vector2(.5f, .5f), 1f, SpriteEffects.None, 0);
+
+                if (Config.DEBUG_RENDER)
+                {
+                    this._battle.Game.SpriteBatch.DrawRectangle(GetDimensions(), Color.White, 3);
+                }
                 for (int i = 0; i < ICON_LENGTH; i++)
                 {
                     Texture2D icon = this._battle.AssetManager.GetTexture(Assets.UI_PATH + _iconPaths[i]);
                     if (icon != null)
                     {
-                        this._battle.Game.SpriteBatch.Draw(icon, new Vector2(_backgroundPosition.X + (i * 100) + 8, _backgroundPosition.Y + 5), null, Color.White,
+                        this._battle.Game.SpriteBatch.Draw(icon, new Vector2(_backgroundPosition.X + (i * 100) + 8, _backgroundPosition.Y + 7), null, Color.White,
                             0, new Vector2(.5f, .5f), .17f, SpriteEffects.None, 0);
                     }
                 }
@@ -60,11 +66,11 @@ namespace Poena.Core.Screen.Battle.UI
 
         public void GenerateIcons(Entity ent)
         {
+            // Weapon skill icon
+
             // Skill icon
             SkillComponent skill = ent.Get<SkillComponent>();
-            this._iconPaths[0] = skill.HotBarTexturePath;
-
-            // Weapon skill icon
+            this._iconPaths[1] = skill.HotBarTexturePath;
 
             // Items
 
@@ -92,41 +98,27 @@ namespace Poena.Core.Screen.Battle.UI
 
         public bool HandleMouseClicked(Vector2 screenCoords)
         {
-            if (this._isVisible && IsWithinBounds(screenCoords))
+            if (this._isVisible && GetDimensions().Contains(screenCoords.ToPoint()))
             {
-                float slotDistance = _background.Width / 4f;
-                int slot = (int)Math.Floor(screenCoords.X / slotDistance);
-                Entity selectedEntity = this._battle.BoardSystem.GetSelectedEntity();
-                if (selectedEntity.Has<AttackingComponent>())
-                {
-                    // Deselect the attack
-                    selectedEntity.Detach<AttackingComponent>();
-                } 
-                else
-                {
-                    selectedEntity.Detach<MovementComponent>();
-                    selectedEntity.Detach<TileHighlightComponent>();
-                    selectedEntity.Attach<AttackingComponent>(new AttackingComponent
-                    {
-                        AttackType = (AttackType)slot,
-                    });
-                }
-
+                float slotDistance = _background.Width / 5f;
+                int slot = (int)Math.Floor((screenCoords.X - _backgroundPosition.X) / slotDistance);
+                Logger.Log("Hotbar", $"Clicked slot {slot}");
+                this._battle.BoardSystem.HandleHotBarInteraction((AttackType)slot);
                 return true;
             }
 
             return false;
         }
 
-        public bool IsWithinBounds(Vector2 pos)
+        public RectangleF GetDimensions()
         {
-            float left = this._backgroundPosition.X;
-            float right = left + this._background.Width;
-            
-            float top = this._backgroundPosition.Y - (this._background.Height / 2);
-            float bottom = top + this._background.Height;
-            
-            return pos.X >= left && pos.X <= right && pos.Y >= top && pos.Y <= bottom;
+            return new RectangleF
+            {
+                Height = _background.Height,
+                X = _backgroundPosition.X,
+                Y = _backgroundPosition.Y,
+                Width = _background.Width
+            };
         }
     }
 }

@@ -92,6 +92,18 @@
 /processorParam:TextureFormat=Color
 /build:../../Poena.Core/Content/assets/tiles/HEX_Highlight_Test.png;assets/tiles/HEX_Highlight_Test.png
 
+#begin ../../Poena.Core/Content/assets/tiles/test.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:../../Poena.Core/Content/assets/tiles/test.png;assets/tiles/test.png
+
 #begin ../../Poena.Core/Content/assets/ui/active1.png
 /importer:TextureImporter
 /processor:TextureProcessor

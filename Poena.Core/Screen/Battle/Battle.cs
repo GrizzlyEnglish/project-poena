@@ -69,10 +69,10 @@ namespace Poena.Core.Screen.Battle
             _world = new WorldBuilder()
                 .AddSystem(BoardSystem)
                 .AddSystem(new MovementSystem())
+                .AddSystem(new AttackingSystem(BoardSystem))
                 .AddSystem(new TileHighlightSystem(Game.SpriteBatch, AssetManager))
                 .AddSystem(new TurnSystem())
                 .AddSystem(new TurnRenderSystem(Game.SpriteBatch, AssetManager))
-                .AddSystem(new AttackingSystem())
                 .AddSystem(new SpriteSystem(Game.SpriteBatch))
                 .Build();
 

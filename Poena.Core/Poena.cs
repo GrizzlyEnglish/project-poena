@@ -24,7 +24,6 @@ namespace Poena.Core
 
         public Poena()
         {
-            Logger.GetInstance().LogLevel = LogLevel.Debug;
             _graphics = new GraphicsDeviceManager(this);
 
             _graphics.IsFullScreen = false;

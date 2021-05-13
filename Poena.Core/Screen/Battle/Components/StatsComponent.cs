@@ -5,83 +5,41 @@ namespace Poena.Core.Screen.Battle.Components
     public class StatsComponent
     {
 
-        /*
-         * Speed:
-         *      Increases the speed of the 'turn bar'
-         *      Increases chance to dodge attacks
-         *      ** Scales with Dexterity **
-         */
-        public int speed { get; set; }
-
-        /*
-         * Endurance:
-         *      Increases the distance the entity can move on a turn
-         *      Increases ability to allow additional actions
-         *      ** Scales with strength **
-         */
-        public int endurance { get; set; }
-
-        /*
-         * Strenth:
-         *      Increases attack with short range weapons
-         */
-        public int strength { get; set; }
-
-        /*
-         * Dexterity:
-         *      Increases attack with long range weapons
-         */
-        public int dexterity { get; set; }
-
-        /*
-         * Defense:
-         *      Decreases damage taken without armor
-         */
-        public int defense { get; set; }
-
-        /*
-         * Luck:
-         *      Increases critical attack
-         */
-        public int luck { get; set; }
-        
-        /*
-         * Level:
-         *      Increases stats by base amount
-         */
-        public int current_level { get; set; }
-
-        /*
-         * Experience:
-         *      Amount of current experience
-         */
-        public int experience { get; set; }
-
-        /*
-         * Experience to level:
-         *      Amount of experience needed to increase level
-         */
-        public int experience_to_level { get; set; }
-
-        public int GetMovementDistance(bool disadvantaged = false)
+        public StatsComponent()
         {
-            int min_distance = 5;
-            int max_distance = 10;
-
-            int distance = (min_distance + ((this.speed + this.dexterity) / 2)) / (disadvantaged ? 2 : 1);
-
-            return Math.Min(distance, max_distance);
+            this.Stamina = 1;
+            this.Strength = 1;
+            this.Luck = 1;
+            this.Agility = 1;
         }
 
-        public void Initialize()
+        public int Strength { get; set; }
+
+        public int Agility { get; set; }
+        
+        public int Stamina { get; set; }
+
+        public int Luck { get; set; }
+
+        public int GetMovementDistance()
         {
-            //TODO: rce - Move this to generator
-            this.current_level = 1;
-            this.speed = 1;
-            this.dexterity = 1;
-            this.endurance = 1;
-            this.defense = 1;
-            this.experience_to_level = 100;
+            return Math.Max(1, (int)Math.Round(Stamina / 3f)) + 2;
+        }
+
+        public double GetTurnTick(double tick)
+        {
+            if (Stamina < 3)
+            {
+                return tick + (tick / 6);
+            } 
+            else if (Stamina < 6)
+            {
+                return tick + (tick / 3);
+            }
+            else
+            {
+                return tick + tick;
+            }
         }
     }
 }

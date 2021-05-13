@@ -40,6 +40,7 @@ namespace Poena.Core.Screen.Battle.Systems
             _turnMapper = mapperService.GetMapper<TurnComponent>();
             _tileHighlightMapper = mapperService.GetMapper<TileHighlightComponent>();
             _movementMapper = mapperService.GetMapper<MovementComponent>();
+            _attackingMapper = mapperService.GetMapper<AttackingComponent>();
         }
 
         public override void Update(GameTime gameTime)
@@ -71,50 +72,88 @@ namespace Poena.Core.Screen.Battle.Systems
 
             // Working backwards we need to determine how to interact
 
-            // Tile is clicked to attack the entity on tile, must have entity on tile and current selected in attacking
-            if (entityOnTileId.HasValue && selectedEntityId.HasValue && _tileHighlightMapper.Get(selectedEntityId.Value)?.TileHighlight == TileHighlight.Attack)
+            if (selectedEntityId.HasValue)
             {
-                //AttackEntity();
-            }
+                TileHighlightComponent tileHighlightComponent = _tileHighlightMapper.Get(selectedEntityId.Value);
+                bool isMovement = tileHighlightComponent.TileHighlight == TileHighlight.Movement;
+                bool isAttacking = tileHighlightComponent.TileHighlight == TileHighlight.Attack;
+                bool highlightingMovement = isMovement && tileHighlightComponent.HighlightCheck;
+                bool selectedTileInPossible = tileHighlightComponent.PossiblePositions.Contains(selectedTile.Position.GetWorldAnchorPosition());
+                bool selectedTileIsDestination = tileHighlightComponent.CheckPosition == selectedTile.Position.GetWorldAnchorPosition();
 
-            // Tile is clicked to move to tile
-            else if (!entityOnTileId.HasValue && selectedEntityId.HasValue && _tileHighlightMapper.Get(selectedEntityId.Value)?.TileHighlight == TileHighlight.Movement)
-            {
-                TileHighlightComponent tileHighlight = _tileHighlightMapper.Get(selectedEntityId.Value);
-
-                if (!tileHighlight.HighlightCheck)
+                // Go by the most specific to least specific move
+                if (isAttacking)
                 {
-                    GetPathOfMovement(selectedEntityId.Value, tileHighlight, selectedTile);
+                    // Nest if is by design, we don't want to do others if attacking
+                    if (entityOnTileId.HasValue)
+                    {
+                        // Attack the entity
+                        if (!tileHighlightComponent.HighlightCheck)
+                        {
+                            // Set the entity tile as being highlighted for attack
+                            tileHighlightComponent.HighlightPositions = new List<Vector2>() { selectedTile.Position.GetWorldAnchorPosition() };
+                            // TODO: Add information on attack
+                        } 
+                        else
+                        {
+                            // Attack the entity
+                            _attackingMapper.Put(selectedEntityId.Value, new AttackingComponent
+                            {
+                                AttackType = tileHighlightComponent.AttackType.Value,
+                                AttackingEntityId = entityOnTileId.Value
+                            });
+                        }
+                    }
                 }
-                else if (tileHighlight.CheckPosition != selectedTile.Position.GetWorldAnchorPosition())
+                else if (isMovement && (highlightingMovement || selectedTileInPossible))
                 {
-                    // Reset the highlight
-                    tileHighlight.HighlightPositions = null;
+                    // Highlight movement, or setup for movement
+                    if (!tileHighlightComponent.HighlightCheck)
+                    {
+                        GetPathOfMovement(selectedEntityId.Value, tileHighlightComponent, selectedTile);
+                    }
+                    else if (!selectedTileIsDestination)
+                    {
+                        // Reset the highlight
+                        tileHighlightComponent.HighlightPositions = null;
+                    }
+                    else
+                    {
+                        SetupEntityMovement(selectedEntityId.Value, tileHighlightComponent);
+                    }
                 }
                 else
                 {
-                    SetupEntityMovement(selectedEntityId.Value, tileHighlight);
+                    DeselectEntity(selectedEntityId.Value);
                 }
             }
-
-            // Tile is clicked to select the entity on the tile
-            else if (entityOnTileId.HasValue && !selectedEntityId.HasValue)
+            else
             {
-                SelectEntity(entityOnTileId.Value, selectedTile);
+                // Tile is clicked to select the entity on the tile
+                if (entityOnTileId.HasValue && !selectedEntityId.HasValue)
+                {
+                    SelectEntity(entityOnTileId.Value, selectedTile);
+                }
             }
         }
 
-        public Entity GetSelectedEntity()
+        public int? GetSelectedEntityId()
         {
             foreach (int entityId in ActiveEntities)
             {
                 if (_selectedMapper.Has(entityId))
                 {
-                    return this.GetEntity(entityId);
+                    return entityId;
                 }
             }
 
             return null;
+        }
+
+        public Entity GetSelectedEntity()
+        {
+            int? entityId = this.GetSelectedEntityId();
+            return entityId.HasValue ? this.GetEntity(entityId.Value) : null;
         }
 
         private void SetupEntityMovement(int entityId, TileHighlightComponent tileHighlightComponent)
@@ -153,13 +192,12 @@ namespace Poena.Core.Screen.Battle.Systems
             }
         }
 
-        private void DeselectEntity(int entityId, BoardTile selectedTile)
+        public void DeselectEntity(int entityId)
         {
             TurnComponent turn = _turnMapper.Get(entityId);
-            PositionComponent pos = _positionMapper.Get(entityId);
 
             // If they are deslect them
-            if (!turn.ReadyForTurn && selectedTile.Position.GetWorldAnchorPosition() == pos.TilePosition)
+            if (!turn.ReadyForTurn)
             {
                 _selectedMapper.Delete(entityId);
                 _attackingMapper.Delete(entityId);
@@ -167,27 +205,81 @@ namespace Poena.Core.Screen.Battle.Systems
             }
         }
 
-        private void SelectEntity(int entityId, BoardTile selected_tile)
+        public void HandleHotBarInteraction(AttackType selectedAttack)
+        {
+            int selectedEntityId = this.GetSelectedEntityId().Value;
+
+            // Check if we need to selet or deselect
+            if (_tileHighlightMapper.Get(selectedEntityId).TileHighlight == TileHighlight.Movement)
+            {
+                // Select
+                SelectEntityAttack(selectedEntityId, selectedAttack);
+            }
+            else
+            {
+                DeselectEntityAttack(selectedEntityId);
+            }
+        }
+
+        public void SelectEntityAttack(int entityId, AttackType selectedAttack)
+        {
+            Entity entity = this.GetEntity(entityId);
+            PositionComponent pos = entity.Get<PositionComponent>();
+            BoardTile onTile = _boardGrid[Coordinates.WorldToBoard(pos.TilePosition)];
+            switch (selectedAttack)
+            {
+                case AttackType.Skill:
+                    SkillComponent skillComponent = entity.Get<SkillComponent>();
+                    List<Vector2> tiles =
+                        onTile.BoardGrid.GetTilePattern(onTile, skillComponent.AttackPattern, skillComponent.Distance)
+                        .Select(bt => bt.Position.GetWorldAnchorPosition()).ToList();
+                    tiles.Remove(onTile.Position.GetWorldAnchorPosition());
+                    entity.Attach(new TileHighlightComponent
+                    {
+                        PossiblePositions = tiles,
+                        TileHighlight = TileHighlight.Attack,
+                        AttackType = selectedAttack
+                    });
+                    break;
+            }
+        }
+
+        public void DeselectEntityAttack(int entityId)
+        {
+            _tileHighlightMapper.Delete(entityId);
+            SelectEntityMovement(entityId);
+        }
+
+        public void SelectEntity(int entityId, BoardTile selected_tile)
         {
             // Get the componenets
             TurnComponent turn = _turnMapper.Get(entityId);
-            StatsComponent stats = _statsMapper.Get(entityId);
             // Created the selected
             SelectedComponent selected = new SelectedComponent();
             // If not ready for turn disadvantage entity
             selected.Disadvantaged = !turn.ReadyForTurn;
             // This entity was selected
             _selectedMapper.Put(entityId, selected);
+            SelectEntityMovement(entityId);
+            // Move camera to entity
+            this._battle.PanCamera(selected_tile.Position.GetWorldAnchorPosition());
+        }
+
+        public void SelectEntityMovement(int entityId)
+        {
+            StatsComponent stats = _statsMapper.Get(entityId);
+            PositionComponent pos = _positionMapper.Get(entityId);
+            BoardTile onTile = _boardGrid[Coordinates.WorldToBoard(pos.TilePosition)];
             // Finally get all the possible tile anchors
             List<Vector2> tiles =
-                selected_tile.BoardGrid.Flood(selected_tile, stats.GetMovementDistance(selected.Disadvantaged))
+                onTile.BoardGrid.Flood(onTile, stats.GetMovementDistance())
                 .Select(bt => bt.Position.GetWorldAnchorPosition()).ToList();
             // Filter blocked tiles
             List<Vector2> ent_positions = new List<Vector2>();
             foreach (int entId in ActiveEntities)
             {
-                PositionComponent pos = _positionMapper.Get(entId);
-                if (pos != null) ent_positions.Add(pos.TilePosition);
+                PositionComponent entPos = _positionMapper.Get(entId);
+                if (entPos != null) ent_positions.Add(entPos.TilePosition);
             }
             tiles.RemoveAll(t => ent_positions.Contains(t));
             // Set movements possible movement tiles
@@ -196,8 +288,6 @@ namespace Poena.Core.Screen.Battle.Systems
                 TileHighlight = TileHighlight.Movement,
                 PossiblePositions = tiles
             });
-            // Move camera to entity
-            this._battle.PanCamera(selected_tile.Position.GetWorldAnchorPosition());
         }
     }
 }

@@ -8,27 +8,38 @@ namespace Poena.Core.Screen.Battle.Systems
 {
     public class AttackingSystem : EntityUpdateSystem
     {
-        private ComponentMapper<TileHighlightComponent> _tileHighlightMapper;
-        private ComponentMapper<SkillComponent> _skillMapper;
         private ComponentMapper<AttackingComponent> _attackingMapper;
+        private ComponentMapper<HealthComponent> _healthMapper;
 
-        public AttackingSystem() 
+        private readonly BoardInteractionSystem _boardSystem;
+
+        public AttackingSystem(BoardInteractionSystem boardSystem) 
             : base(Aspect.All(typeof(AttackingComponent)))
         {
+            _boardSystem = boardSystem;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _skillMapper = mapperService.GetMapper<SkillComponent>();
-            _tileHighlightMapper = mapperService.GetMapper<TileHighlightComponent>();
             _attackingMapper = mapperService.GetMapper<AttackingComponent>();
+            _healthMapper = mapperService.GetMapper<HealthComponent>();
         }
 
         public override void Update(GameTime gameTime)
         {
             foreach (int entityId in ActiveEntities)
             {
+                AttackingComponent attackingComponent = _attackingMapper.Get(entityId);
+                HealthComponent healthComponent = _healthMapper.Get(attackingComponent.AttackingEntityId);
 
+                healthComponent.Health -= 100;
+
+                if (healthComponent.Health <= 0)
+                {
+                    this.DestroyEntity(attackingComponent.AttackingEntityId);
+
+                    _boardSystem.DeselectEntity(entityId);
+                }
             }
         }
     }
