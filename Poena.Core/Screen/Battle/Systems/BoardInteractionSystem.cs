@@ -19,7 +19,7 @@ namespace Poena.Core.Screen.Battle.Systems
 
         private ComponentMapper<SelectedComponent> _selectedMapper;
         private ComponentMapper<PositionComponent> _positionMapper;
-        private ComponentMapper<AttackingComponent> _attackingMapper;
+        private ComponentMapper<DamageComponent> _damageMapper;
         private ComponentMapper<TileHighlightComponent> _tileHighlightMapper;
         private ComponentMapper<TurnComponent> _turnMapper;
         private ComponentMapper<StatsComponent> _statsMapper;
@@ -40,7 +40,7 @@ namespace Poena.Core.Screen.Battle.Systems
             _turnMapper = mapperService.GetMapper<TurnComponent>();
             _tileHighlightMapper = mapperService.GetMapper<TileHighlightComponent>();
             _movementMapper = mapperService.GetMapper<MovementComponent>();
-            _attackingMapper = mapperService.GetMapper<AttackingComponent>();
+            _damageMapper = mapperService.GetMapper<DamageComponent>();
         }
 
         public override void Update(GameTime gameTime)
@@ -97,10 +97,11 @@ namespace Poena.Core.Screen.Battle.Systems
                         else
                         {
                             // Attack the entity
-                            _attackingMapper.Put(selectedEntityId.Value, new AttackingComponent
+                            _tileHighlightMapper.Delete(selectedEntityId.Value);
+                            _damageMapper.Put(entityOnTileId.Value, new DamageComponent
                             {
-                                AttackType = tileHighlightComponent.AttackType.Value,
-                                AttackingEntityId = entityOnTileId.Value
+                                Damage = 10,
+                                CurrentTime = 0
                             });
                         }
                     }
@@ -192,6 +193,14 @@ namespace Poena.Core.Screen.Battle.Systems
             }
         }
 
+        public void SelectedEntityEndTurn()
+        {
+            int selectedEntityId = this.GetSelectedEntityId().Value;
+            TurnComponent turn = _turnMapper.Get(selectedEntityId);
+            turn.CurrentTime = 0;
+            this.DeselectEntity(selectedEntityId);
+        }
+
         public void DeselectEntity(int entityId)
         {
             TurnComponent turn = _turnMapper.Get(entityId);
@@ -200,7 +209,6 @@ namespace Poena.Core.Screen.Battle.Systems
             if (!turn.ReadyForTurn)
             {
                 _selectedMapper.Delete(entityId);
-                _attackingMapper.Delete(entityId);
                 _tileHighlightMapper.Delete(entityId);
             }
         }

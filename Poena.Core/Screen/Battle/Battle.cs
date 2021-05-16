@@ -69,11 +69,10 @@ namespace Poena.Core.Screen.Battle
             _world = new WorldBuilder()
                 .AddSystem(BoardSystem)
                 .AddSystem(new MovementSystem())
-                .AddSystem(new AttackingSystem(BoardSystem))
+                .AddSystem(new DamageSystem(BoardSystem))
                 .AddSystem(new TileHighlightSystem(Game.SpriteBatch, AssetManager))
                 .AddSystem(new TurnSystem())
-                .AddSystem(new TurnRenderSystem(Game.SpriteBatch, AssetManager))
-                .AddSystem(new SpriteSystem(Game.SpriteBatch))
+                .AddSystem(new SpriteSystem(Game.SpriteBatch, AssetManager))
                 .Build();
 
             _hotBar = new HotBar(this);

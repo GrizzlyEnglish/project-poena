@@ -30,7 +30,7 @@ namespace Poena.Core.Screen.Battle.Entities
             entity.Attach(anim);
 
             PositionComponent position = new PositionComponent();
-            position.TilePosition = new BoardGridPosition(5, 5, 0).GetWorldAnchorPosition();
+            position.TilePosition = new BoardGridPosition(8, 8, 0).GetWorldAnchorPosition();
             entity.Attach(position);
             
             StatsComponent stats = new StatsComponent();
